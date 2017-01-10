@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Instabug.svg)
 ![Twitter](https://img.shields.io/badge/twitter-@Instabug-blue.svg)
 
@@ -80,10 +79,3 @@ If your app doesn’t already access the microphone or photo library, we recomme
 ## More
 
 You can also check out our [API Reference](https://instabug.com/public/ios-api-reference/Classes/Instabug.html) for more detailed information about our SDK.
-=======
-Instabug iOS SDK
-----------------
-Instant bug reporting for iOS apps.
-<br/>
-For integration steps check http://instabug.com/sdk-integration
->>>>>>> 04784bb15bc29e5d700d0a18eb1f6a8cdd98e03f
