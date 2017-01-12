@@ -164,6 +164,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         return true
     }
+
     
     // MARK:  UITextFieldDelegate Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -244,7 +245,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
         }
     }
-    
     // MARK:  UITableViewDelegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

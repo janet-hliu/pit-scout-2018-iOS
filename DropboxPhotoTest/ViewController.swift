@@ -161,7 +161,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
         keysList.set(value: [String]().asData(), key: "keys")
-        startUploadingImageQueue()
+        photoManager.startUploadingImageQueue()
     }
     
     func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
@@ -213,68 +213,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         picker.dismiss(animated: true, completion: nil)
         self.photos.append(MWPhoto(image: image))
         photoManager.photoSaver.saveImage(image)
-        addToFirebaseStorageQueue(image: image)
+        photoManager.addToFirebaseStorageQueue(image: image)
     }
     //You shold only have to call this once each time the app wakes up
-    func startUploadingImageQueue() {
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
-            while true {
-                if Reachability.isConnectedToNetwork() {
-                    self.keysList.fetch(key: "keys").onSuccess({ (keysData) in
-                        let keys = (Array.convertFromData(keysData) ?? []) as [String]
-                        var keysToKill = [String]()
-                        for key in keys {
-                            self.imageQueueCache.fetch(key: key).onSuccess({ (image) in
-                                self.storeOnFirebase(image: image, done: { 
-                                    keysToKill.append(key)
-                                })
-                                sleep(60)
-                            })
-                        }
-                        self.keysList.set(value: (keys.filter { !keysToKill.contains($0) }).asData(), key: "keys")
-                    })
-                }
-                sleep(30)
-            }
-        })
-        
-    }
-    
-    func addImageKey(key : String) {
-        self.keysList.fetch(key: "keys").onSuccess({ (keysData) in
-            var keys = (Array.convertFromData(keysData) ?? []) as [String]
-            keys.append(key)
-            self.keysList.set(value: keys.asData(), key: "keys")
-        })
-    }
-    
-    func addToFirebaseStorageQueue(image: UIImage) {
-        let key = String(describing: Date())
-        addImageKey(key: key)
-        self.imageQueueCache.set(value: image, key: key)
-    }
-    
-    func storeOnFirebase(image: UIImage, done: @escaping ()->()) {
-            self.photoManager.updateUrl(self.number, callback: { [unowned self] i in
-                let name = self.photoManager.makeFilenameForTeamNumAndIndex(self.number, imageIndex: i)
-                
-                self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
-                    
-                    if (error != nil) {
-                        print("ERROR: \(error)")
-                    } else {
-                        // Metadata contains file metadata such as size, content-type, and download URL.
-                        let downloadURL = metadata!.downloadURL()?.absoluteString
-                        self.photoManager.putPhotoLinkToFirebase(downloadURL!, teamNumber: self.number, selectedImage: false)
-                        
-                        print("UPLOADED: \(downloadURL)")
-                        done()
-                    }
-                }
-                self.canViewPhotos = true
-            })
-        
-    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool { // So that the scroll view can scroll so you can see the text field you are editing
         textField.resignFirstResponder()
