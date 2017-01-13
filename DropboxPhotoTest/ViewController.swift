@@ -96,6 +96,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let programmingLanguage = PSUISegmentedViewController()
             programmingLanguage.setup("Prog. Lang.", firebaseRef: self.ourTeam.child("pitProgrammingLanguage"), initialValue: snap.childSnapshot(forPath: "pitProgrammingLanguage").value)
             programmingLanguage.segments = ["Java", "C++", "Labview", "Other"]
+            programmingLanguage.neededType = .string
             
             //Switch
             let tankDrive = PSUISwitchViewController()
@@ -105,14 +106,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let pitOrganization = PSUISegmentedViewController()
             pitOrganization.setup("Pit Organization", firebaseRef: self.ourTeam.child("pitOrganization"), initialValue: snap.childSnapshot(forPath: "pitOrganization").value)
             pitOrganization.segments = ["Terrible", "Bad", "Okay", "Good", "Great"]
-
+            pitOrganization.neededType = .string
+            
             // Segmented Control
             let availableWeight = PSUITextInputViewController()
             availableWeight.setup("Available Weight", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
             availableWeight.neededType = .int
             
             
-            /* //Switch
+            /* // Switch
             let willCheesecake = PSUISwitchViewController()
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitWillCheesecake"), initialValue: snap.childSnapshot(forPath: "pitWillCheesecake").value) */
             
