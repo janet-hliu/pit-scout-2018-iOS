@@ -179,7 +179,8 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
     }
     
     @IBAction func selectedSegmentChanged(_ sender: UISegmentedControl) {
-        super.set(segmentedController.selectedSegmentIndex as AnyObject)
+        let index = segmentedController.selectedSegmentIndex
+        super.set(segments[index] as AnyObject)
     }
 }
 

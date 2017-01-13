@@ -29,6 +29,8 @@ class PhotoManager : NSObject {
     var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2016.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
+    let keysList = Shared.dataCache
+    let viewController = ViewController()
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
         
@@ -111,16 +113,16 @@ class PhotoManager : NSObject {
         return self.firebaseImageDownloadURLBeginning + String(fileName)
     }
     
-    func startUploadingImageQueue() {
+    func startUploadingImageQueue(number: Int) {
         DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             while true {
                 if Reachability.isConnectedToNetwork() {
-                    .keysList.fetch(key: "keys").onSuccess({ (keysData) in
+                    self.keysList.fetch(key: "keys").onSuccess({ (keysData) in
                         let keys = (Array.convertFromData(keysData) ?? []) as [String]
                         var keysToKill = [String]()
                         for key in keys {
-                            self.imageQueueCache.fetch(key: key).onSuccess({ (image) in
-                                self.storeOnFirebase(image: image, done: {
+                            self.viewController.imageQueueCache.fetch(key: key).onSuccess({ (image) in
+                                self.storeOnFirebase(number: number, image: image, done: {
                                     keysToKill.append(key)
                                 })
                                 sleep(60)
@@ -136,7 +138,7 @@ class PhotoManager : NSObject {
     }
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String) {
-        ViewController.keysList.fetch(key: "keys").onSuccess({ (keysData) in
+        keysList.fetch(key: "keys").onSuccess({ (keysData) in
             var keys = (Array.convertFromData(keysData) ?? []) as [String]
             keys.append(key)
             self.keysList.set(value: keys.asData(), key: "keys")
@@ -146,27 +148,27 @@ class PhotoManager : NSObject {
     func addToFirebaseStorageQueue(image: UIImage) {
         let key = String(describing: Date())
         addImageKey(key: key)
-        ViewController.imageQueueCache.set(value: image, key: key)
+        viewController.imageQueueCache.set(value: image, key: key)
     }
     
-    func storeOnFirebase(image: UIImage, done: @escaping ()->()) {
-        PhotoManager?.updateUrl(self.number, callback: { [unowned self] i in
-            let name = self.photoManager.makeFilenameForTeamNumAndIndex(self.number, imageIndex: i)
+    func storeOnFirebase(number: Int, image: UIImage, done: @escaping ()->()) {
+        self.updateUrl(number, callback: { [unowned self] i in
+            let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: i)
             
-            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
+            self.viewController.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
                 
                 if (error != nil) {
                     print("ERROR: \(error)")
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()?.absoluteString
-                    self.photoManager.putPhotoLinkToFirebase(downloadURL!, teamNumber: self.number, selectedImage: false)
+                    self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     
                     print("UPLOADED: \(downloadURL)")
                     done()
                 }
             }
-            self.canViewPhotos = true
+            self.viewController.canViewPhotos = true
         })
         
     }

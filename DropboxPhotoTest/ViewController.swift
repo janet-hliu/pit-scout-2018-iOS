@@ -98,8 +98,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             programmingLanguage.segments = ["Java", "C++", "Labview", "Other"]
             
             //Switch
-            let tankTread = PSUISwitchViewController()
-            tankTread.setup("Has Tank Tread", firebaseRef: self.ourTeam.child("pitTankTread"), initialValue: snap.childSnapshot(forPath: "pitTankTread").value)
+            let tankDrive = PSUISwitchViewController()
+            tankDrive.setup("Has Tank Tread", firebaseRef: self.ourTeam.child("pitDidUseStandardTankDrive"), initialValue: snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value)
             
             // Segmented Control
             let pitOrganization = PSUISegmentedViewController()
@@ -119,7 +119,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             // self.addChildViewController(numberOfWheels)
             self.addChildViewController(self.selectedImageURL)
             self.addChildViewController(programmingLanguage)
-            self.addChildViewController(tankTread)
+            self.addChildViewController(tankDrive)
             self.addChildViewController(pitOrganization)
             self.addChildViewController(availableWeight)
             //self.addChildViewController(willCheesecake)
@@ -161,7 +161,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
         keysList.set(value: [String]().asData(), key: "keys")
-        photoManager.startUploadingImageQueue()
+        photoManager.startUploadingImageQueue(number: number)
     }
     
     func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
