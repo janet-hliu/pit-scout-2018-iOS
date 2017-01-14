@@ -168,9 +168,9 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         for i in 0..<segments.count {
             self.segmentedController.insertSegment(withTitle: segments[i], at: i, animated: true)
         }
-        if firebaseRef != nil {
-            for i in 0..<
-        }
+        //if firebaseRef != nil {
+        //    for i in 0..<
+        //}
         /* self.neededType = .int
         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
         super.UIResponse = { value in
