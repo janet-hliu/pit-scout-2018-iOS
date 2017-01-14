@@ -89,31 +89,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
             numberOfWheels.neededType = .int */
             
-            self.selectedImageURL.setup("Selected Image", firebaseRef: self.ourTeam.child("selectedImageUrl"), initialValue: snap.childSnapshot(forPath: "selectedImageUrl").value)
+            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("selectedImageUrl"), initialValue: snap.childSnapshot(forPath: "selectedImageUrl").value)
             self.selectedImageURL.neededType = .string
             
             //Segmented Control
             let programmingLanguage = PSUISegmentedViewController()
-            programmingLanguage.setup("Prog. Lang.", firebaseRef: self.ourTeam.child("pitProgrammingLanguage"), initialValue: snap.childSnapshot(forPath: "pitProgrammingLanguage").value)
+            programmingLanguage.setup("Programming Language:", firebaseRef: self.ourTeam.child("pitProgrammingLanguage"), initialValue: snap.childSnapshot(forPath: "pitProgrammingLanguage").value)
             programmingLanguage.segments = ["Java", "C++", "Labview", "Other"]
             programmingLanguage.neededType = .string
             
             //Switch
             let tankDrive = PSUISwitchViewController()
-            tankDrive.setup("Has Tank Tread", firebaseRef: self.ourTeam.child("pitDidUseStandardTankDrive"), initialValue: snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value)
+            tankDrive.setup("Has Tank Tread:", firebaseRef: self.ourTeam.child("pitDidUseStandardTankDrive"), initialValue: snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value)
             
             // Segmented Control
             let pitOrganization = PSUISegmentedViewController()
-            pitOrganization.setup("Pit Organization", firebaseRef: self.ourTeam.child("pitOrganization"), initialValue: snap.childSnapshot(forPath: "pitOrganization").value)
+            pitOrganization.setup("Pit Organization:", firebaseRef: self.ourTeam.child("pitOrganization"), initialValue: snap.childSnapshot(forPath: "pitOrganization").value)
             pitOrganization.segments = ["Terrible", "Bad", "Okay", "Good", "Great"]
             pitOrganization.neededType = .string
             
-            // Segmented Control
+            // Text Field
             let availableWeight = PSUITextInputViewController()
-            availableWeight.setup("Available Weight", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
+            availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
             availableWeight.neededType = .int
-            
-            
+           
             /* // Switch
             let willCheesecake = PSUISwitchViewController()
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitWillCheesecake"), initialValue: snap.childSnapshot(forPath: "pitWillCheesecake").value) */

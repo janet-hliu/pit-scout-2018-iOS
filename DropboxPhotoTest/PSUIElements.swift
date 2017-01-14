@@ -106,7 +106,7 @@ class PSUIFirebaseViewController : UIViewController {
 /// Just a few customizations of the text input view for the pit scout. See the `PSUIFirebaseViewController`.
 class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDelegate {
     @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField : UITextField!
     override func viewDidLoad() {
         let currentResponse = self.UIResponse
         if !hasOverriddenUIResponse {
@@ -168,11 +168,14 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         for i in 0..<segments.count {
             self.segmentedController.insertSegment(withTitle: segments[i], at: i, animated: true)
         }
-        self.neededType = .int
+        if firebaseRef != nil {
+            for i in 0..<
+        }
+        /* self.neededType = .int
         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
         super.UIResponse = { value in
             self.segmentedController.selectedSegmentIndex = value as! Int
-        }
+        } */
         self.label.text = super.titleText
         
         
@@ -180,7 +183,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
     
     @IBAction func selectedSegmentChanged(_ sender: UISegmentedControl) {
         let index = segmentedController.selectedSegmentIndex
-        super.set(segments[index] as AnyObject)
+        super.set(segments[index] as String)
     }
 }
 
