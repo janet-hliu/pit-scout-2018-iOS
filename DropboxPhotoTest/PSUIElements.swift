@@ -29,8 +29,8 @@ class PSUIFirebaseViewController : UIViewController {
             hasOverriddenUIResponse = true
         }
     }
-    var firebaseRef : FIRDatabaseReference?
-    
+        var firebaseRef : FIRDatabaseReference?
+
     func setup(_ titleText : String, firebaseRef : FIRDatabaseReference, initialValue : Any?) {
         self.titleText = titleText
         self.initialValue = initialValue
@@ -160,6 +160,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
     @IBOutlet weak var segmentedController: UISegmentedControl!
     @IBOutlet weak var label: UILabel!
     var segments : [String] = []
+    var selectedIndex : Int = 0
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -168,9 +169,15 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         for i in 0..<segments.count {
             self.segmentedController.insertSegment(withTitle: segments[i], at: i, animated: true)
         }
-        if firebaseRef != nil {
-            for i in 0..<
+        if String(describing:initialValue) != "Optional(<null>)" {
+            selectedIndex = segments.index(of: String(describing: initialValue!))!
         }
+       /*firebaseRef?.observeSingleEvent(of: .value, with: {(snap) in
+            let selectedSegment = snap.value as? String
+            self.selectedIndex = self.segments.index(where: {$0 == selectedSegment})}, withCancel: {(error) in
+                print (error.localizedDescription)})*/
+ 
+        segmentedController.selectedSegmentIndex = selectedIndex
         /* self.neededType = .int
         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
         super.UIResponse = { value in
