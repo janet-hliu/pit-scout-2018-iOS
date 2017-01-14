@@ -29,8 +29,8 @@ class PSUIFirebaseViewController : UIViewController {
             hasOverriddenUIResponse = true
         }
     }
-        var firebaseRef : FIRDatabaseReference?
-
+    var firebaseRef : FIRDatabaseReference?
+    
     func setup(_ titleText : String, firebaseRef : FIRDatabaseReference, initialValue : Any?) {
         self.titleText = titleText
         self.initialValue = initialValue
@@ -169,6 +169,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         for i in 0..<segments.count {
             self.segmentedController.insertSegment(withTitle: segments[i], at: i, animated: true)
         }
+
         if String(describing:initialValue) != "Optional(<null>)" {
             selectedIndex = segments.index(of: String(describing: initialValue!))!
         }
@@ -178,6 +179,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
                 print (error.localizedDescription)})*/
  
         segmentedController.selectedSegmentIndex = selectedIndex
+
         /* self.neededType = .int
         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
         super.UIResponse = { value in

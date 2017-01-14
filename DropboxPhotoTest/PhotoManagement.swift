@@ -168,7 +168,7 @@ class PhotoManager : NSObject {
                     done()
                 }
             }
-            self.viewController.canViewPhotos = true
+          
         })
         
     }

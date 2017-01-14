@@ -56,6 +56,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
                 
+               
                 picker.sourceType = .camera
                 picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
                 picker.delegate = self
