@@ -173,11 +173,6 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         if String(describing:initialValue) != "Optional(<null>)" {
             selectedIndex = segments.index(of: String(describing: initialValue!))!
         }
-       /*firebaseRef?.observeSingleEvent(of: .value, with: {(snap) in
-            let selectedSegment = snap.value as? String
-            self.selectedIndex = self.segments.index(where: {$0 == selectedSegment})}, withCancel: {(error) in
-                print (error.localizedDescription)})*/
- 
         segmentedController.selectedSegmentIndex = selectedIndex
 
         /* self.neededType = .int
