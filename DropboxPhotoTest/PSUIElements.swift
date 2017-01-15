@@ -1,3 +1,4 @@
+
 //
 //  PSUIElement.swift
 //  DropboxPhotoTest
@@ -160,7 +161,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
     @IBOutlet weak var segmentedController: UISegmentedControl!
     @IBOutlet weak var label: UILabel!
     var segments : [String] = []
-    var selectedIndex : Int = 0
+    var selectedIndex : Int?
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -173,8 +174,10 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         if String(describing:initialValue) != "Optional(<null>)" {
             selectedIndex = segments.index(of: String(describing: initialValue!))!
         }
-        segmentedController.selectedSegmentIndex = selectedIndex
-
+        if selectedIndex != nil {
+            segmentedController.selectedSegmentIndex = selectedIndex!
+        }
+        
         /* self.neededType = .int
         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
         super.UIResponse = { value in

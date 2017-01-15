@@ -114,7 +114,7 @@ class PhotoManager : NSObject {
     }
     
     func startUploadingImageQueue(number: Int) {
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.keysList.fetch(key: "keys").onSuccess({ (keysData) in
@@ -158,7 +158,7 @@ class PhotoManager : NSObject {
             self.viewController.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
                 
                 if (error != nil) {
-                    print("ERROR: \(error)")
+                    print("ERROR: \(error.debugDescription)")
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()?.absoluteString

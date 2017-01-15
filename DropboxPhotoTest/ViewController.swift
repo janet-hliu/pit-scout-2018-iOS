@@ -55,8 +55,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let addImageButton = PSUIButton(title: "Add Image", width: screenWidth, y: 0, buttonPressed: { (sender) -> () in
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
-                
-               
                 picker.sourceType = .camera
                 picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
                 picker.delegate = self
