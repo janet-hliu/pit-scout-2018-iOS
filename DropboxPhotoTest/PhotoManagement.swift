@@ -29,8 +29,10 @@ class PhotoManager : NSObject {
     var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2016.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
-    let keysList = Shared.dataCache
-    let viewController = ViewController()
+    let teamsList = Shared.dataCache
+    let imageQueueCache = Shared.imageCache
+    let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://firebase-scouting-2016.appspot.com")
+
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
         
@@ -117,18 +119,18 @@ class PhotoManager : NSObject {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
             while true {
                 if Reachability.isConnectedToNetwork() {
-                    self.keysList.fetch(key: "keys").onSuccess({ (keysData) in
+                    self.teamsList.fetch(key: "keys").onSuccess({ (keysData) in
                         let keys = (Array.convertFromData(keysData) ?? []) as [String]
                         var keysToKill = [String]()
                         for key in keys {
-                            self.viewController.imageQueueCache.fetch(key: key).onSuccess({ (image) in
+                            self.imageQueueCache.fetch(key: key).onSuccess({ (image) in
                                 self.storeOnFirebase(number: number, image: image, done: {
                                     keysToKill.append(key)
                                 })
                                 sleep(60)
                             })
                         }
-                        self.keysList.set(value: (keys.filter { !keysToKill.contains($0) }).asData(), key: "keys")
+                        self.teamsList.set(value: (keys.filter { !keysToKill.contains($0) }).asData(), key: "keys")
                     })
                 }
                 sleep(30)
@@ -138,24 +140,25 @@ class PhotoManager : NSObject {
     }
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String) {
-        keysList.fetch(key: "keys").onSuccess({ (keysData) in
+        teamsList.fetch(key: "keys").onSuccess({ (keysData) in
+            //what is keys supposed to be? an array of date strings or an array of photo/data?
             var keys = (Array.convertFromData(keysData) ?? []) as [String]
             keys.append(key)
-            self.keysList.set(value: keys.asData(), key: "keys")
+            self.teamsList.set(value: keys.asData(), key: "keys")
         })
     }
     
     func addToFirebaseStorageQueue(image: UIImage) {
         let key = String(describing: Date())
         addImageKey(key: key)
-        viewController.imageQueueCache.set(value: image, key: key)
+        imageQueueCache.set(value: image, key: key)
     }
     
     func storeOnFirebase(number: Int, image: UIImage, done: @escaping ()->()) {
         self.updateUrl(number, callback: { [unowned self] i in
             let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: i)
             
-            self.viewController.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
+            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
                 
                 if (error != nil) {
                     print("ERROR: \(error.debugDescription)")

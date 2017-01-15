@@ -30,8 +30,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var numberOfImagesOnFirebase = -1
     var notActuallyLeavingViewController = false
     let selectedImageURL = PSUITextInputViewController()
-    let imageQueueCache = Shared.imageCache
-    let keysList = Shared.dataCache
+    let teamsList = Shared.dataCache
     
     var activeField : UITextField? {
         didSet {
@@ -160,7 +159,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         browser.autoPlayOnAppear = false; // Auto-play first video
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        keysList.set(value: [String]().asData(), key: "keys")
+        teamsList.set(value: [String]().asData(), key: "keys")
         photoManager.startUploadingImageQueue(number: number)
     }
     

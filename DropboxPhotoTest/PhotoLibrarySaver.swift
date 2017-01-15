@@ -49,7 +49,7 @@ class CustomPhotoAlbum {
             albumChangeRequest!.addAssets([assetPlaceholder!] as NSArray)
             }, completionHandler: { success, error in
                 //print("added image to album")
-                print(error)
+                print("ERROR: \(error.debugDescription)")
                 
         })
     }
