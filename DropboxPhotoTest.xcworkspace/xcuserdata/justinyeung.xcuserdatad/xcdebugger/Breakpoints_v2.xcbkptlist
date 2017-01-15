@@ -9,22 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DropboxPhotoTest/PSUIElements.swift"
-            timestampString = "506121701.685296"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "210"
-            endingLineNumber = "210"
-            landmarkName = "init(title:width:y:buttonPressed:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/ViewController.swift"
             timestampString = "506121872.582134"
             startingColumnNumber = "9223372036854775807"
@@ -38,7 +22,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/ViewController.swift"
@@ -74,6 +58,299 @@
             startingLineNumber = "57"
             endingLineNumber = "57"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "0"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DropboxPhotoTest/MissingDataViewController.swift"
+            timestampString = "506197783.906963"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "MissingDataViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; DropboxPhotoTest.MissingDataViewController"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.671857"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "152">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;DropboxPhotoTest.MissingDataViewController&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.673017"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15"
+                  offsetFromSymbolStart = "88">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DropboxPhotoTest/MissingDataViewController.swift"
+            timestampString = "506202480.970394"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "MissingDataViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.firebaseKeys.getter : Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.675563"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; DropboxPhotoTest.MissingDataViewController"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.676729"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21"
+                  offsetFromSymbolStart = "176">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;DropboxPhotoTest.MissingDataViewController&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.677827"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21"
+                  offsetFromSymbolStart = "112">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DropboxPhotoTest/MissingDataViewController.swift"
+            timestampString = "506202480.970394"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "MissingDataViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.ignoreKeys.getter : Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.680433"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; DropboxPhotoTest.MissingDataViewController"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.681723"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "520">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;DropboxPhotoTest.MissingDataViewController&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.68284"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "452">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DropboxPhotoTest/MissingDataViewController.swift"
+            timestampString = "506198019.337342"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "12"
+            endingLineNumber = "12"
+            landmarkName = "MissingDataViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.__deallocating_deinit"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.685662"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; DropboxPhotoTest.MissingDataViewController"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.686831"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "80">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.__allocating_init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; DropboxPhotoTest.MissingDataViewController"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.687994"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.__allocating_init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;DropboxPhotoTest.MissingDataViewController&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.689185"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.MissingDataViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;DropboxPhotoTest.MissingDataViewController&gt;"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/MissingDataViewController.swift"
+                  timestampString = "506200711.690328"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DropboxPhotoTest/PhotoManagement.swift"
+            timestampString = "506199470.764309"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "putPhotoLinkToFirebase(_:teamNumber:selectedImage:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

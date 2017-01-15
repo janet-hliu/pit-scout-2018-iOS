@@ -60,4 +60,15 @@ class MissingDataViewController : UIViewController {
         _ controller: UIPresentationController!) -> UIModalPresentationStyle {
             return .none
     }
+    // used to show loading of missing data, come back to later
+    func showActivityIndicatory(uiView: UIView) {
+        var actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+        actInd.frame = CGRect(x: 0.0, y: 0.0, width: 0.0, height: 40.0);
+        actInd.center = uiView.center
+        actInd.hidesWhenStopped = true
+        actInd.activityIndicatorViewStyle =
+            UIActivityIndicatorViewStyle.whiteLarge
+        uiView.addSubview(actInd)
+        actInd.startAnimating()
+    }
 }
