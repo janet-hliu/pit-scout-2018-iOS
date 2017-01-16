@@ -61,24 +61,17 @@ class PhotoManager : NSObject {
     
     func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
         self.getSharedURLsForTeam(teamNumber) { [unowned self] (urls) -> () in
+            // sets url to be used in
+            
+            //create key for current photo index, real index only goes up
+            //1. increment firebase index key
+            //2. Make url of photo
+            //3. append urls to old urls
             if let oldURLs = urls {
-                let i : Int
-                if oldURLs.count == 3 {
-                    i = 0
-                } else if oldURLs.count < 3 {
-                    i = oldURLs.count //If there are currently two images, we want i to be 2, because that will be the index of the third image
-                } else {
-                    print("This should not happen")
-                    i = 0
-                }
+                let i : Int = oldURLs.count
                 let url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: i)
-                if oldURLs.count - 1 == i {
-                    oldURLs[i] = url
-                } else if oldURLs.count == i {
                     oldURLs.add(url)
-                } else {
-                    oldURLs[i] = url
-                } //Old URLs is actually new urls at this point
+                 //Old URLs is actually new urls at this point
                 self.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: oldURLs), key: "sharedURLs\(teamNumber)", success: { _ in
                     callback(i)
                 })
