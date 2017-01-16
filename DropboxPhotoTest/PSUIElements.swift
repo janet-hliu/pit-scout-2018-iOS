@@ -115,7 +115,7 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
                 currentResponse!(value)
                 //print(String(value))
                     self.textField.text = value as? String ?? (value as? NSNumber)?.stringValue ?? ""
-               
+        
 
             }
         }

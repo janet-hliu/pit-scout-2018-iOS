@@ -35,10 +35,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var activeField : UITextField? {
         didSet {
             scrollPositionBeforeScrollingToTextField = scrollView.contentOffset.y
+            print(scrollPositionBeforeScrollingToTextField)
             self.scrollView.scrollRectToVisible((activeField?.frame)!, animated: true)
         }
     }
-    var scrollPositionBeforeScrollingToTextField : CGFloat = 0
+    var scrollPositionBeforeScrollingToTextField : CGFloat = -38
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,7 +132,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 let center = NSLayoutConstraint(item: childViewController.view, attribute: NSLayoutAttribute.centerX, relatedBy: .equal, toItem: self.scrollView, attribute: .centerX, multiplier: 1.0, constant: 0)
                 
                 self.scrollView.addConstraints([width, center])
-                
+                print(verticalPlacement)
                 verticalPlacement = childViewController.view.frame.origin.y + childViewController.view.frame.height
             }
         })
@@ -228,6 +229,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func keyboardWillHide(_ notification:Notification){
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
+        print(self.view.frame.midY)
     }
     
     override func didReceiveMemoryWarning() {
