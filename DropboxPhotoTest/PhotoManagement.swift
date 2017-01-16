@@ -121,9 +121,11 @@ class PhotoManager : NSObject {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [String: [String]]
+                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
                         var keysToKill = [String]()
-                            for (team, dates) in teams {
+                        if teams.count != 0 {
+                            let dict = teams[0]
+                            for (team, dates) in dict {
                                 for date in dates{
                                     self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
                                         self.storeOnFirebase(number: Int(team)!, image: image, done: {
@@ -134,7 +136,8 @@ class PhotoManager : NSObject {
                                 }
                                 self.teamsList.set(value: (dates.filter { !keysToKill.contains($0) }).asData(), key: "teams")
                             }
-                        
+
+                        }
                         
                     })
                 }
@@ -155,9 +158,9 @@ class PhotoManager : NSObject {
                 // A team will not have any previous date keys if keys has nothing in it, so append the date key to the array without worrying about previous information
                 dateArray.append(key)
                 // Create new team number and make keys into data format to cache
-                keys[String(number)] = dateArray
+                keys.append([String(number) : dateArray])
             } else {
-                var dict = keys as [String: [String]]
+                var dict = keys[0] as [String: [String]]
                 // If the team number already exists in the queue
                 if Array(dict.keys.map { String($0) }).contains(where: {$0 == String(number)}) {
                     // Get previous dates and add new date
@@ -165,12 +168,12 @@ class PhotoManager : NSObject {
                     dateArray.append(key)
                     dict[String(number)] = dateArray
                     // Updates keys to include new date
-                    keys = dict
+                    keys[0] = dict
                 } else { // Create the team number
                     dateArray.append(key)
                     
                     dict.updateValue(dateArray, forKey: String(number))
-                    keys = dict
+                    keys[0] = dict
                 }
             }
             let data = NSKeyedArchiver.archivedData(withRootObject:keys)
