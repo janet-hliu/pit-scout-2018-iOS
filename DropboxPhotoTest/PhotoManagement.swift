@@ -32,6 +32,7 @@ class PhotoManager : NSObject {
     let teamsList = Shared.dataCache
     let imageQueueCache = Shared.imageCache
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://firebase-scouting-2016.appspot.com")
+    var teamKeys : [String]?
 
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
@@ -119,18 +120,23 @@ class PhotoManager : NSObject {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
             while true {
                 if Reachability.isConnectedToNetwork() {
-                    self.teamsList.fetch(key: "keys").onSuccess({ (keysData) in
-                        let keys = (Array.convertFromData(keysData) ?? []) as [String]
+                    self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
                         var keysToKill = [String]()
-                        for key in keys {
-                            self.imageQueueCache.fetch(key: key).onSuccess({ (image) in
-                                self.storeOnFirebase(number: number, image: image, done: {
-                                    keysToKill.append(key)
-                                })
-                                sleep(60)
-                            })
+                        for i in teams{
+                            for (team, dates) in i {
+                                for date in dates{
+                                    self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
+                                        self.storeOnFirebase(number: number, image: image, done: {
+                                            keysToKill.append(date)
+                                        })
+                                        sleep(60)
+                                    })
+                                }
+                                self.teamsList.set(value: (dates.filter { !keysToKill.contains($0) }).asData(), key: "teams")
+                            }
                         }
-                        self.teamsList.set(value: (keys.filter { !keysToKill.contains($0) }).asData(), key: "keys")
+                        
                     })
                 }
                 sleep(30)
@@ -139,18 +145,38 @@ class PhotoManager : NSObject {
         
     }
     // Photo storage stuff - work on waiting till wifi
-    func addImageKey(key : String) {
-        teamsList.fetch(key: "keys").onSuccess({ (keysData) in
-            //what is keys supposed to be? an array of date strings or an array of photo/data?
-            var keys = (Array.convertFromData(keysData) ?? []) as [String]
-            keys.append(key)
-            self.teamsList.set(value: keys.asData(), key: "keys")
+    func addImageKey(key : String, number: Int) {
+        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            // dictionary is in array because NSKeyedUnarchiver does not work with dictionaries. Keys is an array that has team number: [date keys: images]
+            var keys = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
+            // array is the list of date keys under a certain team number
+            var array = [String]()
+            array = keys[0][String(number)]!
+            array.append(key)
+            // if keys is empty and has no values
+            if keys.count == 0 {
+                // create new team number
+                keys.append([String(number):array])
+                let data = NSKeyedArchiver.archivedData(withRootObject:keys)
+                self.teamsList.set(value: data, key: "teams")
+            } else {
+                var dict = keys[0] as! [String: [String]]
+                // if the team number already exists in the queue
+                if Array(dict.keys.map { String($0) }).contains(where: {$0 == String(number)}) {
+                    
+                } else {
+                    
+                }
+                keys.append([String(number):array])
+                let data = NSKeyedArchiver.archivedData(withRootObject:keys)
+                self.teamsList.set(value:  data, key: "teams")
+            }
         })
     }
     
-    func addToFirebaseStorageQueue(image: UIImage) {
+    func addToFirebaseStorageQueue(image: UIImage, number: Int) {
         let key = String(describing: Date())
-        addImageKey(key: key)
+        addImageKey(key: key, number: number)
         imageQueueCache.set(value: image, key: key)
     }
     

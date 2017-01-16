@@ -159,7 +159,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         browser.autoPlayOnAppear = false; // Auto-play first video
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        teamsList.set(value: [String]().asData(), key: "keys")
+        teamsList.set(value: [String]().asData(), key: "teams")
         photoManager.startUploadingImageQueue(number: number)
     }
     
@@ -212,7 +212,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         picker.dismiss(animated: true, completion: nil)
         self.photos.append(MWPhoto(image: image))
         photoManager.photoSaver.saveImage(image)
-        photoManager.addToFirebaseStorageQueue(image: image)
+        photoManager.addToFirebaseStorageQueue(image: image, number: number)
     }
     //You shold only have to call this once each time the app wakes up
     
@@ -317,3 +317,4 @@ extension Array : DataConvertible, DataRepresentable {
     }
     
 }
+
