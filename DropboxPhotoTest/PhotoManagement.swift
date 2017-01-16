@@ -123,11 +123,12 @@ class PhotoManager : NSObject {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
                         let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
                         var keysToKill = [String]()
-                        for i in teams{
-                            for (team, dates) in i {
+                        if teams.count != 0 {
+                            let dict = teams[0]
+                            for (team, dates) in dict {
                                 for date in dates{
                                     self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
-                                        self.storeOnFirebase(number: number, image: image, done: {
+                                        self.storeOnFirebase(number: Int(team)!, image: image, done: {
                                             keysToKill.append(date)
                                         })
                                         sleep(60)
@@ -135,6 +136,7 @@ class PhotoManager : NSObject {
                                 }
                                 self.teamsList.set(value: (dates.filter { !keysToKill.contains($0) }).asData(), key: "teams")
                             }
+
                         }
                         
                     })
@@ -147,30 +149,35 @@ class PhotoManager : NSObject {
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            // dictionary is in array because NSKeyedUnarchiver does not work with dictionaries. Keys is an array that has team number: [date keys: images]
+            // keys is in an array because NSKeyedUnarchiver does not work with dictionaries. Keys is an array that has the dictionary [team number: [date keys]]. It has only one index (the first dictionary, which then contains all other information
             var keys = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
-            // array is the list of date keys under a certain team number
-            var array = [String]()
-            array = keys[0][String(number)]!
-            array.append(key)
-            // if keys is empty and has no values
+            // Array is the list of date keys under a certain team number
+            var dateArray = [String]()
+            // If keys is empty and has no values
             if keys.count == 0 {
-                // create new team number
-                keys.append([String(number):array])
-                let data = NSKeyedArchiver.archivedData(withRootObject:keys)
-                self.teamsList.set(value: data, key: "teams")
+                // A team will not have any previous date keys if keys has nothing in it, so append the date key to the array without worrying about previous information
+                dateArray.append(key)
+                // Create new team number and make keys into data format to cache
+                keys.append([String(number) : dateArray])
             } else {
-                var dict = keys[0] as! [String: [String]]
-                // if the team number already exists in the queue
+                var dict = keys[0] as [String: [String]]
+                // If the team number already exists in the queue
                 if Array(dict.keys.map { String($0) }).contains(where: {$0 == String(number)}) {
+                    // Get previous dates and add new date
+                    dateArray = dict[String(number)]!
+                    dateArray.append(key)
+                    dict[String(number)] = dateArray
+                    // Updates keys to include new date
+                    keys[0] = dict
+                } else { // Create the team number
+                    dateArray.append(key)
                     
-                } else {
-                    
+                    dict.updateValue(dateArray, forKey: String(number))
+                    keys[0] = dict
                 }
-                keys.append([String(number):array])
-                let data = NSKeyedArchiver.archivedData(withRootObject:keys)
-                self.teamsList.set(value:  data, key: "teams")
             }
+            let data = NSKeyedArchiver.archivedData(withRootObject:keys)
+            self.teamsList.set(value: data, key: "teams")
         })
     }
     
