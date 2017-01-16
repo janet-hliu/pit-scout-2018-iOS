@@ -77,6 +77,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         self.browser.reloadData()
                     })
                 }
+                
             })
             
             self.scrollView.addSubview(viewImagesButton)
