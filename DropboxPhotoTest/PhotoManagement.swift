@@ -61,7 +61,7 @@ class PhotoManager : NSObject {
     }
     
     func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
-        
+        // Firebase key of photoIndex
         self.getSharedURLsForTeam(teamNumber) { [unowned self] (urls) -> () in
             let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
             myTeamFirebaseRef.child("photoIndex").observeSingleEvent(of: .value, with: { (snap) in
@@ -69,12 +69,11 @@ class PhotoManager : NSObject {
                 photoIndex = photoIndex + 1
             myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
             })
-            // sets url to be used in
             
-            //create key for current photo index, real index only goes up
-            //1. increment firebase index key of photos
+            
             //2. Make url of photo
             //3. append urls to old urls
+            
             if let oldURLs = urls {
                 let i : Int = oldURLs.count
                 var photoList: [String]
