@@ -94,9 +94,6 @@ class PhotoManager : NSObject {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("otherImageUrls")
         currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            if snap.childrenCount >= 3 {
-                currentURLs.child((snap.children.allObjects.first as! FIRDataSnapshot).key).removeValue()
-            }
             currentURLs.childByAutoId().setValue(link)
 
             if(selectedImage) {

@@ -40,8 +40,6 @@ class CustomPhotoAlbum {
             return   // If there was an error upstream, skip the save.
         }
         
-        
-        
         PHPhotoLibrary.shared().performChanges({
             let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             let assetPlaceholder = assetRequest.placeholderForCreatedAsset

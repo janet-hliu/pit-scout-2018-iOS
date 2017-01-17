@@ -39,7 +39,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.scrollRectToVisible((activeField?.frame)!, animated: true)
         }
     }
-    var scrollPositionBeforeScrollingToTextField : CGFloat = -38
+    var scrollPositionBeforeScrollingToTextField : CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,10 +80,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
             })
             
-            self.scrollView.addSubview(viewImagesButton)
-            
             verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
             
+            self.scrollView.addSubview(viewImagesButton)
+            
+            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+                self.notActuallyLeavingViewController = true
+                self.updateMyPhotos { [unowned self] in
+                    let nav = UINavigationController(rootViewController: self.browser)
+                    nav.delegate = self
+                    self.present(nav, animated: true, completion: {
+                        self.browser.reloadData()
+                    })
+                }
+            })
+            
+            verticalPlacement = deleteImagesButton.frame.origin.y + deleteImagesButton.frame.height
+            
+            self.scrollView.addSubview(deleteImagesButton)
+
             /* Text Input
             let numberOfWheels = PSUITextInputViewController()
             numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
@@ -112,10 +127,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let availableWeight = PSUITextInputViewController()
             availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
             availableWeight.neededType = .int
+        
            
-            /* // Switch
+            // Switch
             let willCheesecake = PSUISwitchViewController()
-            willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitWillCheesecake"), initialValue: snap.childSnapshot(forPath: "pitWillCheesecake").value) */
+            willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
             
             // self.addChildViewController(numberOfWheels)
             self.addChildViewController(self.selectedImageURL)
@@ -123,7 +139,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.addChildViewController(tankDrive)
             self.addChildViewController(pitOrganization)
             self.addChildViewController(availableWeight)
-            //self.addChildViewController(willCheesecake)
+            self.addChildViewController(willCheesecake)
             
             for childViewController in self.childViewControllers {
                 self.scrollView.addSubview(childViewController.view)
@@ -229,7 +245,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func keyboardWillHide(_ notification:Notification){
-        scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
+       // scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         print(self.view.frame.midY)
     }
     
