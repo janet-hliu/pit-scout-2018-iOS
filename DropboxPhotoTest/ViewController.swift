@@ -77,6 +77,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         self.browser.reloadData()
                     })
                 }
+                
             })
             
             verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
