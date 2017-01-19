@@ -70,10 +70,6 @@ class PhotoManager : NSObject {
             myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
             })
             
-            
-            //2. Make url of photo
-            //3. append urls to old urls
-            
             if let oldURLs = urls {
                 let i : Int = oldURLs.count
                 var photoList: [String]
