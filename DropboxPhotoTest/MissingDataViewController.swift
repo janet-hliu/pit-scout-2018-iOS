@@ -20,7 +20,7 @@ class MissingDataViewController : UIViewController {
     
     let firebaseKeys = ["pitNumberOfWheels", "pitNotes", "pitProgrammingLanguage", "pitAvailableWeight", "pitDidUseStandardTankDrive", "pitOrganization"]
     
-    let ignoreKeys = ["pitNotes", "pitAvailableWeight", "photoIndex", "selectedImageUrl"]
+    let ignoreKeys = ["pitNotes", "pitAvailableWeight", "photoIndex", "selectedImageURL"]
     
     override func viewWillAppear(_ animated: Bool) {
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100
@@ -31,7 +31,7 @@ class MissingDataViewController : UIViewController {
         if let snap = self.snap {
             for team in snap.children.allObjects {
                 let t = (team as! FIRDataSnapshot).value as! [String: AnyObject]
-                if t["selectedImageUrl"] == nil {
+                if t["selectedImageURL"] == nil {
                     self.updateWithText("\nTeam \(t["number"]!) has no selected image URL.", color: UIColor.blue)
                 }
                 var dataNils : [String] = []

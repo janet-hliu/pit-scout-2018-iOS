@@ -28,7 +28,7 @@ class PhotoManager : NSObject {
     var currentlyNotifyingTeamNumber = 0
     let photoSaver = CustomPhotoAlbum()
     var activeImages = [[String: AnyObject]]()
-    let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2016.appspot.com/o/"
+    let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2017-5f51c.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
     let teamsList = Shared.dataCache
     let imageQueueCache = Shared.imageCache
@@ -88,12 +88,12 @@ class PhotoManager : NSObject {
     
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int, selectedImage: Bool) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
-        let currentURLs = teamFirebase.child("otherImageUrls")
+        let currentURLs = teamFirebase.child("allImageURLs")
         currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
 
             if(selectedImage) {
-                teamFirebase.child("selectedImageUrl").setValue(link)
+                teamFirebase.child("selectedImageURL").setValue(link)
             }
         })
     }

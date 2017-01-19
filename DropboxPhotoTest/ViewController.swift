@@ -104,7 +104,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
             numberOfWheels.neededType = .int */
             
-            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("selectedImageUrl"), initialValue: snap.childSnapshot(forPath: "selectedImageUrl").value)
+            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("selectedImageURL"), initialValue: snap.childSnapshot(forPath: "selectedImageURL").value)
             self.selectedImageURL.neededType = .string
             
             //Segmented Control
@@ -157,7 +157,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         
         
-        self.ourTeam.child("otherImageUrls").observe(.value, with: { (snap) -> Void in
+        self.ourTeam.child("allImageURLs").observe(.value, with: { (snap) -> Void in
             if self.numberOfImagesOnFirebase == -1 { //This is the first time that the firebase event gets called, it gets called once no matter what when you first get here in code.
                 self.numberOfImagesOnFirebase = Int(snap.childrenCount)
                 self.updateMyPhotos({})
