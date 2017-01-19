@@ -32,7 +32,7 @@ class PhotoManager : NSObject {
     let firebaseImageDownloadURLEnd = "?alt=media"
     let teamsList = Shared.dataCache
     let imageQueueCache = Shared.imageCache
-    let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://firebase-scouting-2016.appspot.com")
+    let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     
     
