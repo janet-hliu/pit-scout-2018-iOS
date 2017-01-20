@@ -69,7 +69,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                if  snap.childSnapshot(forPath: "photoIndex").value != nil {self.notActuallyLeavingViewController = true
+                if snap.childSnapshot(forPath: "photoIndex").value != nil { self.notActuallyLeavingViewController = true
                     self.updateMyPhotos { [unowned self] in
                         let nav = UINavigationController(rootViewController: self.browser)
                         nav.delegate = self
