@@ -29,7 +29,6 @@
 		19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F317611DC9A400008EBFAD /* PSUITextInputView.xib */; };
 		426FFAA21E307247005D63DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 426FFAA11E307247005D63DC /* GoogleService-Info.plist */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
-		FAD639771BA81EF0BD13F692 /* Pods_DropboxPhotoTestUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,9 +87,7 @@
 		426FFAA11E307247005D63DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
-		66D8A587C315FA5407F0A6EB /* Pods-DropboxPhotoTestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTestUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTestUITests/Pods-DropboxPhotoTestUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
-		9F0CBC9B81FDD17AFD432CF5 /* Pods-DropboxPhotoTestUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTestUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTestUITests/Pods-DropboxPhotoTestUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -118,7 +115,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAD639771BA81EF0BD13F692 /* Pods_DropboxPhotoTestUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,8 +126,6 @@
 			children = (
 				8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */,
 				669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */,
-				9F0CBC9B81FDD17AFD432CF5 /* Pods-DropboxPhotoTestUITests.debug.xcconfig */,
-				66D8A587C315FA5407F0A6EB /* Pods-DropboxPhotoTestUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -274,11 +268,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestUITests" */;
 			buildPhases = (
-				C35776CAB0F92202DD2D8DF0 /* [CP] Check Pods Manifest.lock */,
 				192BEAD91C3463BA00992A8A /* Sources */,
 				192BEADA1C3463BA00992A8A /* Frameworks */,
 				192BEADB1C3463BA00992A8A /* Resources */,
-				BEE166F9FEB74AC8DE1F5DA4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -384,36 +376,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BEE166F9FEB74AC8DE1F5DA4 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTestUITests/Pods-DropboxPhotoTestUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C35776CAB0F92202DD2D8DF0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		E9FA28EC8E16006975D2E77F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -441,7 +403,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -688,7 +650,6 @@
 		};
 		192BEAED1C3463BA00992A8A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F0CBC9B81FDD17AFD432CF5 /* Pods-DropboxPhotoTestUITests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = DropboxPhotoTestUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -702,7 +663,6 @@
 		};
 		192BEAEE1C3463BA00992A8A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66D8A587C315FA5407F0A6EB /* Pods-DropboxPhotoTestUITests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = DropboxPhotoTestUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
