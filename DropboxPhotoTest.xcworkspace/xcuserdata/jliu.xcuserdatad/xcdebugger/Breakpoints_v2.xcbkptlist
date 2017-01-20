@@ -196,7 +196,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "196"
             endingLineNumber = "196"
-            landmarkName = "updateMyPhotos(_:)"
+            landmarkName = "didLongPressImageButton(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

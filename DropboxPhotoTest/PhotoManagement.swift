@@ -88,12 +88,12 @@ class PhotoManager : NSObject {
     
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int, selectedImage: Bool) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
-        let currentURLs = teamFirebase.child("allImageURLs")
+        let currentURLs = teamFirebase.child("pitAllImageURLs")
         currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
 
             if(selectedImage) {
-                teamFirebase.child("selectedImageURL").setValue(link)
+                teamFirebase.child("pitSelectedImageURL").setValue(link)
             }
         })
     }

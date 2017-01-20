@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 import Haneke
 
-let firebaseKeys = ["pitNumberOfWheels",  "selectedImageURL"]
+let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageURL"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
@@ -77,7 +77,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
                 self.teamNums.append(teamNum)
-                if let urlsForTeam = team["allImageURLs"] as? NSMutableDictionary {
+                if let urlsForTeam = team["pitAllImageURLs"] as? NSMutableDictionary {
                     let urlsArr = NSMutableArray()
                     for (_, value) in urlsForTeam {
                         urlsArr.add(value)
