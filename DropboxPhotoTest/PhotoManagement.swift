@@ -63,16 +63,10 @@ class PhotoManager : NSObject {
     func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
         // Firebase key of photoIndex
         self.getSharedURLsForTeam(teamNumber) { [unowned self] (urls) -> () in
-            let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
-            myTeamFirebaseRef.child("photoIndex").observeSingleEvent(of: .value, with: { (snap) in
-                var photoIndex = snap.value as? Int ?? -1
-                photoIndex = photoIndex + 1
-            myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
-            })
             
             if let oldURLs = urls {
                 let i : Int = oldURLs.count
-                var photoList: [String]
+               // var photoList: [String]
                 let url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: i)
                     oldURLs.add(url)
                  //Old URLs is actually new urls at this point
@@ -91,12 +85,16 @@ class PhotoManager : NSObject {
         let currentURLs = teamFirebase.child("pitAllImageURLs")
         currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
+            let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
+            var photoIndex = snap.value as? Int ?? -1
+            photoIndex = photoIndex + 1
+            myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
+        })
 
             if(selectedImage) {
                 teamFirebase.child("pitSelectedImageURL").setValue(link)
             }
-        })
-    }
+        }
     
     func makeURLForTeamNumAndImageIndex(_ teamNum: Int, imageIndex: Int) -> String {
         return self.firebaseImageDownloadURLBeginning + self.makeFilenameForTeamNumAndIndex(teamNum, imageIndex: imageIndex) + self.firebaseImageDownloadURLEnd
@@ -194,7 +192,7 @@ class PhotoManager : NSObject {
                     let downloadURL = metadata!.downloadURL()?.absoluteString
                     self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     
-                    print("UPLOADED: \(downloadURL)")
+                    print("UPLOADED: \(downloadURL!)")
                     done()
                 }
             }

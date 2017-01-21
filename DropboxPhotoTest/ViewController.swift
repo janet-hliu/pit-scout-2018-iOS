@@ -163,7 +163,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
             if self.numberOfImagesOnFirebase == -1 { //This is the first time that the firebase event gets called, it gets called once no matter what when you first get here in code.
-                self.numberOfImagesOnFirebase = Int(snap.childrenCount)
+                    self.numberOfImagesOnFirebase = Int(snap.childrenCount)
                 self.updateMyPhotos({})
             } else {
                 self.numberOfImagesOnFirebase = Int(snap.childrenCount)
