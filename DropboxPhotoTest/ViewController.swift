@@ -216,7 +216,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt, selectedChanged selected: Bool) {
         if selected {
             self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                self.dismiss(animated: true, completion: nil)
+                // self.dismiss(animated: true, completion: nil)
                 self.photoManager.updateUrl(self.number, callback: { i in
                     self.selectedImageURL.set(self.photoManager.makeURLForTeamNumAndImageIndex(self.number, imageIndex: i) as AnyObject)
                 })
