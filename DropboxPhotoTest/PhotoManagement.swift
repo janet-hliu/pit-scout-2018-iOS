@@ -113,8 +113,8 @@ class PhotoManager : NSObject {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                        let NSKeyedUnarchiver.unarchiveObject(with: keysData)
-                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
+                        
+                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSDictionary as! [[String: [String]]]
                         var keysToKill = [String]()
                         if teams.count != 0 {
                             let dict = teams[0]

@@ -30,6 +30,7 @@
 		5BC8B1BB1E31BE09009D380D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC8B1BA1E31BE09009D380D /* GoogleService-Info.plist */; };
 		5BC8B1BC1E31BE09009D380D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC8B1BA1E31BE09009D380D /* GoogleService-Info.plist */; };
 		5BC8B1BD1E31BE09009D380D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BC8B1BA1E31BE09009D380D /* GoogleService-Info.plist */; };
+		A6F5EDC2C173615BF460DFE2 /* Pods_Pit_Scout_2017.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB9E9447CD94EA2331FA9BA1 /* Pods_Pit_Scout_2017.framework */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,17 +57,17 @@
 		190DBEC71C5598FC00C4D1C2 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
 		190DBED01C5599B200C4D1C2 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		190DBED21C5599D200C4D1C2 /* libicucore.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.A.tbd; path = usr/lib/libicucore.A.tbd; sourceTree = SDKROOT; };
-		192BEABE1C3463B900992A8A /* Pit Scout 2017.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pit Scout 2017.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DropboxPhotoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAC11C3463B900992A8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		192BEAC31C3463B900992A8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		192BEAC61C3463B900992A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		192BEAC81C3463B900992A8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		192BEACB1C3463B900992A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		192BEACD1C3463B900992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		192BEAD21C3463BA00992A8A /* Pit Scout 2017Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pit Scout 2017Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DropboxPhotoTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAD61C3463BA00992A8A /* DropboxPhotoTestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxPhotoTestTests.swift; sourceTree = "<group>"; };
 		192BEAD81C3463BA00992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		192BEADD1C3463BA00992A8A /* Pit Scout 2017UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pit Scout 2017UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DropboxPhotoTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAE11C3463BA00992A8A /* DropboxPhotoTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxPhotoTestUITests.swift; sourceTree = "<group>"; };
 		192BEAE31C3463BA00992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		194587931C7D326D00507019 /* PhotoLibrarySaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoLibrarySaver.swift; sourceTree = "<group>"; };
@@ -86,11 +87,14 @@
 		19EEDCCF1CE583470057AA96 /* PSUIElements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSUIElements.swift; sourceTree = "<group>"; };
 		19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUISwitchViewController.xib; sourceTree = "<group>"; };
 		19F317611DC9A400008EBFAD /* PSUITextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUITextInputView.xib; sourceTree = "<group>"; };
+		2D89FE56E1DC360372196205 /* Pods-Pit Scout 2017.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pit Scout 2017.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pit Scout 2017/Pods-Pit Scout 2017.debug.xcconfig"; sourceTree = "<group>"; };
 		5BC8B1BA1E31BE09009D380D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		61300B1A549D437C9106AA8E /* Pods-Pit Scout 2017.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pit Scout 2017.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pit Scout 2017/Pods-Pit Scout 2017.release.xcconfig"; sourceTree = "<group>"; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB9E9447CD94EA2331FA9BA1 /* Pods_Pit_Scout_2017.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pit_Scout_2017.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,7 @@
 				19A6697E1C51E9E50044D1F2 /* CFNetwork.framework in Frameworks */,
 				19A6697C1C51E9D60044D1F2 /* libc++.tbd in Frameworks */,
 				D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */,
+				A6F5EDC2C173615BF460DFE2 /* Pods_Pit_Scout_2017.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +133,8 @@
 			children = (
 				8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */,
 				669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */,
+				2D89FE56E1DC360372196205 /* Pods-Pit Scout 2017.debug.xcconfig */,
+				61300B1A549D437C9106AA8E /* Pods-Pit Scout 2017.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -147,9 +154,9 @@
 		192BEABF1C3463B900992A8A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				192BEABE1C3463B900992A8A /* Pit Scout 2017.app */,
-				192BEAD21C3463BA00992A8A /* Pit Scout 2017Tests.xctest */,
-				192BEADD1C3463BA00992A8A /* Pit Scout 2017UITests.xctest */,
+				192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */,
+				192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */,
+				192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -221,6 +228,7 @@
 				19A6697B1C51E9D60044D1F2 /* libc++.tbd */,
 				60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */,
 				C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */,
+				DB9E9447CD94EA2331FA9BA1 /* Pods_Pit_Scout_2017.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -228,9 +236,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		192BEABD1C3463B900992A8A /* Pit Scout 2017 */ = {
+		192BEABD1C3463B900992A8A /* DropboxPhotoTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017" */;
+			buildConfigurationList = 192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTest" */;
 			buildPhases = (
 				FD714B0B8FA6903A8EDA9E4D /* [CP] Check Pods Manifest.lock */,
 				192BEABA1C3463B900992A8A /* Sources */,
@@ -243,14 +251,14 @@
 			);
 			dependencies = (
 			);
-			name = "Pit Scout 2017";
+			name = DropboxPhotoTest;
 			productName = DropboxPhotoTest;
-			productReference = 192BEABE1C3463B900992A8A /* Pit Scout 2017.app */;
+			productReference = 192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */;
 			productType = "com.apple.product-type.application";
 		};
-		192BEAD11C3463BA00992A8A /* Pit Scout 2017Tests */ = {
+		192BEAD11C3463BA00992A8A /* DropboxPhotoTestTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017Tests" */;
+			buildConfigurationList = 192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestTests" */;
 			buildPhases = (
 				192BEACE1C3463BA00992A8A /* Sources */,
 				192BEACF1C3463BA00992A8A /* Frameworks */,
@@ -261,14 +269,14 @@
 			dependencies = (
 				192BEAD41C3463BA00992A8A /* PBXTargetDependency */,
 			);
-			name = "Pit Scout 2017Tests";
+			name = DropboxPhotoTestTests;
 			productName = DropboxPhotoTestTests;
-			productReference = 192BEAD21C3463BA00992A8A /* Pit Scout 2017Tests.xctest */;
+			productReference = 192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		192BEADC1C3463BA00992A8A /* Pit Scout 2017UITests */ = {
+		192BEADC1C3463BA00992A8A /* DropboxPhotoTestUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017UITests" */;
+			buildConfigurationList = 192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestUITests" */;
 			buildPhases = (
 				192BEAD91C3463BA00992A8A /* Sources */,
 				192BEADA1C3463BA00992A8A /* Frameworks */,
@@ -279,9 +287,9 @@
 			dependencies = (
 				192BEADF1C3463BA00992A8A /* PBXTargetDependency */,
 			);
-			name = "Pit Scout 2017UITests";
+			name = DropboxPhotoTestUITests;
 			productName = DropboxPhotoTestUITests;
-			productReference = 192BEADD1C3463BA00992A8A /* Pit Scout 2017UITests.xctest */;
+			productReference = 192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -311,7 +319,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "Pit Scout 2017" */;
+			buildConfigurationList = 192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "DropboxPhotoTest" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -324,9 +332,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				192BEABD1C3463B900992A8A /* Pit Scout 2017 */,
-				192BEAD11C3463BA00992A8A /* Pit Scout 2017Tests */,
-				192BEADC1C3463BA00992A8A /* Pit Scout 2017UITests */,
+				192BEABD1C3463B900992A8A /* DropboxPhotoTest */,
+				192BEAD11C3463BA00992A8A /* DropboxPhotoTestTests */,
+				192BEADC1C3463BA00992A8A /* DropboxPhotoTestUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -377,7 +385,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pit Scout 2017/Pods-Pit Scout 2017-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E9FA28EC8E16006975D2E77F /* [CP] Embed Pods Frameworks */ = {
@@ -392,7 +400,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Pit Scout 2017/Pods-Pit Scout 2017-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD714B0B8FA6903A8EDA9E4D /* [CP] Check Pods Manifest.lock */ = {
@@ -449,12 +457,12 @@
 /* Begin PBXTargetDependency section */
 		192BEAD41C3463BA00992A8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 192BEABD1C3463B900992A8A /* Pit Scout 2017 */;
+			target = 192BEABD1C3463B900992A8A /* DropboxPhotoTest */;
 			targetProxy = 192BEAD31C3463BA00992A8A /* PBXContainerItemProxy */;
 		};
 		192BEADF1C3463BA00992A8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 192BEABD1C3463B900992A8A /* Pit Scout 2017 */;
+			target = 192BEABD1C3463B900992A8A /* DropboxPhotoTest */;
 			targetProxy = 192BEADE1C3463BA00992A8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -573,7 +581,7 @@
 		};
 		192BEAE71C3463BA00992A8A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */;
+			baseConfigurationReference = 2D89FE56E1DC360372196205 /* Pods-Pit Scout 2017.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
@@ -601,7 +609,7 @@
 		};
 		192BEAE81C3463BA00992A8A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */;
+			baseConfigurationReference = 61300B1A549D437C9106AA8E /* Pods-Pit Scout 2017.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
@@ -635,7 +643,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pit Scout 2017.app/Pit Scout 2017";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Debug;
 		};
@@ -648,7 +656,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pit Scout 2017.app/Pit Scout 2017";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Release;
 		};
@@ -681,7 +689,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "Pit Scout 2017" */ = {
+		192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "DropboxPhotoTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAE41C3463BA00992A8A /* Debug */,
@@ -690,7 +698,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017" */ = {
+		192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAE71C3463BA00992A8A /* Debug */,
@@ -699,7 +707,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017Tests" */ = {
+		192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAEA1C3463BA00992A8A /* Debug */,
@@ -708,7 +716,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "Pit Scout 2017UITests" */ = {
+		192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAED1C3463BA00992A8A /* Debug */,

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pit Scout 2017</string>
+	<string>DropboxPhotoTest</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
@@ -51,6 +51,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to share photos of robots</string>
+	<key>NSHumanReadableCopyright</key>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access to robot photos</string>
 	<key>UILaunchStoryboardName</key>

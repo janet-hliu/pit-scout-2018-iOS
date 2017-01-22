@@ -5,7 +5,7 @@
 use_frameworks!
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'DropboxPhotoTest' do
+target 'Pit Scout 2017' do
     #platform :ios, '9.1'
     post_install do |installer|
         installer.pods_project.targets.each do |target|
