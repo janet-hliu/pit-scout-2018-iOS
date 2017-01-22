@@ -30,7 +30,7 @@ class PhotoManager : NSObject {
     var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2017-5f51c.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
-    let teamsList = Shared.dataCache
+    var teamsList = Shared.dataCache
     let imageQueueCache = Shared.imageCache
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
@@ -63,19 +63,13 @@ class PhotoManager : NSObject {
     func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
         // Firebase key of photoIndex
         self.getSharedURLsForTeam(teamNumber) { [unowned self] (urls) -> () in
-            let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
-            myTeamFirebaseRef.child("photoIndex").observeSingleEvent(of: .value, with: { (snap) in
-                var photoIndex = snap.value as? Int ?? -1
-                photoIndex = photoIndex + 1
-            myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
-            })
             
             if let oldURLs = urls {
                 let i : Int = oldURLs.count
-                var photoList: [String]
+                // var photoList: [String]
                 let url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: i)
-                    oldURLs.add(url)
-                 //Old URLs is actually new urls at this point
+                oldURLs.add(url)
+                //Old URLs is actually new urls at this point
                 self.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: oldURLs), key: "sharedURLs\(teamNumber)", success: { _ in
                     callback(i)
                 })
@@ -88,14 +82,18 @@ class PhotoManager : NSObject {
     
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int, selectedImage: Bool) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
-        let currentURLs = teamFirebase.child("allImageURLs")
+        let currentURLs = teamFirebase.child("pitAllImageURLs")
         currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
-
-            if(selectedImage) {
-                teamFirebase.child("selectedImageURL").setValue(link)
-            }
+            let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
+            var photoIndex = snap.value as? Int ?? -1
+            photoIndex = photoIndex + 1
+            myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
         })
+        
+        if(selectedImage) {
+            teamFirebase.child("pitSelectedImageURL").setValue(link)
+        }
     }
     
     func makeURLForTeamNumAndImageIndex(_ teamNum: Int, imageIndex: Int) -> String {
@@ -115,22 +113,24 @@ class PhotoManager : NSObject {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
-                        var keysToKill = [String]()
+                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSDictionary as! [[String: [String]]]
+                        self.teamsList.set
+                        var selfkeysToKill = [String]()
                         if teams.count != 0 {
                             let dict = teams[0]
                             for (team, dates) in dict {
                                 for date in dates{
                                     self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
                                         self.storeOnFirebase(number: Int(team)!, image: image, done: {
-                                            keysToKill.append(date)
+                                            selfkeysToKill.append(date)
                                         })
                                         sleep(60)
                                     })
                                 }
-                                self.teamsList.set(value: (dates.filter { !keysToKill.contains($0) }).asData(), key: "teams")
+                                self.teamsList.set(value: (dates.filter { !selfkeysToKill.contains($0) }).asData(), key: "teams")
+                                self.teamsList = self.teamsList as! Dictionary
                             }
-
+                            
                         }
                         
                     })
@@ -194,15 +194,17 @@ class PhotoManager : NSObject {
                     let downloadURL = metadata!.downloadURL()?.absoluteString
                     self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     
-                    print("UPLOADED: \(downloadURL)")
+                    print("UPLOADED:\(downloadURL!)")
                     done()
                 }
             }
-          
+            
         })
         
     }
-    
+    func deleteImageFromFirebase() {
+        
+    }
 }
 
 extension UIImage {

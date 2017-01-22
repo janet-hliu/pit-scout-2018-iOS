@@ -114,9 +114,9 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
             self.UIResponse = { value in
                 currentResponse!(value)
                 //print(String(value))
-                    self.textField.text = value as? String ?? (value as? NSNumber)?.stringValue ?? ""
-        
-
+                self.textField.text = value as? String ?? (value as? NSNumber)?.stringValue ?? ""
+                
+                
             }
         }
     }
@@ -170,7 +170,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         for i in 0..<segments.count {
             self.segmentedController.insertSegment(withTitle: segments[i], at: i, animated: true)
         }
-
+        
         if String(describing:initialValue) != "Optional(<null>)" {
             selectedIndex = segments.index(of: String(describing: initialValue!))!
         }
@@ -179,10 +179,10 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         }
         
         /* self.neededType = .int
-        self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
-        super.UIResponse = { value in
-            self.segmentedController.selectedSegmentIndex = value as! Int
-        } */
+         self.segmentedController.selectedSegmentIndex = super.initialValue as? Int ?? 0
+         super.UIResponse = { value in
+         self.segmentedController.selectedSegmentIndex = value as! Int
+         } */
         self.label.text = super.titleText
         
         

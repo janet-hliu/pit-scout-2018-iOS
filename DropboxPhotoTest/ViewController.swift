@@ -69,15 +69,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                self.notActuallyLeavingViewController = true
-                self.updateMyPhotos { [unowned self] in
-                    let nav = UINavigationController(rootViewController: self.browser)
-                    nav.delegate = self
-                    self.present(nav, animated: true, completion: {
-                        self.browser.reloadData()
-                    })
+                if (snap.childSnapshot(forPath: "photoIndex").value as? Int) == nil {
+                    let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                    noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(noImageAlert, animated: true, completion: nil)
+                } else {
+                    self.notActuallyLeavingViewController = true
+                    self.updateMyPhotos { [unowned self] in
+                        let nav = UINavigationController(rootViewController: self.browser)
+                        nav.delegate = self
+                        self.present(nav, animated: true, completion: {
+                            self.browser.reloadData()
+                        })
+                    }
+                    
                 }
-                
             })
             
             verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
@@ -98,13 +104,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             verticalPlacement = deleteImagesButton.frame.origin.y + deleteImagesButton.frame.height
             
             self.scrollView.addSubview(deleteImagesButton)
-
-            /* Text Input
-            let numberOfWheels = PSUITextInputViewController()
-            numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
-            numberOfWheels.neededType = .int */
             
-            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("selectedImageURL"), initialValue: snap.childSnapshot(forPath: "selectedImageURL").value)
+            /* Text Input
+             let numberOfWheels = PSUITextInputViewController()
+             numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
+             numberOfWheels.neededType = .int */
+            
+            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageURL"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageURL").value)
             self.selectedImageURL.neededType = .string
             
             //Segmented Control
@@ -127,8 +133,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let availableWeight = PSUITextInputViewController()
             availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
             availableWeight.neededType = .int
-        
-           
+            
+            
             // Switch
             let willCheesecake = PSUISwitchViewController()
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
@@ -157,7 +163,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         
         
-        self.ourTeam.child("allImageURLs").observe(.value, with: { (snap) -> Void in
+        self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
             if self.numberOfImagesOnFirebase == -1 { //This is the first time that the firebase event gets called, it gets called once no matter what when you first get here in code.
                 self.numberOfImagesOnFirebase = Int(snap.childrenCount)
                 self.updateMyPhotos({})
@@ -195,12 +201,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func updateMyPhotos(_ callback: @escaping ()->()) {
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-            self.photos.removeAll()
-            for url in urls! {
-                self.photos.append(MWPhoto(url: URL(string: url as! String)))
-            }
-            callback()
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                self.photos.removeAll()
+                /* if String(describing:snap.childSnapshot(forPath: "pitSelectedImageURL").value) != "Optional(<null>)" {
+                 let selectedImage = String(describing: snap.childSnapshot(forPath: "pitSelectedImageURL").value!)
+                 self.photos.append(MWPhoto(url: URL(string: selectedImage )))
+                 for i in 0 ..< urls!.count {
+                 if String(describing: urls![i]) == selectedImage {
+                 urls!.removeObject(at: i)
+                 break
+                 }
+                 }
+                 } // This is if you want selected image to be first, but messes up the cache/image index order */
+                for url in urls! {
+                    self.photos.append(MWPhoto(url: URL(string: url as! String)))
+                }
+            })
         }
+        callback()
     }
     
     func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
@@ -211,9 +229,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if selected {
             self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
                 self.dismiss(animated: true, completion: nil)
-                self.photoManager.updateUrl(self.number, callback: { i in
-                    self.selectedImageURL.set(self.photoManager.makeURLForTeamNumAndImageIndex(self.number, imageIndex: i) as AnyObject)
-                })
+                let selectedImageURL = String(describing: urls![Int(index)])
+                self.selectedImageURL.set(selectedImageURL)
             }
         }
     }
@@ -245,7 +262,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func keyboardWillHide(_ notification:Notification){
-       // scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
+        // scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         print(self.view.frame.midY)
     }
     
@@ -308,18 +325,18 @@ extension Dictionary {
     }
     var FIRJSONString : String {
         //if self.keys[0] as? String != nil && self.vals[0] as? String != nil {
-            var JSONString = "{\n"
-            for i in 0..<self.keys.count {
-                JSONString.append(keys[i] as! String)
-                JSONString.append(" : ")
-                JSONString.append(String(describing: vals[i]))
-                JSONString.append("\n")
-            }
-            JSONString.append("}")
-            return JSONString
+        var JSONString = "{\n"
+        for i in 0..<self.keys.count {
+            JSONString.append(keys[i] as! String)
+            JSONString.append(" : ")
+            JSONString.append(String(describing: vals[i]))
+            JSONString.append("\n")
+        }
+        JSONString.append("}")
+        return JSONString
         /*} else {
-            return "Not of Type [String: String], so cannot use FIRJSONString."
-        }*/
+         return "Not of Type [String: String], so cannot use FIRJSONString."
+         }*/
     }
 }
 

@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 import Haneke
 
-let firebaseKeys = ["pitNumberOfWheels",  "selectedImageURL"]
+let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageURL"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
@@ -77,7 +77,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
                 self.teamNums.append(teamNum)
-                if let urlsForTeam = team["allImageURLs"] as? NSMutableDictionary {
+                if let urlsForTeam = team["pitAllImageURLs"] as? NSMutableDictionary {
                     let urlsArr = NSMutableArray()
                     for (_, value) in urlsForTeam {
                         urlsArr.add(value)
@@ -88,19 +88,19 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
                 if(self.scoutedTeamInfo.count > i) {
                     /*if(self.teamHasBeenPitScouted(team)) {
-                    self.scoutedTeamInfo[i]["hasBeenScouted"] = 1
-                    } else {
-                    self.scoutedTeamInfo[i]["hasBeenScouted"] = 0
-                    }*/
+                     self.scoutedTeamInfo[i]["hasBeenScouted"] = 1
+                     } else {
+                     self.scoutedTeamInfo[i]["hasBeenScouted"] = 0
+                     }*/
                 } else {
                     print("ERROR")
                     /* let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": -1]
-                    self.scoutedTeamInfo.append(scoutedTeamInfoDict)
-                    if(self.teamHasBeenPitScouted(team as! FDataSnapshot)) {
-                    self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 1
-                    } else {
-                    self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 0
-                    }*/
+                     self.scoutedTeamInfo.append(scoutedTeamInfoDict)
+                     if(self.teamHasBeenPitScouted(team as! FDataSnapshot)) {
+                     self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 1
+                     } else {
+                     self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 0
+                     }*/
                 }
                 
             } else {
@@ -133,7 +133,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             self.scoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             self.tableView.reloadData()
             
-            })
+        })
         //self.cache.set(value: NSKeyedArchiver.archivedDataWithRootObject(scoutedTeamInfo), key: "scoutedTeamInfo")
         
         //})
@@ -164,7 +164,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         return true
     }
-
+    
     
     // MARK:  UITextFieldDelegate Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -283,7 +283,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             teamViewController.firebaseStorageRef = self.firebaseStorageRef
         }
         else if segue.identifier == "popoverSegue" {
-            let popoverViewController = segue.destination 
+            let popoverViewController = segue.destination
             popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             popoverViewController.popoverPresentationController!.delegate = self
             if let missingDataViewController = segue.destination as? MissingDataViewController {
