@@ -113,10 +113,10 @@ class PhotoManager : NSObject {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                        let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [[String: [String]]]
+                        var teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [[String: [String]]]
                         var keysToKill = [String]()
                         if teams.count != 0 {
-                            let dict = teams[0]
+                            var dict = teams[0]
                             for (team, dates) in dict {
                                 for date in dates{
                                     self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
@@ -126,8 +126,11 @@ class PhotoManager : NSObject {
                                         sleep(60)
                                     })
                                 }
-                                self.teamsList.set(value: (dates.filter { !keysToKill.contains($0) }).asData(), key: "teams")
+                                dict[team] = dates.filter { !keysToKill.contains($0)}
                             }
+                            teams[0] = dict
+                            let keyData = NSKeyedArchiver.archivedData(withRootObject: teams)
+                            self.teamsList.set(value: keyData, key: "teams")
                         }
                     })
                 }
