@@ -66,7 +66,7 @@ class PhotoManager : NSObject {
             
             if let oldURLs = urls {
                 let i : Int = oldURLs.count
-               // var photoList: [String]
+                // var photoList: [String]
                 let url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: i)
                     oldURLs.add(url)
                  //Old URLs is actually new urls at this point
@@ -192,7 +192,7 @@ class PhotoManager : NSObject {
                     let downloadURL = metadata!.downloadURL()?.absoluteString
                     self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     
-                    print("UPLOADED: \(downloadURL!)")
+                    print("UPLOADED:\(downloadURL!)")
                     done()
                 }
             }
