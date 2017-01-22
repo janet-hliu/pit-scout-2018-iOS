@@ -69,19 +69,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                if  snap.childSnapshot(forPath: "photoIndex").value != nil {self.notActuallyLeavingViewController = true
-                    self.updateMyPhotos { [unowned self] in
-                        let nav = UINavigationController(rootViewController: self.browser)
-                        nav.delegate = self
-                        self.present(nav, animated: true, completion: {
-                            self.browser.reloadData()
-                        })
-                    }
-                } else {
-                    let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
-                    noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(noImageAlert, animated: true, completion: nil)
+                self.notActuallyLeavingViewController = true
+                self.updateMyPhotos { [unowned self] in
+                    let nav = UINavigationController(rootViewController: self.browser)
+                    nav.delegate = self
+                    self.present(nav, animated: true, completion: {
+                        self.browser.reloadData()
+                    })
                 }
+                
             })
             
             verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
