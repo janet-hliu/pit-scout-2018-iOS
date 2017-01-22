@@ -113,6 +113,7 @@ class PhotoManager : NSObject {
             while true {
                 if Reachability.isConnectedToNetwork() {
                     self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+                        let NSKeyedUnarchiver.unarchiveObject(with: keysData)
                         let teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
                         var keysToKill = [String]()
                         if teams.count != 0 {
@@ -200,7 +201,9 @@ class PhotoManager : NSObject {
         })
         
     }
+    func deleteImageFromFirebase() {
     
+    }
 }
 
 extension UIImage {
