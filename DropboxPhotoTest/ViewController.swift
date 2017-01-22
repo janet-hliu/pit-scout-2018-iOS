@@ -201,12 +201,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func updateMyPhotos(_ callback: @escaping ()->()) {
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-            self.photos.removeAll()
-            for url in urls! {
-                self.photos.append(MWPhoto(url: URL(string: url as! String)))
-            }
-            callback()
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                self.photos.removeAll()
+                /* if String(describing:snap.childSnapshot(forPath: "pitSelectedImageURL").value) != "Optional(<null>)" {
+                    let selectedImage = String(describing: snap.childSnapshot(forPath: "pitSelectedImageURL").value!)
+                    self.photos.append(MWPhoto(url: URL(string: selectedImage )))
+                    for i in 0 ..< urls!.count {
+                        if String(describing: urls![i]) == selectedImage {
+                            urls!.removeObject(at: i)
+                            break
+                        }
+                    }
+                } // This is if you want selected image to be first, but messes up the cache/image index order */
+                for url in urls! {
+                        self.photos.append(MWPhoto(url: URL(string: url as! String)))
+                }
+            })
         }
+        callback()
     }
     
     func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
@@ -216,10 +228,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt, selectedChanged selected: Bool) {
         if selected {
             self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                // self.dismiss(animated: true, completion: nil)
-                self.photoManager.updateUrl(self.number, callback: { i in
-                    self.selectedImageURL.set(self.photoManager.makeURLForTeamNumAndImageIndex(self.number, imageIndex: i) as AnyObject)
-                })
+                self.dismiss(animated: true, completion: nil)
+                let selectedImageURL = String(describing: urls![Int(index)])
+                self.selectedImageURL.set(selectedImageURL)
             }
         }
     }
