@@ -61,34 +61,35 @@ class PhotoManager : NSObject {
     }
     
     func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
-        // Firebase key of photoIndex
-        self.getSharedURLsForTeam(teamNumber) { [unowned self] (urls) -> () in
-            
-            if let oldURLs = urls {
-                let i : Int = oldURLs.count
-                // var photoList: [String]
-                let url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: i)
-                oldURLs.add(url)
-                //Old URLs is actually new urls at this point
-                self.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: oldURLs), key: "sharedURLs\(teamNumber)", success: { _ in
-                    callback(i)
-                })
-                
-            } else {
-                print("Could not fetch shared urls for \(teamNumber)")
-            }
-        }
+        let teamFirebase = teamsFirebase.child("\(teamNumber)")
+        teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int
+            self.cache.fetch(key: "sharedURLs\(teamNumber)").onSuccess({ (keysData) in
+                var url: String
+                if photoIndex == nil {
+                    url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: 0)
+                    photoIndex = 0
+                    teamFirebase.child("photoIndex").setValue(0)
+                } else {
+                    url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex!)
+                }
+                let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as?NSMutableArray
+                urlList?.add(url)
+                let urlData = NSKeyedArchiver.archivedData(withRootObject: urlList)
+                self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
+                callback(photoIndex!)
+            })
+        })
     }
     
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int, selectedImage: Bool) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
-        currentURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+        teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
-            let myTeamFirebaseRef = self.teamsFirebase.child(String(teamNumber))
-            var photoIndex = snap.value as? Int ?? -1
+            var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0
             photoIndex = photoIndex + 1
-            myTeamFirebaseRef.child("photoIndex").setValue(photoIndex)
+            teamFirebase.child("photoIndex").setValue(photoIndex)
         })
         
         if(selectedImage) {
@@ -143,7 +144,7 @@ class PhotoManager : NSObject {
     func addImageKey(key : String, number: Int) {
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             // keys is in an array because NSKeyedUnarchiver does not work with dictionaries. Keys is an array that has the dictionary [team number: [date keys]]. It has only one index (the first dictionary, which then contains all other information
-            var keys = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [[String: [String]]]
+            var keys = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [[String: [String]]]
             // Array is the list of date keys under a certain team number
             var dateArray = [String]()
             // If keys is empty and has no values
@@ -155,19 +156,19 @@ class PhotoManager : NSObject {
             } else {
                 var dict = keys[0] as [String: [String]]
                 // If the team number already exists in the queue
-                if Array(dict.keys.map { String($0) }).contains(where: {$0 == String(number)}) {
+                if Array(dict.keys.map { String($0) }).contains(where: { $0 == String(number)}) {
                     // Get previous dates and add new date
                     dateArray = dict[String(number)]!
                     dateArray.append(key)
                     dict[String(number)] = dateArray
-                    // Updates keys to include new date
-                    keys[0] = dict
+                    
                 } else { // Create the team number
                     dateArray.append(key)
                     
                     dict.updateValue(dateArray, forKey: String(number))
-                    keys[0] = dict
                 }
+                // Updates keys to include new date
+                keys[0] = dict
             }
             let data = NSKeyedArchiver.archivedData(withRootObject:keys)
             self.teamsList.set(value: data, key: "teams")

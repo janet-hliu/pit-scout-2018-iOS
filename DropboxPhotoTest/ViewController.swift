@@ -69,6 +69,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+                let imageURLs = self.ourTeam.child("pitAllImageURLs")
+                imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                    if snap.childrenCount == 0 {
+                        let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                        noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(noImageAlert, animated: true, completion: nil)
+                    } else {
+                        self.notActuallyLeavingViewController = true
+                        self.updateMyPhotos { [unowned self] in
+                            let nav = UINavigationController(rootViewController: self.browser)
+                            nav.delegate = self
+                            self.present(nav, animated: true, completion: {
+                                self.browser.reloadData()
+                            })
+                    }
+                    
+                }
+                })
+            })
+            
+            verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
+            
+            self.scrollView.addSubview(viewImagesButton)
+            
+            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
                 if (snap.childSnapshot(forPath: "photoIndex").value as? Int) == nil {
                     let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
                     noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -82,22 +107,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.browser.reloadData()
                         })
                     }
-                    
-                }
-            })
-            
-            verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
-            
-            self.scrollView.addSubview(viewImagesButton)
-            
-            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                self.notActuallyLeavingViewController = true
-                self.updateMyPhotos { [unowned self] in
-                    let nav = UINavigationController(rootViewController: self.browser)
-                    nav.delegate = self
-                    self.present(nav, animated: true, completion: {
-                        self.browser.reloadData()
-                    })
                 }
             })
             
@@ -212,7 +221,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                  break
                  }
                  }
-                 } // This is if you want selected image to be first, but messes up the cache/image index order */
+                 } // This is if you want selected image to be first, but this code messes up the cache/image index order */
                 for url in urls! {
                     self.photos.append(MWPhoto(url: URL(string: url as! String)))
                 }
