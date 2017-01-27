@@ -109,104 +109,45 @@ class PhotoManager : NSObject {
         return self.firebaseImageDownloadURLBeginning + String(fileName)
     }
     
-    func startUploadingImageQueue() {
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
-                if Reachability.isConnectedToNetwork() {
-                    self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                        var teams = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [[String: [String]]]
-                        // keysToKill is the array of date keys that have been successfully added to firebase storage
-                        // var keysToKill = [String]()
-                        //let teamDispatch = DispatchGroup()
-                        // teamDispatch prevents for loop from going to new team until dates have all been run through
-                        if teams.count != 0 {
-                            var dict = teams[0]
-                            for (team, var dates) in dict {
-                                while dates.count != 0 {
-                                    let date = dates[0]
-                                    self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
-                                        self.storeOnFirebase(number: Int(team)!, image: image, done: { didSucceed in
-                                            if didSucceed {
-                                               // keysToKill.append(date)
-                                                dates.remove(at: 0)
-                                            }
-                                           // dateDispatch.leave()
-                                        })
-                                    })
-                                }
-                                dict[team] = dates
-                                // teamDispatch.enter()
-                                // dateDispatch prevents for loop from going to new date until that date has been uploaded to firebase
-                                /* let dateDispatch = DispatchGroup()
-                                for date in dates{
-                                    dateDispatch.enter()
-                                    self.imageQueueCache.fetch(key: date).onSuccess({ (image) in
-                                        self.storeOnFirebase(number: Int(team)!, image: image, done: { didSucceed in
-                                            if didSucceed {
-                                                keysToKill.append(date)
-                                            }
-                                            dateDispatch.leave()
-                                        })
-                                    })
-                                }
-                                dateDispatch.notify(queue: DispatchQueue.main, execute: {
-                                    // Filtering successfully uploaded keys from queue
-                                    dict[team] = dates.filter { !keysToKill.contains($0)}
-                                })
-                                teamDispatch.leave() */
-                            }
-                            // teamDispatch.notify(queue: DispatchQueue.main, execute: {
-                                // Uploading cache to remove keys that have been uploaded to firebase
-                                teams[0] = dict
-                                let keyData = NSKeyedArchiver.archivedData(withRootObject: teams)
-                                self.teamsList.set(value: keyData, key: "teams")
-                                self.startUploadingImageQueue()
-                            // })
-                        } else {
-                            sleep(60)
-                            self.startUploadingImageQueue()
-                        }
-                })
-            }
-        })
+    func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int)->()) {
+        
     }
+
+    func removeFromCache(photo: UIImage, key: String, done: @escaping ()->()) {
+        
+    }
+    
+    func startUploadingImageQueue(photo: UIImage, key: String, num: Int) {
+        if Reachability.isConnectedToNetwork() {
+            self.storeOnFirebase(number: <#T##Int#>, image: photo, done: { didSucceed in
+                if didSucceed {
+                    self.removeFromCache(photo: photo, key: key, done: {
+                        self.getNext(done: { nextPhoto, nextKey, nextNumber in
+                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, num: nextNumber)
+                        })
+                    })
+                }
+            })
+        }
+    }
+ 
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            // keys is in an array because NSKeyedUnarchiver does not work with dictionaries. Keys is an array that has the dictionary [team number: [date keys]]. It has only one index (the first dictionary, which then contains all other information
-            var keys = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [[String: [String]]]
-            // Array is the list of date keys under a certain team number
-            var dateArray = [String]()
-            // If keys is empty and has no values
-            if keys.count == 0 {
-                // A team will not have any previous date keys if keys has nothing in it, so append the date key to the array without worrying about previous information
-                dateArray.append(key)
-                // Create new team number and make keys into data format to cache
-                keys.append([String(number) : dateArray])
-            } else {
-                var dict = keys[0] as [String: [String]]
-                // If the team number already exists in the queue
-                if Array(dict.keys.map { String($0) }).contains(where: { $0 == String(number)}) {
-                    // Get previous dates and add new date
-                    dateArray = dict[String(number)]!
-                    dateArray.append(key)
-                    dict[String(number)] = dateArray
-                    
-                } else { // Create the team number
-                    dateArray.append(key)
-                    
-                    dict.updateValue(dateArray, forKey: String(number))
-                }
-                // Updates keys to include new date
-                keys[0] = dict
-            }
-            let data = NSKeyedArchiver.archivedData(withRootObject:keys)
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
+            let key = "\(number)-\(key)"
+            keysArray.append(key)
+            let data = NSKeyedArchiver.archivedData(withRootObject:keysArray)
             self.teamsList.set(value: data, key: "teams")
         })
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
-        let key = String(describing: Date())
-        addImageKey(key: key, number: number)
+        let date = String(describing: Date())
+        addImageKey(key: date, number: number)
+        // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
+        let key = "(\(number)-\(date)"
         imageQueueCache.set(value: image, key: key)
     }
     
@@ -230,6 +171,7 @@ class PhotoManager : NSObject {
         })
         
     }
+    
     
     func deleteImageFromFirebase() {
         
