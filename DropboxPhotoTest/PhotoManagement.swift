@@ -60,7 +60,7 @@ class PhotoManager : NSObject {
         }
     }
     
-    func updateUrl(_ teamNumber: Int, callback: @escaping (_ i: Int)->()) {
+    func updateUrl(_ teamNumber: Int, done: @escaping (_ i: Int)->()) {
         let teamFirebase = teamsFirebase.child("\(teamNumber)")
         teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int
@@ -77,7 +77,7 @@ class PhotoManager : NSObject {
                 urlList?.add(url)
                 let urlData = NSKeyedArchiver.archivedData(withRootObject: urlList)
                 self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
-                callback(photoIndex!)
+                done(photoIndex!)
             })
         })
     }
@@ -110,49 +110,66 @@ class PhotoManager : NSObject {
     }
     
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int)->()) {
-        
+        while true {
+            teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+                // Choose key in index 0 of cache and find the corresponding image
+                var teamNum : Int
+                var nextPhoto = UIImage()
+                let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+                if keysArray.count != 0 {
+                    let nextKey = String(keysArray[0])
+                    let nextKeyArray = nextKey!.components(separatedBy: "-")
+                    teamNum = Int(nextKeyArray[0])!
+                    self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
+                        nextPhoto = image
+                    })
+                // still have to do the choose new index if second time trying getNext
+                done(nextPhoto, nextKey!, teamNum)
+                } else {
+                    // No keys or images have been cached, so retry in 60 seconds
+                    sleep(60)
+                    // How to call recursive function in a callback? getNext(done: )
+                }
+            })
+        }
     }
 
     func removeFromCache(photo: UIImage, key: String, done: @escaping ()->()) {
-        
+        // Removes image from imageCache
+        imageQueueCache.remove(key: key)
+        // Removes key from dataCache
+        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            for var i in 0 ..< keysData.count {
+                if String(keysData[i]) != key {
+                    i += 1
+                } else {
+                    keysArray.remove(at: i)
+                    break
+                }
+            }
+            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+            self.teamsList.set(value: data, key: "teams")
+        })
     }
     
-    func startUploadingImageQueue(photo: UIImage, key: String, num: Int) {
+    func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
+        // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
         if Reachability.isConnectedToNetwork() {
-            self.storeOnFirebase(number: <#T##Int#>, image: photo, done: { didSucceed in
+            self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed in
                 if didSucceed {
                     self.removeFromCache(photo: photo, key: key, done: {
                         self.getNext(done: { nextPhoto, nextKey, nextNumber in
-                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, num: nextNumber)
+                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
                         })
                     })
                 }
             })
         }
     }
- 
-    // Photo storage stuff - work on waiting till wifi
-    func addImageKey(key : String, number: Int) {
-        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-            // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
-            let key = "\(number)-\(key)"
-            keysArray.append(key)
-            let data = NSKeyedArchiver.archivedData(withRootObject:keysArray)
-            self.teamsList.set(value: data, key: "teams")
-        })
-    }
-    
-    func addToFirebaseStorageQueue(image: UIImage, number: Int) {
-        let date = String(describing: Date())
-        addImageKey(key: date, number: number)
-        // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
-        let key = "(\(number)-\(date)"
-        imageQueueCache.set(value: image, key: key)
-    }
     
     func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool)->()) {
-        self.updateUrl(number, callback: { [unowned self] i in
+        self.updateUrl(number, done: { [unowned self] i in
             let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: i)
             var e: Bool = false
             self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
@@ -170,6 +187,26 @@ class PhotoManager : NSObject {
             done(e)
         })
         
+    }
+ 
+    // Photo storage stuff - work on waiting till wifi
+    func addImageKey(key : String, number: Int) {
+        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
+            let key = "\(number)-\(key)"
+            keysArray.append(key)
+            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+            self.teamsList.set(value: data, key: "teams")
+        })
+    }
+    
+    func addToFirebaseStorageQueue(image: UIImage, number: Int) {
+        let date = String(describing: Date())
+        addImageKey(key: date, number: number)
+        // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
+        let key = "(\(number)-\(date)"
+        imageQueueCache.set(value: image, key: key)
     }
     
     
