@@ -35,6 +35,7 @@ class PhotoManager : NSObject {
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
+    var keyFetchFailed : Bool = true
     
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
@@ -111,28 +112,33 @@ class PhotoManager : NSObject {
     }
     
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int)->()) {
-        while true {
-            teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                // Choose key in index 0 of cache and find the corresponding image
-                var teamNum : Int
-                var nextPhoto = UIImage()
-                let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-                if keysArray.count != 0 {
-                    let nextKey = String(keysArray[self.keyIndex])
-                    let nextKeyArray = nextKey!.components(separatedBy: "-")
-                    teamNum = Int(nextKeyArray[0])!
-                    self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
-                        nextPhoto = image
-                        done(nextPhoto, nextKey!, teamNum)
-                    })
-                    self.keyIndex += 1
-                } else {
-                    // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
-                    self.keyIndex = 0
-                    // No keys or images in cache, retry in 60 seconds
-                    sleep(60)
-                }
-            })
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            while self.keyFetchFailed {
+                self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+                    // Choose key in index 0 of cache and find the corresponding image
+                    var teamNum : Int
+                    var nextPhoto = UIImage()
+                    let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+                    if keysArray.count != 0 {
+                        let nextKey = String(keysArray[self.keyIndex])
+                        let nextKeyArray = nextKey!.components(separatedBy: "_")
+                        teamNum = Int(nextKeyArray[0])!
+                        self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
+                            nextPhoto = image
+                            done(nextPhoto, nextKey!, teamNum)
+                            self.keyFetchFailed = false
+                        })
+                        self.keyIndex += 1
+                        // Gives time for the cache fetch to occur
+                        sleep(1)
+                    } else {
+                        // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
+                        self.keyIndex = 0
+                        // No keys or images in cache, retry in 60 seconds
+                        sleep(60)
+                    }
+                })
+            }
         }
     }
 
@@ -142,6 +148,10 @@ class PhotoManager : NSObject {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            if keysArray.count >= self.keyIndex {
+                // keyIndex is one index higher than successfully uploaded index
+                self.keyIndex = 0
+            }
             for var i in 0 ..< keysData.count {
                 if String(keysData[i]) != key {
                     i += 1
@@ -156,6 +166,7 @@ class PhotoManager : NSObject {
     }
     
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
+        keyFetchFailed = true
         // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
         if Reachability.isConnectedToNetwork() {
             self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed in
@@ -195,8 +206,6 @@ class PhotoManager : NSObject {
     func addImageKey(key : String, number: Int) {
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-            // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
-            let key = "\(number)-\(key)"
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
@@ -205,9 +214,9 @@ class PhotoManager : NSObject {
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
         let date = String(describing: Date())
-        addImageKey(key: date, number: number)
         // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
-        let key = "(\(number)-\(date)"
+        let key = "\(number)_\(date)"
+        addImageKey(key: key, number: number)
         imageQueueCache.set(value: image, key: key)
     }
     
