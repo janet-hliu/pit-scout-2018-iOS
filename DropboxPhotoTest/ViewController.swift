@@ -193,7 +193,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
         teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
-        photoManager.getNext(done: { nextImage, nextKey, nextNumber in
+        self.photoManager.getNext(done: { nextImage, nextKey, nextNumber in
             self.photoManager.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
         })
     }

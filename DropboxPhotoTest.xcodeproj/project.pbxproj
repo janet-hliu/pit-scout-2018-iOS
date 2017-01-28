@@ -30,6 +30,9 @@
 		42989BF81E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
 		42989BF91E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
 		42989BFA1E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
+		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
+		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
+		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +90,7 @@
 		19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUISwitchViewController.xib; sourceTree = "<group>"; };
 		19F317611DC9A400008EBFAD /* PSUITextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUITextInputView.xib; sourceTree = "<group>"; };
 		42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
@@ -188,6 +192,7 @@
 		192BEAE01C3463BA00992A8A /* DropboxPhotoTestUITests */ = {
 			isa = PBXGroup;
 			children = (
+				5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */,
 				192BEAE11C3463BA00992A8A /* DropboxPhotoTestUITests.swift */,
 				192BEAE31C3463BA00992A8A /* Info.plist */,
 			);
@@ -296,7 +301,7 @@
 				TargetAttributes = {
 					192BEABD1C3463B900992A8A = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 4QL94Y49Z9;
+						DevelopmentTeam = S2C8988WQX;
 						LastSwiftMigration = 0800;
 					};
 					192BEAD11C3463BA00992A8A = {
@@ -343,6 +348,7 @@
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
 				19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */,
 				42989BF81E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
+				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42989BF91E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
+				5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42989BFA1E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
+				5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,7 +590,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4QL94Y49Z9;
+				DEVELOPMENT_TEAM = S2C8988WQX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -590,7 +598,7 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios2345678";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";
@@ -610,7 +618,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4QL94Y49Z9;
+				DEVELOPMENT_TEAM = S2C8988WQX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -618,7 +626,7 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios2345678";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";

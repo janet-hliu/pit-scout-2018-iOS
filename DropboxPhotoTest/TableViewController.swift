@@ -137,8 +137,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         //self.cache.set(value: NSKeyedArchiver.archivedDataWithRootObject(scoutedTeamInfo), key: "scoutedTeamInfo")
         
         //})
-        self.tableView.reloadData()
         
+        photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
+            self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
+        })
+        
+        self.tableView.reloadData()
     }
     
     func setupphotoManager() {

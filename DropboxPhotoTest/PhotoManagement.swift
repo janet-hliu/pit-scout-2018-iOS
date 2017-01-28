@@ -119,23 +119,27 @@ class PhotoManager : NSObject {
                     var teamNum : Int
                     var nextPhoto = UIImage()
                     let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-                    if keysArray.count != 0 {
-                        let nextKey = String(keysArray[self.keyIndex])
-                        let nextKeyArray = nextKey!.components(separatedBy: "_")
-                        teamNum = Int(nextKeyArray[0])!
-                        self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
-                            nextPhoto = image
-                            done(nextPhoto, nextKey!, teamNum)
-                            self.keyFetchFailed = false
-                        })
-                        self.keyIndex += 1
-                        // Gives time for the cache fetch to occur
-                        sleep(1)
+                    if keysArray.count > self.keyIndex {
+                        if keysArray.count != 0 {
+                            let nextKey = String(keysArray[self.keyIndex])
+                            let nextKeyArray = nextKey!.components(separatedBy: "_")
+                            teamNum = Int(nextKeyArray[0])!
+                            self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
+                                nextPhoto = image
+                                done(nextPhoto, nextKey!, teamNum)
+                                self.keyFetchFailed = false
+                            })
+                            self.keyIndex += 1
+                            // Gives time for the cache fetch to occur
+                            sleep(1)
+                        } else {
+                            // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
+                            self.keyIndex = 0
+                            // No keys or images in cache, retry in 60 seconds
+                            sleep(60)
+                        }
                     } else {
-                        // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
-                        self.keyIndex = 0
-                        // No keys or images in cache, retry in 60 seconds
-                        sleep(60)
+                        
                     }
                 })
             }
@@ -179,6 +183,8 @@ class PhotoManager : NSObject {
                 }
             })
         }
+        sleep(60)
+        
     }
     
     func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool)->()) {
