@@ -34,6 +34,7 @@ class PhotoManager : NSObject {
     let imageQueueCache = Shared.imageCache
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
+    var keyIndex : Int = 0
     
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
@@ -117,18 +118,19 @@ class PhotoManager : NSObject {
                 var nextPhoto = UIImage()
                 let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
                 if keysArray.count != 0 {
-                    let nextKey = String(keysArray[0])
+                    let nextKey = String(keysArray[self.keyIndex])
                     let nextKeyArray = nextKey!.components(separatedBy: "-")
                     teamNum = Int(nextKeyArray[0])!
                     self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
                         nextPhoto = image
+                        done(nextPhoto, nextKey!, teamNum)
                     })
-                // still have to do the choose new index if second time trying getNext
-                done(nextPhoto, nextKey!, teamNum)
+                    self.keyIndex += 1
                 } else {
-                    // No keys or images have been cached, so retry in 60 seconds
+                    // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
+                    self.keyIndex = 0
+                    // No keys or images in cache, retry in 60 seconds
                     sleep(60)
-                    // How to call recursive function in a callback? getNext(done: )
                 }
             })
         }
