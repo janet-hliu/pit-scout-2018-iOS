@@ -35,8 +35,6 @@ class PhotoManager : NSObject {
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
-    var keyFetchFailed : Bool = true
-    
     
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
         
@@ -77,7 +75,7 @@ class PhotoManager : NSObject {
                 }
                 let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as?NSMutableArray
                 urlList?.add(url)
-                let urlData = NSKeyedArchiver.archivedData(withRootObject: urlList)
+                let urlData = NSKeyedArchiver.archivedData(withRootObject: urlList!)
                 self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
                 done(photoIndex!)
             })
@@ -112,38 +110,37 @@ class PhotoManager : NSObject {
     }
     
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int)->()) {
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            while self.keyFetchFailed {
-                self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-                    // Choose key in index 0 of cache and find the corresponding image
-                    var teamNum : Int
-                    var nextPhoto = UIImage()
-                    let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+        self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                // Choose key in index 0 of cache and find the corresponding image
+                var teamNum : Int
+                var nextPhoto = UIImage()
+                let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+                if keysArray.count != 0 {
                     if keysArray.count > self.keyIndex {
-                        if keysArray.count != 0 {
-                            let nextKey = String(keysArray[self.keyIndex])
-                            let nextKeyArray = nextKey!.components(separatedBy: "_")
-                            teamNum = Int(nextKeyArray[0])!
-                            self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
-                                nextPhoto = image
-                                done(nextPhoto, nextKey!, teamNum)
-                                self.keyFetchFailed = false
-                            })
-                            self.keyIndex += 1
-                            // Gives time for the cache fetch to occur
-                            sleep(1)
-                        } else {
-                            // There are no keys in cache- either all the keys have been uploaded or no keys are cached. Either way, reset keyIndex to 0
-                            self.keyIndex = 0
-                            // No keys or images in cache, retry in 60 seconds
-                            sleep(60)
-                        }
+                        let nextKey = String(keysArray[self.keyIndex])
+                        let nextKeyArray = nextKey!.components(separatedBy: "_")
+                        teamNum = Int(nextKeyArray[0])!
+                        self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
+                            nextPhoto = image
+                            done(nextPhoto, nextKey!, teamNum)
+                        })
+                        self.keyIndex += 1
+                        // Gives time for the cache fetch to occur
+                        sleep(1)
                     } else {
-                        
+                        self.keyIndex = 0
                     }
-                })
+                } else {
+                    self.keyIndex = 0
+                    // Retry again in a minute
+                    sleep(60)
+                    self.getNext(done: { (image, key, number) in
+                        done(image, key, number)
+                    })
+                }
             }
-        }
+        })
     }
 
     func removeFromCache(photo: UIImage, key: String, done: @escaping ()->()) {
@@ -152,10 +149,6 @@ class PhotoManager : NSObject {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-            if keysArray.count >= self.keyIndex {
-                // keyIndex is one index higher than successfully uploaded index
-                self.keyIndex = 0
-            }
             for var i in 0 ..< keysData.count {
                 if String(keysData[i]) != key {
                     i += 1
@@ -170,28 +163,28 @@ class PhotoManager : NSObject {
     }
     
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
-        keyFetchFailed = true
-        // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
-        if Reachability.isConnectedToNetwork() {
-            self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed in
-                if didSucceed {
-                    self.removeFromCache(photo: photo, key: key, done: {
-                        self.getNext(done: { nextPhoto, nextKey, nextNumber in
-                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+            // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
+            if Reachability.isConnectedToNetwork() {
+                self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed in
+                    if didSucceed {
+                        self.removeFromCache(photo: photo, key: key, done: {
+                            self.getNext(done: { nextPhoto, nextKey, nextNumber in
+                                self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
+                            })
                         })
-                    })
-                }
-            })
+                    }
+                })
+            }
+            sleep(60)
         }
-        sleep(60)
-        
     }
     
     func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool)->()) {
         self.updateUrl(number, done: { [unowned self] i in
             let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: i)
             var e: Bool = false
-            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { metadata, error in
+            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
                 
                 if (error != nil) {
                     print("ERROR: \(error.debugDescription)")
@@ -202,8 +195,9 @@ class PhotoManager : NSObject {
                     e = true
                     print("UPLOADED:\(downloadURL!)")
                 }
+                done(e)
             }
-            done(e)
+            //done(e)
         })
         
     }

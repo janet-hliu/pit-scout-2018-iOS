@@ -126,8 +126,8 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
         self.textField.delegate = self
         self.label.text = super.titleText
         self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
-        print(self.textField.text)
-        print("a \(super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? "")")
+        //print(self.textField.text)
+        //print("a \(super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? "")")
         //self.neededType = .String
         
     }

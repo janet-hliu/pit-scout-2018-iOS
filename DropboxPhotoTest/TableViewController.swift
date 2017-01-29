@@ -52,8 +52,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             self.setup(snapshot.childSnapshot(forPath: "Teams"))
         })
         
-        
-        
+        photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
+            self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
+        })
         
         NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.updateTitle(_:)), name: NSNotification.Name(rawValue: "titleUpdated"), object: nil)
     }
@@ -137,10 +138,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         //self.cache.set(value: NSKeyedArchiver.archivedDataWithRootObject(scoutedTeamInfo), key: "scoutedTeamInfo")
         
         //})
-        
-        photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
-            self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
-        })
         
         self.tableView.reloadData()
     }
