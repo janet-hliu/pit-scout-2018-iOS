@@ -130,6 +130,9 @@ class PhotoManager : NSObject {
                         sleep(1)
                     } else {
                         self.keyIndex = 0
+                        self.getNext(done: { (image, key, number) in
+                            done(image, key, number)
+                        })
                     }
                 } else {
                     self.keyIndex = 0
@@ -149,8 +152,8 @@ class PhotoManager : NSObject {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-            for var i in 0 ..< keysData.count {
-                if String(keysData[i]) != key {
+            for var i in 0 ..< keysArray.count {
+                if String(keysArray[i]) != key {
                     i += 1
                 } else {
                     keysArray.remove(at: i)
@@ -159,6 +162,7 @@ class PhotoManager : NSObject {
             }
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
+            done()
         })
     }
     

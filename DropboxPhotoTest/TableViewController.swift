@@ -52,9 +52,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             self.setup(snapshot.childSnapshot(forPath: "Teams"))
         })
         
-        photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
-            self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
-        })
+        setupphotoManager()
         
         NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.updateTitle(_:)), name: NSNotification.Name(rawValue: "titleUpdated"), object: nil)
     }
@@ -129,7 +127,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         //dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
         //})
-        if dontNeedNotification { self.setupphotoManager() }
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             self.scoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             self.tableView.reloadData()
@@ -146,6 +143,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         if self.photoManager == nil {
             self.photoManager = PhotoManager(teamsFirebase: (self.firebase?.child("Teams"))!, teamNumbers: self.teamNums)
+            photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
+                self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
+            })
         }
         for (teamNum, urls) in urlsDict {
             self.photoManager?.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: urls), key: "sharedURLs\(teamNum)")
