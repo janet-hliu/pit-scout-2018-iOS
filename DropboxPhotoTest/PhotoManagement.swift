@@ -54,7 +54,7 @@ class PhotoManager : NSObject {
                 } else {
                     fetched(nil)
                 }
-                }.onFailure { (E) -> () in
+            }.onFailure { (E) -> () in
                     print("Failed to fetch URLS for team \(num)")
             }
         }
@@ -64,21 +64,24 @@ class PhotoManager : NSObject {
         let teamFirebase = teamsFirebase.child("\(teamNumber)")
         teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int
+            var url: String
+            if photoIndex == nil {
+                url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: 0)
+                photoIndex = 0
+                teamFirebase.child("photoIndex").setValue(0)
+            } else {
+                url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex!)
+            }
             self.cache.fetch(key: "sharedURLs\(teamNumber)").onSuccess({ (keysData) in
-                var url: String
-                if photoIndex == nil {
-                    url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: 0)
-                    photoIndex = 0
-                    teamFirebase.child("photoIndex").setValue(0)
-                } else {
-                    url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex!)
-                }
                 let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as?NSMutableArray
                 urlList?.add(url)
-                let urlData = NSKeyedArchiver.archivedData(withRootObject: urlList!)
-                self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
+                let urlsData = NSKeyedArchiver.archivedData(withRootObject: urlList!)
+                self.cache.set(value: urlsData, key: "sharedURLs\(teamNumber)")
                 done(photoIndex!)
-            })
+            }) .onFailure { (E) -> () in
+                let urlData = NSKeyedArchiver.archivedData(withRootObject: url)
+                self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
+            }
         })
     }
     
@@ -181,6 +184,9 @@ class PhotoManager : NSObject {
                 })
             }
             sleep(60)
+            self.getNext(done: { (image, key, number) in
+                self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
+            })
         }
     }
     
@@ -201,7 +207,6 @@ class PhotoManager : NSObject {
                 }
                 done(e)
             }
-            //done(e)
         })
         
     }
