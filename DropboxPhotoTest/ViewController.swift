@@ -226,8 +226,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                  }
                  }
                  } // This is if you want selected image to be first, but this code messes up the cache/image index order */
-                for url in urls! {
-                    self.photos.append(MWPhoto(url: URL(string: url as! String)))
+                if urls != nil {
+                    for url in urls! {
+                        self.photos.append(MWPhoto(url: URL(string: url as! String)))
+                    }
                 }
             })
         }
@@ -266,7 +268,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     })
                     urls!.remove(index)
                     let urlData = NSKeyedArchiver.archivedData(withRootObject: urls!)
-                    self.photoManager.cache.set(value: urlData, key: "sharedURLs\(self.number)")
+                    //self.photoManager.cache.set(value: urlData, key: "sharedURLs\(self.number)")
                 }
             }
         }

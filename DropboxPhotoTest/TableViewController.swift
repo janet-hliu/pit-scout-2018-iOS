@@ -91,7 +91,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
         }
         
-        let tempArray : NSMutableArray = NSMutableArray(array: self.scoutedTeamInfo)
+        /*let tempArray : NSMutableArray = NSMutableArray(array: self.scoutedTeamInfo)
         tempArray.sortedArray(comparator: { (obj1, obj2) -> ComparisonResult in
             let o = (obj1 as! [String: Int])["num"]
             let t = (obj2 as! [String: Int])["num"]
@@ -105,7 +105,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 return ComparisonResult.orderedSame
             }
         })
-        self.scoutedTeamInfo = tempArray as [AnyObject] as! [[String: Int]]
+        self.scoutedTeamInfo = tempArray as [AnyObject] as! [[String: Int]]*/
+        self.scoutedTeamInfo.sort { (team1, team2) -> Bool in
+            if team1["num"]! < team2["num"]! {
+                return true
+            }
+            return false
+        }
         //dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
         //})
@@ -118,7 +124,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         //})
         
-        self.tableView.reloadData()
+        //self.tableView.reloadData()
     }
     
     func setupphotoManager() {
@@ -129,9 +135,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
             })
         }
-        for (teamNum, urls) in urlsDict {
+        /* for (teamNum, urls) in urlsDict {
             self.photoManager?.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: urls), key: "sharedURLs\(teamNum)")
-        }
+        } */
         self.tableView.allowsSelection = true
     }
     
