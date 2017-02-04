@@ -12,6 +12,7 @@ import Firebase
 import Haneke
 
 class PhotoManager : NSObject {
+    // cache of urls used to set up images to view or delete
     let cache = Shared.dataCache
     var teamNumbers : [Int]
     var mayKeepWorking = true {
@@ -160,7 +161,7 @@ class PhotoManager : NSObject {
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
-            if Reachability.isConnectedToNetwork() {
+            // if Reachability.isConnectedToNetwork() {
                 self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
                     if didSucceed {
                         self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
@@ -176,12 +177,12 @@ class PhotoManager : NSObject {
                         })
                     }
                 })
-            } else {
+            /* } else {
                 sleep(60)
                 self.getNext(done: { (image, key, number) in
                     self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
                 })
-            }
+            } */
         }
     }
     
@@ -200,7 +201,7 @@ class PhotoManager : NSObject {
                     let downloadURL = metadata!.downloadURL()?.absoluteString
                     self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     e = true
-                    print("UPLOADED\(downloadURL!)")
+                    print("UPLOADED: \(downloadURL!)")
                 }
                 done(e, photoIndex)
             }
