@@ -48,7 +48,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         self.firebase = FIRDatabase.database().reference()
         
-        self.firebase!.observe(FIRDataEventType.value, with: { (snapshot) in
+        self.firebase!.observe( .value, with: { (snapshot) in
             self.setup(snapshot.childSnapshot(forPath: "Teams"))
         })
         
@@ -67,16 +67,17 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.teams = NSMutableArray()
         self.scoutedTeamInfo = []
         self.teamNums = []
-        let teams = snap.children.allObjects
-        for i in 0..<teams.count {
-            let team = (teams[i] as! FIRDataSnapshot).value as! [String: AnyObject]
+        let teamsDatabase: NSDictionary = snap.value as! NSDictionary
+        for info in teamsDatabase.allValues {
+            let teamInfo = info as! [String: AnyObject]
+            // as! FIRDataSnapshot).value as! [String: AnyObject]
             //let i = teams.indexOf { (($0 as! FDataSnapshot).value as! [String: AnyObject])["number"] as? Int == team["number"] as? Int }
-            self.teams.add(team)
-            if let teamNum = team["number"] as? Int {
+            self.teams.add(teamInfo)
+            if let teamNum = teamInfo["number"] as? Int {
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
                 self.teamNums.append(teamNum)
-                if let urlsForTeam = team["pitAllImageURLs"] as? NSMutableDictionary {
+                if let urlsForTeam = teamInfo["pitAllImageURLs"] as? NSMutableDictionary {
                     let urlsArr = NSMutableArray()
                     for (_, value) in urlsForTeam {
                         urlsArr.add(value)
@@ -85,28 +86,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 } else {
                     urlsDict[teamNum] = NSMutableArray()
                 }
-                if(self.scoutedTeamInfo.count > i) {
-                    /*if(self.teamHasBeenPitScouted(team)) {
-                     self.scoutedTeamInfo[i]["hasBeenScouted"] = 1
-                     } else {
-                     self.scoutedTeamInfo[i]["hasBeenScouted"] = 0
-                     }*/
-                } else {
-                    print("ERROR")
-                    /* let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": -1]
-                     self.scoutedTeamInfo.append(scoutedTeamInfoDict)
-                     if(self.teamHasBeenPitScouted(team as! FDataSnapshot)) {
-                     self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 1
-                     } else {
-                     self.scoutedTeamInfo[t.index]["hasBeenScouted"] = 0
-                     }*/
-                }
-                
             } else {
                 print("No Num")
             }
-            
-            
         }
         
         let tempArray : NSMutableArray = NSMutableArray(array: self.scoutedTeamInfo)

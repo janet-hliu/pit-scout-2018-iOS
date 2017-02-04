@@ -60,28 +60,16 @@ class PhotoManager : NSObject {
         }
     }
     
-    func updateUrl(_ teamNumber: Int, done: @escaping (_ i: Int)->()) {
+    func updateUrl(teamNumber: Int, photoIndex: Int) {
         let teamFirebase = teamsFirebase.child("\(teamNumber)")
         teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int
-            var url: String
-            if photoIndex == nil {
-                url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: 0)
-                photoIndex = 0
-                teamFirebase.child("photoIndex").setValue(0)
-            } else {
-                url = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex!)
-            }
+            let url: String = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex)
             self.cache.fetch(key: "sharedURLs\(teamNumber)").onSuccess({ (keysData) in
-                let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as?NSMutableArray
-                urlList?.add(url)
-                let urlsData = NSKeyedArchiver.archivedData(withRootObject: urlList!)
+                let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? NSMutableArray ?? []
+                urlList.add(url)
+                let urlsData = NSKeyedArchiver.archivedData(withRootObject: urlList)
                 self.cache.set(value: urlsData, key: "sharedURLs\(teamNumber)")
-                done(photoIndex!)
-            }) .onFailure { (E) -> () in
-                let urlData = NSKeyedArchiver.archivedData(withRootObject: url)
-                self.cache.set(value: urlData, key: "sharedURLs\(teamNumber)")
-            }
+            })
         })
     }
     
@@ -173,26 +161,35 @@ class PhotoManager : NSObject {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
             if Reachability.isConnectedToNetwork() {
-                self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed in
+                self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
                     if didSucceed {
+                        self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
                         self.removeFromCache(photo: photo, key: key, done: {
                             self.getNext(done: { nextPhoto, nextKey, nextNumber in
                                 self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
                             })
                         })
+                    } else {
+                        sleep(60)
+                        self.getNext(done: { (image, key, number) in
+                            self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
+                        })
                     }
                 })
+            } else {
+                sleep(60)
+                self.getNext(done: { (image, key, number) in
+                    self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
+                })
             }
-            sleep(60)
-            self.getNext(done: { (image, key, number) in
-                self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
-            })
         }
     }
     
-    func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool)->()) {
-        self.updateUrl(number, done: { [unowned self] i in
-            let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: i)
+    func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool, _ photoIndex: Int)->()) {
+        self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            let photoIndex = (snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0)
+            self.teamsFirebase.child("\(number)").child("photoIndex").setValue(0)
+            let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: photoIndex)
             var e: Bool = false
             self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
                 
@@ -203,12 +200,11 @@ class PhotoManager : NSObject {
                     let downloadURL = metadata!.downloadURL()?.absoluteString
                     self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
                     e = true
-                    print("UPLOADED:\(downloadURL!)")
+                    print("UPLOADED\(downloadURL!)")
                 }
-                done(e)
+                done(e, photoIndex)
             }
         })
-        
     }
  
     // Photo storage stuff - work on waiting till wifi
