@@ -31,8 +31,9 @@ class PhotoManager : NSObject {
     var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2017-5f51c.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
+    // teamsList is used to upload images to firebase, imageKeys on firebase is used to find selectedImage via imageCache (even if device is offline)
     var teamsList = Shared.dataCache
-    let imageQueueCache = Shared.imageCache
+    let imageCache = Shared.imageCache
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
@@ -59,20 +60,7 @@ class PhotoManager : NSObject {
         }
     }
     
-    /*func updateUrl(teamNumber: Int, photoIndex: Int) {
-        let teamFirebase = teamsFirebase.child("\(teamNumber)")
-        teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            let url: String = self.makeURLForTeamNumAndImageIndex(teamNumber, imageIndex: photoIndex)
-            self.cache.fetch(key: "sharedURLs\(teamNumber)").onSuccess({ (keysData) in
-                let urlList = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? NSMutableArray ?? []
-                urlList.add(url)
-                let urlsData = NSKeyedArchiver.archivedData(withRootObject: urlList)
-                self.cache.set(value: urlsData, key: "sharedURLs\(teamNumber)")
-            })
-        })
-    } */
-    
-    func putPhotoLinkToFirebase(_ link: String, teamNumber: Int, selectedImage: Bool) {
+    func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
         teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -81,10 +69,6 @@ class PhotoManager : NSObject {
             photoIndex = photoIndex + 1
             teamFirebase.child("photoIndex").setValue(photoIndex)
         })
-        
-        if(selectedImage) {
-            teamFirebase.child("pitSelectedImageURL").setValue(link)
-        }
     }
     
     func makeURLForTeamNumAndImageIndex(_ teamNum: Int, imageIndex: Int) -> String {
@@ -111,7 +95,7 @@ class PhotoManager : NSObject {
                         let nextKey = String(keysArray[self.keyIndex])
                         let nextKeyArray = nextKey!.components(separatedBy: "_")
                         teamNum = Int(nextKeyArray[0])!
-                        self.imageQueueCache.fetch(key: nextKey!).onSuccess({ (image) in
+                        self.imageCache.fetch(key: nextKey!).onSuccess({ (image) in
                             nextPhoto = image
                             done(nextPhoto, nextKey!, teamNum)
                         })
@@ -136,9 +120,7 @@ class PhotoManager : NSObject {
         })
     }
 
-    func removeFromCache(photo: UIImage, key: String, done: @escaping ()->()) {
-        // Removes image from imageCache
-        imageQueueCache.remove(key: key)
+    func removeFromCache(key: String, done: @escaping ()->()) {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
@@ -163,7 +145,7 @@ class PhotoManager : NSObject {
                 self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
                     if didSucceed {
                         //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
-                        self.removeFromCache(photo: photo, key: key, done: {
+                        self.removeFromCache(key: key, done: {
                             self.getNext(done: { nextPhoto, nextKey, nextNumber in
                                 self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
                             })
@@ -197,7 +179,7 @@ class PhotoManager : NSObject {
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
                     let downloadURL = metadata!.downloadURL()?.absoluteString
-                    self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number, selectedImage: false)
+                    self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number)
                     e = true
                     print("UPLOADED: \(downloadURL!)")
                 }
@@ -208,25 +190,23 @@ class PhotoManager : NSObject {
  
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
+        // Adding to teamsList cache to upload photos
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
         })
+        // Adding to imageKeys on firebase to get selectedImage and other photos even if there is no wifi
+        teamsFirebase.child("\(number)").child("imageKeys").setValue([key])
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
         let date = String(describing: Date())
-        // Format of keys will be teamNumber-date. Will use - to distinguish between number and date
+        // Format of keys will be teamNumber_date. Will use _ to distinguish between number and date
         let key = "\(number)_\(date)"
         addImageKey(key: key, number: number)
-        imageQueueCache.set(value: image, key: key)
-    }
-    
-    
-    func deleteImageFromFirebase() {
-        
+        imageCache.set(value: image, key: key)
     }
 }
 

@@ -10,7 +10,7 @@ import Foundation
 import Firebase
 import Haneke
 
-let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageURL"]
+let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageName"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
@@ -69,9 +69,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.teamNums = []
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for info in teamsDatabase.allValues {
+            // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
-            // as! FIRDataSnapshot).value as! [String: AnyObject]
-            //let i = teams.indexOf { (($0 as! FDataSnapshot).value as! [String: AnyObject])["number"] as? Int == team["number"] as? Int }
             self.teams.add(teamInfo)
             if let teamNum = teamInfo["number"] as? Int {
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
@@ -90,41 +89,19 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 print("No Num")
             }
         }
-        
-        /*let tempArray : NSMutableArray = NSMutableArray(array: self.scoutedTeamInfo)
-        tempArray.sortedArray(comparator: { (obj1, obj2) -> ComparisonResult in
-            let o = (obj1 as! [String: Int])["num"]
-            let t = (obj2 as! [String: Int])["num"]
-            if(o! > t!) {
-                return ComparisonResult.orderedAscending
-            }
-            else if(t! > o!) {
-                return ComparisonResult.orderedDescending
-            }
-            else {
-                return ComparisonResult.orderedSame
-            }
-        })
-        self.scoutedTeamInfo = tempArray as [AnyObject] as! [[String: Int]]*/
+
         self.scoutedTeamInfo.sort { (team1, team2) -> Bool in
             if team1["num"]! < team2["num"]! {
                 return true
             }
             return false
         }
-        //dispatch_async(dispatch_get_main_queue(), { () -> Void in
         self.tableView.reloadData()
-        //})
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             self.scoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             self.tableView.reloadData()
             
         })
-        //self.cache.set(value: NSKeyedArchiver.archivedDataWithRootObject(scoutedTeamInfo), key: "scoutedTeamInfo")
-        
-        //})
-        
-        //self.tableView.reloadData()
     }
     
     func setupphotoManager() {
@@ -135,9 +112,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
             })
         }
-        /* for (teamNum, urls) in urlsDict {
-            self.photoManager?.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: urls), key: "sharedURLs\(teamNum)")
-        } */
         self.tableView.allowsSelection = true
     }
     

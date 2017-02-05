@@ -29,7 +29,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.
     var numberOfImagesOnFirebase = -1
     var notActuallyLeavingViewController = false
-    let selectedImageURL = PSUITextInputViewController()
+    let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
     
@@ -70,13 +70,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                let imageURLs = self.ourTeam.child("pitAllImageURLs")
+                let imageURLs = self.ourTeam.child("imageKeys")
                 imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     if snap.childrenCount == 0 {
                         let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
                         noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                         self.present(noImageAlert, animated: true, completion: nil)
                     } else {
+                        self.deleteImagePhotoBrowser = false
                         self.notActuallyLeavingViewController = true
                         self.updateMyPhotos { [unowned self] in
                             let nav = UINavigationController(rootViewController: self.browser)
@@ -84,9 +85,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.present(nav, animated: true, completion: {
                                 self.browser.reloadData()
                             })
+                        }
                     }
-                    
-                }
                 })
             })
             
@@ -95,14 +95,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(viewImagesButton)
             
             let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                self.deleteImagePhotoBrowser = true
-                let imageURLs = self.ourTeam.child("pitAllImageURLs")
+                let imageURLs = self.ourTeam.child("imageKeys")
                 imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     if snap.childrenCount == 0 {
-                        let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                        let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no images for this team.", preferredStyle: UIAlertControllerStyle.alert)
                         noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                         self.present(noImageAlert, animated: true, completion: nil)
                     } else {
+                        self.deleteImagePhotoBrowser = true
                         self.notActuallyLeavingViewController = true
                         self.updateMyPhotos { [unowned self] in
                             let nav = UINavigationController(rootViewController: self.browser)
@@ -124,8 +124,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
              numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
              numberOfWheels.neededType = .int */
             
-            self.selectedImageURL.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageURL"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageURL").value)
-            self.selectedImageURL.neededType = .string
+            self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value)
+            self.selectedImageName.neededType = .string
             
             //Segmented Control
             let programmingLanguage = PSUISegmentedViewController()
@@ -154,7 +154,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
             
             // self.addChildViewController(numberOfWheels)
-            self.addChildViewController(self.selectedImageURL)
+            self.addChildViewController(self.selectedImageName)
             self.addChildViewController(programmingLanguage)
             self.addChildViewController(tankDrive)
             self.addChildViewController(pitOrganization)
@@ -175,7 +175,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
-        
         
         self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
             if self.numberOfImagesOnFirebase == -1 { //This is the first time that the firebase event gets called, it gets called once no matter what when you first get here in code.
@@ -213,26 +212,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func updateMyPhotos(_ callback: @escaping ()->()) {
-        self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                self.photos.removeAll()
-                /* if String(describing:snap.childSnapshot(forPath: "pitSelectedImageURL").value) != "Optional(<null>)" {
-                 let selectedImage = String(describing: snap.childSnapshot(forPath: "pitSelectedImageURL").value!)
-                 self.photos.append(MWPhoto(url: URL(string: selectedImage )))
-                 for i in 0 ..< urls!.count {
-                 if String(describing: urls![i]) == selectedImage {
-                 urls!.removeObject(at: i)
-                 break
-                 }
-                 }
-                 } // This is if you want selected image to be first, but this code messes up the cache/image index order */
-                if urls != nil {
-                    for url in urls! {
-                        self.photos.append(MWPhoto(url: URL(string: url as! String)))
-                    }
+        let imageKeys = ourTeam.child("imageKeys")
+        imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            if snap.value as? [String] != nil {
+                let imageKeysArray = snap.value as! [String]
+                for i in 0 ..< imageKeysArray.count {
+                    let key = imageKeysArray[i]
+                    // use imageKey to find corresponding image in imageCache
+                    let image = self.photoManager.imageCache.fetch(key: key).onSuccess ({ (image) in
+                        self.photos.removeAll()
+                        self.photos.append(MWPhoto(image: image))
+                    })
                 }
-            })
-        }
+            }
+        })
         callback()
     }
     
@@ -244,17 +237,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if selected {
             if self.deleteImagePhotoBrowser == false {
                 // Setting selected image
-                self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                    self.dismiss(animated: true, completion: nil)
-                    let selectedImageURL = String(describing: urls![Int(index)])
-                    self.selectedImageURL.set(selectedImageURL)
-                }
+                self.dismiss(animated: true, completion: nil)
+                let imageKeys = ourTeam.child("imageKeys")
+                imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                    let imageKeysArray = snap.value as! [String]
+                    let selectedImageName = imageKeysArray[Int(index)]
+                    self.selectedImageName.set(selectedImageName)
+                    self.ourTeam.child("pitSelectedImageName").setValue(selectedImageName)
+                })
             } else {
                 // Deleting images from firebase database but not from firebase storage
-                self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                    self.dismiss(animated: true, completion: nil)
-                    self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                        var imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
+                // Deletes image from imageCache for offline capabilities
+                ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                    let imageKeysArray = snap.childSnapshot(forPath: "imageKeys").value as! [String]
+                    let imageToBeDeleted = imageKeysArray[Int(index)]
+                    self.photoManager.imageCache.remove(key: imageToBeDeleted)
+                    self.ourTeam.child("imageKeys").child("\(imageToBeDeleted)").removeValue()
+                    // Deletes image URL from pitAllImageURLs
+                    var imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
+                    self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
                         for (key, url) in imageURLDictionary! {
                             if url == String(describing: urls![Int(index)]) {
                                 imageURLDictionary?.removeValue(forKey: key)
@@ -265,11 +266,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                 break
                             }
                         }
-                    })
-                    urls!.remove(index)
-                    let urlData = NSKeyedArchiver.archivedData(withRootObject: urls!)
-                    //self.photoManager.cache.set(value: urlData, key: "sharedURLs\(self.number)")
-                }
+                    }
+                })
             }
         }
     }
@@ -334,7 +332,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewWillDisappear(animated)
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
             if urls?.count == 1 {
-                self.selectedImageURL.set(self.photoManager.makeURLForTeamNumAndImageIndex(self.number, imageIndex: 0) as AnyObject)
+                self.selectedImageName.set(self.photoManager.makeURLForTeamNumAndImageIndex(self.number, imageIndex: 0) as AnyObject)
             }
         }
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -343,6 +341,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
             if snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value as? Bool == nil {
                 self.ourTeam.child("pitDidDemonstrateCheesecakePotential").setValue(false)
+            }
+            let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
+            if imageKeys != nil {
+                if imageKeys!.count == 1 {
+                    self.ourTeam.child("pitSelectedImageName").setValue(imageKeys![0])
+                }
             }
         })
     }
