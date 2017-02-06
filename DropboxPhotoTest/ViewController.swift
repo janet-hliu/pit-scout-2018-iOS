@@ -214,14 +214,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func updateMyPhotos(_ callback: @escaping ()->()) {
         let imageKeys = ourTeam.child("imageKeys")
         imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            if snap.value as? [String] != nil {
-                let imageKeysArray = snap.value as! [String]
-                for i in 0 ..< imageKeysArray.count {
-                    let key = imageKeysArray[i]
+            self.photos.removeAll()
+            let imageKeysArray = snap.value as? NSDictionary
+            if imageKeysArray != nil {
+                for imageKey in imageKeysArray!.allValues {
                     // use imageKey to find corresponding image in imageCache
-                    let image = self.photoManager.imageCache.fetch(key: key).onSuccess ({ (image) in
-                        self.photos.removeAll()
-                        self.photos.append(MWPhoto(image: image))
+                    self.photoManager.imageCache.fetch(key: String(describing: imageKey)).onSuccess ({ (image) in
+                        let captionedImage = MWPhoto(image: image)
+                        captionedImage!.caption = "\(String(describing: imageKey))"
+                        self.photos.append(captionedImage!)
                     })
                 }
             }
@@ -240,19 +241,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.dismiss(animated: true, completion: nil)
                 let imageKeys = ourTeam.child("imageKeys")
                 imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let imageKeysArray = snap.value as! [String]
-                    let selectedImageName = imageKeysArray[Int(index)]
-                    self.selectedImageName.set(selectedImageName)
-                    self.ourTeam.child("pitSelectedImageName").setValue(selectedImageName)
+                    let imageKeysDict = snap.value as! NSDictionary
+                    for key in imageKeysDict.allValues {
+                        if key as! String == photoBrowser.photo(at: index).caption!() {
+                            self.selectedImageName.set(key)
+                            self.ourTeam.child("pitSelectedImageName").setValue(key)
+                            break
+                        }
+                    }
                 })
             } else {
                 // Deleting images from firebase database but not from firebase storage
-                // Deletes image from imageCache for offline capabilities
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let imageKeysArray = snap.childSnapshot(forPath: "imageKeys").value as! [String]
-                    let imageToBeDeleted = imageKeysArray[Int(index)]
-                    self.photoManager.imageCache.remove(key: imageToBeDeleted)
-                    self.ourTeam.child("imageKeys").child("\(imageToBeDeleted)").removeValue()
+                    let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    for key in imageKeysDict.allValues {
+                        if key as! String == photoBrowser.photo(at: index).caption!() {
+                            self.photoManager.imageCache.remove(key: key as! String)
+                            self.ourTeam.child("imageKeys").child(key as! String).removeValue()
+                            break
+                        }
+                    }
+                
                     // Deletes image URL from pitAllImageURLs
                     var imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
                     self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in

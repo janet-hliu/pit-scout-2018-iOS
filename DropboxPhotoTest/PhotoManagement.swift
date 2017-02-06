@@ -140,29 +140,21 @@ class PhotoManager : NSObject {
     
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            // If connected to wifi, and if photo stores on firebase, THEN remove the image and key from the caches and get the next photo to upload
-             if Reachability.isConnectedToNetwork() {
-                self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
-                    if didSucceed {
-                        //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
-                        self.removeFromCache(key: key, done: {
-                            self.getNext(done: { nextPhoto, nextKey, nextNumber in
-                                self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
-                            })
+            self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
+                if didSucceed {
+                    //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
+                    self.removeFromCache(key: key, done: {
+                        self.getNext(done: { nextPhoto, nextKey, nextNumber in
+                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
                         })
-                    } else {
-                        sleep(60)
-                        self.getNext(done: { (image, key, number) in
-                            self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
-                        })
-                    }
-                })
-             } else {
-                sleep(60)
-                self.getNext(done: { (image, key, number) in
-                    self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
-                })
-            }
+                    })
+                } else {
+                    sleep(60)
+                    self.getNext(done: { (image, key, number) in
+                        self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
+                    })
+                }
+            })
         }
     }
     
@@ -197,8 +189,10 @@ class PhotoManager : NSObject {
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
         })
-        // Adding to imageKeys on firebase to get selectedImage and other photos even if there is no wifi
-        teamsFirebase.child("\(number)").child("imageKeys").setValue([key])
+        let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
+        teamsFirebase.child("\(number)").observeSingleEvent(of: .value, with: { (snap) -> Void in
+            currentImageKeys.childByAutoId().setValue(key)
+        })
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
