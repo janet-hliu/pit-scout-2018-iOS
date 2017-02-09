@@ -254,31 +254,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 // Deleting images from firebase database but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
-                    for key in imageKeysDict.allValues {
-                        if key as! String == photoBrowser.photo(at: index).caption!() {
-                            self.photoManager.imageCache.remove(key: key as! String)
+                    for (key, value) in imageKeysDict {
+                        if value as! String == photoBrowser.photo(at: index).caption!() {
+                            self.photoManager.imageCache.remove(key: value as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
+                            let currentSelectedImageName = self.ourTeam.value(forKey: "pitSelectedImageName")
+                            if String(describing: currentSelectedImageName) == value as! String {
+                                self.ourTeam.child("pitSelectedImageName").removeValue()
+                            }
                             break
                         }
-                        
                     }
-                
+                    
                     // Deletes image URL from pitAllImageURLs
                     var imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
                     self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
                         for (key, url) in imageURLDictionary! {
                             if url == String(describing: urls![Int(index)]) {
-                                imageURLDictionary?.removeValue(forKey: key)
                                 self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
-                                
-                                if imageURLDictionary!.count == 0 {
-<<<<<<< HEAD
-                                    self.ourTeam.child("pitSelectedImageURL").removeValue()
-                                    
-=======
-                                    self.ourTeam.child("pitSelectedImageName").removeValue()
->>>>>>> 8a35a2456ba5dc347ecb84d8f986846813213eb0
-                                }
                                 break
                             }
                         }
@@ -347,15 +340,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewWillDisappear(_ animated: Bool) { //If you are leaving the view controller, and only have one image, make that the selected one.
         super.viewWillDisappear(animated)
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                if urls?.count == 1 {
-                    self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                        // Should only have one image key because there is only one url
-                        let imageKey = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
-                        for value in imageKey.allValues {
-                            self.selectedImageName.set(value as AnyObject)
-                        }
-                    })
-                }
+            if urls?.count == 1 {
+                self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                    // Should only have one image key because there is only one url
+                    let imageKey = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    for value in imageKey.allValues {
+                        self.selectedImageName.set(value as AnyObject)
+                    }
+                })
+            }
         }
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -427,4 +420,3 @@ extension Array : DataConvertible, DataRepresentable {
     }
     
 }
-

@@ -64,10 +64,10 @@ class PhotoManager : NSObject {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
         // teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            currentURLs.childByAutoId().setValue(link)
+        currentURLs.childByAutoId().setValue(link)
         // })
-    } 
-
+    }
+    
     func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
         return String(teamNum) + "_" + date + ".png"
     }
@@ -114,7 +114,7 @@ class PhotoManager : NSObject {
             }
         })
     }
-
+    
     func removeFromCache(key: String, done: @escaping ()->()) {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
@@ -173,7 +173,7 @@ class PhotoManager : NSObject {
             }
         })
     }
- 
+    
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
         // Adding to teamsList cache to upload photos
@@ -185,7 +185,7 @@ class PhotoManager : NSObject {
         })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
         // teamsFirebase.child("\(number)").observeSingleEvent(of: .value, with: { (snap) -> Void in
-            currentImageKeys.childByAutoId().setValue(key)
+        currentImageKeys.childByAutoId().setValue(key)
         // })
     }
     

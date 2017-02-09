@@ -27,9 +27,7 @@
 		19EEDCD01CE583470057AA96 /* PSUIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EEDCCF1CE583470057AA96 /* PSUIElements.swift */; };
 		19F317621DC9A400008EBFAD /* PSUISwitchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */; };
 		19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F317611DC9A400008EBFAD /* PSUITextInputView.xib */; };
-		42989BF81E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
-		42989BF91E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
-		42989BFA1E31BAB60038DD3F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */; };
+		42818E991E4C2CF7009C2FFF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42818E981E4C2CF7009C2FFF /* GoogleService-Info.plist */; };
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
@@ -89,7 +87,7 @@
 		19EEDCCF1CE583470057AA96 /* PSUIElements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSUIElements.swift; sourceTree = "<group>"; };
 		19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUISwitchViewController.xib; sourceTree = "<group>"; };
 		19F317611DC9A400008EBFAD /* PSUITextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUITextInputView.xib; sourceTree = "<group>"; };
-		42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		42818E981E4C2CF7009C2FFF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -174,7 +172,7 @@
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
-				42989BF71E31BAB60038DD3F /* GoogleService-Info.plist */,
+				42818E981E4C2CF7009C2FFF /* GoogleService-Info.plist */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
 			);
 			path = DropboxPhotoTest;
@@ -342,12 +340,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				192BEACC1C3463B900992A8A /* LaunchScreen.storyboard in Resources */,
+				42818E991E4C2CF7009C2FFF /* GoogleService-Info.plist in Resources */,
 				197788C31CFA6ED700D632AD /* PSUISegmentedViewController.xib in Resources */,
 				192BEAC91C3463B900992A8A /* Assets.xcassets in Resources */,
 				19F317621DC9A400008EBFAD /* PSUISwitchViewController.xib in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
 				19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */,
-				42989BF81E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,7 +354,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42989BF91E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
 				5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,7 +362,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42989BFA1E31BAB60038DD3F /* GoogleService-Info.plist in Resources */,
 				5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
