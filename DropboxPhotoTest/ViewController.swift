@@ -260,6 +260,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
                             break
                         }
+                        
                     }
                 
                     // Deletes image URL from pitAllImageURLs
@@ -269,8 +270,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             if url == String(describing: urls![Int(index)]) {
                                 imageURLDictionary?.removeValue(forKey: key)
                                 self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
+                                
                                 if imageURLDictionary!.count == 0 {
                                     self.ourTeam.child("pitSelectedImageURL").removeValue()
+                                    
                                 }
                                 break
                             }
