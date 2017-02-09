@@ -108,8 +108,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         if self.photoManager == nil {
             self.photoManager = PhotoManager(teamsFirebase: (self.firebase?.child("Teams"))!, teamNumbers: self.teamNums)
-            photoManager?.getNext(done: { (nextImage, nextKey, nextNumber) in
-                self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber)
+            photoManager?.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
+                self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
             })
         }
         self.tableView.allowsSelection = true
