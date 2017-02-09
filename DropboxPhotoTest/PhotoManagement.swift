@@ -63,31 +63,25 @@ class PhotoManager : NSObject {
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
-        teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
+        // teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentURLs.childByAutoId().setValue(link)
-            var photoIndex = snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0
-            photoIndex = photoIndex + 1
-            teamFirebase.child("photoIndex").setValue(photoIndex)
-        })
-    }
-    
-    func makeURLForTeamNumAndImageIndex(_ teamNum: Int, imageIndex: Int) -> String {
-        return self.firebaseImageDownloadURLBeginning + self.makeFilenameForTeamNumAndIndex(teamNum, imageIndex: imageIndex) + self.firebaseImageDownloadURLEnd
-    }
-    
-    func makeFilenameForTeamNumAndIndex(_ teamNum: Int, imageIndex: Int) -> String {
-        return String(teamNum) + "_" + String(imageIndex) + ".png"
+        // })
+    } 
+
+    func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
+        return String(teamNum) + "_" + date + ".png"
     }
     
     func makeURLForFileName(_ fileName: String) -> String {
         return self.firebaseImageDownloadURLBeginning + String(fileName)
     }
     
-    func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int)->()) {
+    func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
                 // Choose key in index 0 of cache and find the corresponding image
                 var teamNum : Int
+                var date: String
                 var nextPhoto = UIImage()
                 let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
                 if keysArray.count != 0 {
@@ -95,25 +89,26 @@ class PhotoManager : NSObject {
                         let nextKey = String(keysArray[self.keyIndex])
                         let nextKeyArray = nextKey!.components(separatedBy: "_")
                         teamNum = Int(nextKeyArray[0])!
+                        date = String(nextKeyArray[1])!
                         self.imageCache.fetch(key: nextKey!).onSuccess({ (image) in
                             nextPhoto = image
-                            done(nextPhoto, nextKey!, teamNum)
+                            done(nextPhoto, nextKey!, teamNum, date)
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
                         sleep(1)
                     } else {
                         self.keyIndex = 0
-                        self.getNext(done: { (image, key, number) in
-                            done(image, key, number)
+                        self.getNext(done: { (image, key, number, date) in
+                            done(image, key, number, date)
                         })
                     }
                 } else {
                     self.keyIndex = 0
                     // Retry again in a minute
                     sleep(60)
-                    self.getNext(done: { (image, key, number) in
-                        done(image, key, number)
+                    self.getNext(done: { (image, key, number, date) in
+                        done(image, key, number, date)
                     })
                 }
             }
@@ -138,31 +133,31 @@ class PhotoManager : NSObject {
         })
     }
     
-    func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int) {
+    func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            self.storeOnFirebase(number: teamNum, image: photo, done: { didSucceed, photoIndex in
+            self.storeOnFirebase(number: teamNum, date: date, image: photo, done: { didSucceed in
                 if didSucceed {
                     //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
                     self.removeFromCache(key: key, done: {
-                        self.getNext(done: { nextPhoto, nextKey, nextNumber in
-                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber)
+                        self.getNext(done: { nextPhoto, nextKey, nextNumber, nextDate in
+                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber, date: nextDate)
                         })
                     })
                 } else {
                     sleep(60)
-                    self.getNext(done: { (image, key, number) in
-                        self.startUploadingImageQueue(photo: image, key: key, teamNum: number)
+                    self.getNext(done: { (image, key, number, date) in
+                        self.startUploadingImageQueue(photo: image, key: key, teamNum: number, date: date)
                     })
                 }
             })
         }
     }
     
-    func storeOnFirebase(number: Int, image: UIImage, done: @escaping (_ didSucceed : Bool, _ photoIndex: Int)->()) {
+    func storeOnFirebase(number: Int, date: String, image: UIImage, done: @escaping (_ didSucceed : Bool) ->()) {
         self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            let photoIndex = (snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0)
+            // let photoIndex = (snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0)
             //self.teamsFirebase.child("\(number)").child("photoIndex").setValue(0)
-            let name = self.makeFilenameForTeamNumAndIndex(number, imageIndex: photoIndex)
+            let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
             var e: Bool = false
             self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
                 
@@ -175,7 +170,6 @@ class PhotoManager : NSObject {
                     e = true
                     print("UPLOADED: \(downloadURL!)")
                 }
-                done(e, photoIndex)
             }
         })
     }
@@ -190,9 +184,9 @@ class PhotoManager : NSObject {
             self.teamsList.set(value: data, key: "teams")
         })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
-        teamsFirebase.child("\(number)").observeSingleEvent(of: .value, with: { (snap) -> Void in
+        // teamsFirebase.child("\(number)").observeSingleEvent(of: .value, with: { (snap) -> Void in
             currentImageKeys.childByAutoId().setValue(key)
-        })
+        // })
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
