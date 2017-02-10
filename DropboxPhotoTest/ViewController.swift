@@ -258,7 +258,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if value as! String == photoBrowser.photo(at: index).caption!() {
                             self.photoManager.imageCache.remove(key: value as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
-                            let currentSelectedImageName = self.ourTeam.value(forKey: "pitSelectedImageName")
+                            let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
                             if String(describing: currentSelectedImageName) == value as! String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
                             }
@@ -267,7 +267,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                     
                     // Deletes image URL from pitAllImageURLs
-                    var imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
+                    let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
                     self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
                         for (key, url) in imageURLDictionary! {
                             if url == String(describing: urls![Int(index)]) {
