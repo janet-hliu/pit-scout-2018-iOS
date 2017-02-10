@@ -352,7 +352,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
                     for value in imageKeys.allValues {
                         var modifiedURL = urls![0] as! String
-                        modifiedURL.replacingOccurrences(of: "%", with: " ")
+                        modifiedURL = modifiedURL.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
                         if modifiedURL.contains(value as! String) {
                             self.selectedImageName.set(value as AnyObject)
                         }
