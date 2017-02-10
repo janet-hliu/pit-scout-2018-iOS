@@ -19,7 +19,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var bottomScrollViewConstraint: NSLayoutConstraint!
     
-    var browser = MWPhotoBrowser()
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = FIRDatabase.database().reference()
@@ -70,23 +69,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(addImageButton)
             
             let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                let imageURLs = self.ourTeam.child("imageKeys")
-                imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    if snap.childrenCount == 0 {
-                        let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
-                        noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                        self.present(noImageAlert, animated: true, completion: nil)
-                    } else {
-                        self.deleteImagePhotoBrowser = false
-                        self.notActuallyLeavingViewController = true
-                        self.updateMyPhotos { [unowned self] in
-                            let nav = UINavigationController(rootViewController: self.browser)
-                            nav.delegate = self
-                            self.present(nav, animated: true, completion: {
-                                self.browser.reloadData()
-                            })
+                self.makeNewBrowser(done: { browser in
+                    let imageURLs = self.ourTeam.child("imageKeys")
+                    imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                        if snap.childrenCount == 0 {
+                            let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                            noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(noImageAlert, animated: true, completion: nil)
+                        } else {
+                            self.deleteImagePhotoBrowser = false
+                            self.notActuallyLeavingViewController = true
+                            self.updateMyPhotos { [unowned self] in
+                                let nav = UINavigationController(rootViewController: browser)
+                                nav.delegate = self
+                                self.present(nav, animated: true, completion: {
+                                    browser.reloadData()
+                                })
+                            }
                         }
-                    }
+                    })
                 })
             })
             
@@ -95,23 +96,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.scrollView.addSubview(viewImagesButton)
             
             let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                let imageURLs = self.ourTeam.child("imageKeys")
-                imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    if snap.childrenCount == 0 {
-                        let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no images for this team.", preferredStyle: UIAlertControllerStyle.alert)
-                        noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                        self.present(noImageAlert, animated: true, completion: nil)
-                    } else {
-                        self.deleteImagePhotoBrowser = true
-                        self.notActuallyLeavingViewController = true
-                        self.updateMyPhotos { [unowned self] in
-                            let nav = UINavigationController(rootViewController: self.browser)
-                            nav.delegate = self
-                            self.present(nav, animated: true, completion: {
-                                self.browser.reloadData()
-                            })
+                self.makeNewBrowser(done: { browser in
+                    let imageURLs = self.ourTeam.child("imageKeys")
+                    imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                        if snap.childrenCount == 0 {
+                            let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no images for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                            noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(noImageAlert, animated: true, completion: nil)
+                        } else {
+                            self.deleteImagePhotoBrowser = true
+                            self.notActuallyLeavingViewController = true
+                            self.updateMyPhotos { [unowned self] in
+                                let nav = UINavigationController(rootViewController: browser)
+                                nav.delegate = self
+                                self.present(nav, animated: true, completion: {
+                                    browser.reloadData()
+                                })
+                            }
                         }
-                    }
+                    })
                 })
             })
             
@@ -185,7 +188,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.updateMyPhotos({})
             }
         })
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
+        teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
+    }
+    
+    func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
+        var browser = MWPhotoBrowser()
         browser = MWPhotoBrowser.init(delegate: self)
         
         // browser options
@@ -194,9 +202,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         browser.displaySelectionButtons = true; // Whether selection buttons are shown on each image (defaults to NO)
         browser.enableGrid = false; // Whether to allow the viewing of all the photo thumbnails on a grid (defaults to YES)
         browser.autoPlayOnAppear = false; // Auto-play first video
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
+        done(browser)
     }
     
     func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
@@ -244,13 +250,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
                         if key as! String == photoBrowser.photo(at: index).caption!() {
-                            self.selectedImageName.set(key)
-                            self.ourTeam.child("pitSelectedImageName").setValue(key)
+                            self.selectedImageName.set(key as! String)
+                            self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
                             break
                         }
                     }
                 })
             } else {
+                self.dismiss(animated: true, completion: nil)
                 // Deleting images from firebase database but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
@@ -259,20 +266,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.photoManager.imageCache.remove(key: value as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
                             let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
-                            if String(describing: currentSelectedImageName) == value as! String {
+                            if currentSelectedImageName == value as! String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
                             }
-                            break
                         }
                     }
                     
                     // Deletes image URL from pitAllImageURLs
                     let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
                     self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                        for (key, url) in imageURLDictionary! {
-                            if url == String(describing: urls![Int(index)]) {
-                                self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
-                                break
+                        if imageURLDictionary != nil {
+                            for (key, url) in imageURLDictionary! {
+                                if url == String(describing: urls![Int(index)]) {
+                                    self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
+                                }
                             }
                         }
                     }
@@ -342,10 +349,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
             if urls?.count == 1 {
                 self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    // Should only have one image key because there is only one url
-                    let imageKey = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
-                    for value in imageKey.allValues {
-                        self.selectedImageName.set(value as AnyObject)
+                    let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    for value in imageKeys.allValues {
+                        var modifiedURL = urls![0] as! String
+                        modifiedURL.replacingOccurrences(of: "%", with: " ")
+                        if modifiedURL.contains(value as! String) {
+                            self.selectedImageName.set(value as AnyObject)
+                        }
                     }
                 })
             }

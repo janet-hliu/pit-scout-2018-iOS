@@ -63,9 +63,7 @@ class PhotoManager : NSObject {
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
-        // teamFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
         currentURLs.childByAutoId().setValue(link)
-        // })
     }
     
     func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
@@ -155,8 +153,6 @@ class PhotoManager : NSObject {
     
     func storeOnFirebase(number: Int, date: String, image: UIImage, done: @escaping (_ didSucceed : Bool) ->()) {
         self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            // let photoIndex = (snap.childSnapshot(forPath: "photoIndex").value as? Int ?? 0)
-            //self.teamsFirebase.child("\(number)").child("photoIndex").setValue(0)
             let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
             var e: Bool = false
             self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
@@ -170,6 +166,7 @@ class PhotoManager : NSObject {
                     e = true
                     print("UPLOADED: \(downloadURL!)")
                 }
+                done(e)
             }
         })
     }
@@ -184,9 +181,7 @@ class PhotoManager : NSObject {
             self.teamsList.set(value: data, key: "teams")
         })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
-        // teamsFirebase.child("\(number)").observeSingleEvent(of: .value, with: { (snap) -> Void in
         currentImageKeys.childByAutoId().setValue(key)
-        // })
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
