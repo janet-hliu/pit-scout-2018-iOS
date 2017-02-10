@@ -266,6 +266,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             self.photoManager.imageCache.remove(key: value as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
                             let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
+                            // If deleted image is also selected image, delete key value on firebase
                             if currentSelectedImageName == value as! String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
                             }
@@ -274,12 +275,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     
                     // Deletes image URL from pitAllImageURLs
                     let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
-                    self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
-                        if imageURLDictionary != nil {
-                            for (key, url) in imageURLDictionary! {
-                                if url == String(describing: urls![Int(index)]) {
-                                    self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
-                                }
+                    if imageURLDictionary != nil {
+                        for (key, url) in imageURLDictionary! {
+                            let modifiedURL: String = url.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
+                            if modifiedURL.contains(photoBrowser.photo(at: index).caption!()){
+                                self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
                             }
                         }
                     }
