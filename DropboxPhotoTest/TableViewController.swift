@@ -68,7 +68,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.scoutedTeamInfo = []
         self.teamNums = []
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
-        for info in teamsDatabase.allValues {
+        for (team, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
             self.teams.add(teamInfo)

@@ -115,8 +115,6 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
                 currentResponse!(value)
                 //print(String(value))
                 self.textField.text = value as? String ?? (value as? NSNumber)?.stringValue ?? ""
-                
-                
             }
         }
     }
@@ -125,11 +123,11 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
         super.viewDidAppear(animated)
         self.textField.delegate = self
         self.label.text = super.titleText
+        // THE PROBLEM IS HEREREERERERERE
         self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
-        //print(self.textField.text)
-        //print("a \(super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? "")")
-        //self.neededType = .String
-        
+        if neededType == .int {
+            textField.keyboardType = UIKeyboardType.decimalPad
+        }
     }
     
     @IBAction func textFieldEditingDidEnd(_ sender: UITextField) {

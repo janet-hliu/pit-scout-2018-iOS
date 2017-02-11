@@ -127,7 +127,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
              numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
              numberOfWheels.neededType = .int */
             
-            self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value)
+            self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value as? String)
             self.selectedImageName.neededType = .string
             
             //Segmented Control
@@ -150,7 +150,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let availableWeight = PSUITextInputViewController()
             availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
             availableWeight.neededType = .int
-            
             
             // Switch
             let willCheesecake = PSUISwitchViewController()
@@ -222,6 +221,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
             self.photos.removeAll()
             let imageKeysArray = snap.value as? NSDictionary
+            // Pulling from cache and not firebase- photo browser will not load images that were not taken from the phone that the app is running on
             if imageKeysArray != nil {
                 for imageKey in imageKeysArray!.allValues {
                     // use imageKey to find corresponding image in imageCache
@@ -252,7 +252,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if key as! String == photoBrowser.photo(at: index).caption!() {
                             self.selectedImageName.set(key as! String)
                             self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
-                            break
                         }
                     }
                 })
