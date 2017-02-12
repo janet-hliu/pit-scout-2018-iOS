@@ -85,8 +85,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 } else {
                     urlsDict[teamNum] = NSMutableArray()
                 }
-            } else {
-                print("No Num")
             }
         }
 

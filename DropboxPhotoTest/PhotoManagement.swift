@@ -77,13 +77,16 @@ class PhotoManager : NSObject {
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                 print("in get next, has teams")
                 // Choose key in index 0 of cache and find the corresponding image
                 var teamNum : Int
                 var date: String
                 var nextPhoto = UIImage()
                 let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
                 if keysArray.count != 0 {
+                    print("cache has stuff")
                     if keysArray.count > self.keyIndex {
+                        print("keysArray: \(keysArray)")
                         let nextKey = String(keysArray[self.keyIndex])
                         let nextKeyArray = nextKey!.components(separatedBy: "_")
                         teamNum = Int(nextKeyArray[0])!
@@ -96,6 +99,7 @@ class PhotoManager : NSObject {
                         // Gives time for the cache fetch to occur
                         sleep(1)
                     } else {
+                        print("\(keysArray.count)")
                         self.keyIndex = 0
                         self.getNext(done: { (image, key, number, date) in
                             done(image, key, number, date)
@@ -104,6 +108,7 @@ class PhotoManager : NSObject {
                 } else {
                     self.keyIndex = 0
                     // Retry again in a minute
+                    print("sleeps")
                     sleep(60)
                     self.getNext(done: { (image, key, number, date) in
                         done(image, key, number, date)
@@ -116,6 +121,7 @@ class PhotoManager : NSObject {
     func removeFromCache(key: String, done: @escaping ()->()) {
         // Removes key from dataCache
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            print("removing from cache")
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             for var i in 0 ..< keysArray.count {
                 if String(keysArray[i]) != key {
@@ -125,6 +131,7 @@ class PhotoManager : NSObject {
                     break
                 }
             }
+            print("NOW WRITING TO  CACHE: \(keysArray)")
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
             done()
@@ -158,6 +165,7 @@ class PhotoManager : NSObject {
             self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
                 
                 if (error != nil) {
+                    print("LOOK no wifi")
                     print("ERROR: \(error.debugDescription)")
                 } else {
                     // Metadata contains file metadata such as size, content-type, and download URL.
@@ -174,11 +182,14 @@ class PhotoManager : NSObject {
     // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
         // Adding to teamsList cache to upload photos
+        print("added image key")
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+            print("NOW WRITING TO  CACHE: \(keysArray)")
             self.teamsList.set(value: data, key: "teams")
+            print("image key in cache")
         })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
         currentImageKeys.childByAutoId().setValue(key)

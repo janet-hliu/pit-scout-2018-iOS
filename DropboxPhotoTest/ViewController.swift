@@ -188,7 +188,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         })
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
+        print("NOW WRITING TO  CACHE: \([[String: [String]]]())")
+        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
+            if keysArray == nil {
+                self.teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
+            }
+        })
     }
     
     func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
