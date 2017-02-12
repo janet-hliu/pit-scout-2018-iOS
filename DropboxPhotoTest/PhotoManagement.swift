@@ -94,6 +94,11 @@ class PhotoManager : NSObject {
                         self.imageCache.fetch(key: nextKey!).onSuccess({ (image) in
                             nextPhoto = image
                             done(nextPhoto, nextKey!, teamNum, date)
+                        }).onFailure({ Void in
+                            self.keyIndex += 1
+                            self.getNext(done: { (image, key, number, date) in
+                                done(image, key, number, date)
+                            })
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
@@ -114,6 +119,13 @@ class PhotoManager : NSObject {
                         done(image, key, number, date)
                     })
                 }
+            }
+        }).onFailure({ Void in
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                sleep(2)
+                self.getNext(done: { (image, key, number, date) in
+                    done(image, key, number, date)
+                })
             }
         })
     }
@@ -190,7 +202,14 @@ class PhotoManager : NSObject {
             print("NOW WRITING TO  CACHE: \(keysArray)")
             self.teamsList.set(value: data, key: "teams")
             print("image key in cache")
-        })
+        }).onFailure({ Void in
+                var keysArray: [String] = []
+                keysArray.append(key)
+                let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                print("NOW WRITING TO  CACHE: \(keysArray)")
+                self.teamsList.set(value: data, key: "teams")
+                print("image key in cache")
+            })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
         currentImageKeys.childByAutoId().setValue(key)
     }

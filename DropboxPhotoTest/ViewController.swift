@@ -223,10 +223,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func updateMyPhotos(_ callback: @escaping ()->()) {
-        let imageKeys = ourTeam.child("imageKeys")
-        imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
+        ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             self.photos.removeAll()
-            let imageKeysArray = snap.value as? NSDictionary
+            let imageKeysArray = snap.childSnapshot(forPath: "imageKeys").value as? NSDictionary
             // Pulling from cache and not firebase- photo browser will not load images that were not taken from the phone that the app is running on
             if imageKeysArray != nil {
                 for imageKey in imageKeysArray!.allValues {
@@ -235,6 +234,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         let captionedImage = MWPhoto(image: image)
                         captionedImage!.caption = "\(String(describing: imageKey))"
                         self.photos.append(captionedImage!)
+                    }).onFailure({ Void in //if photo doesn't exist in cache, pull from firebase
+                        let imageURLs = snap.childSnapshot(forPath: "pitAllImageURLs").value as? NSDictionary
+                        if imageURLs != nil {
+                            for url in imageURLs!.allValues {
+                                let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2017-5f51c.appspot.com/o/", with: "")
+                                let componentArray: [String] = urlArray.components(separatedBy: ".png?")
+                                let key = componentArray[0]
+                                // This is the final key extracted from the image url
+                                let modifiedKey = key.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
+                                if modifiedKey == imageKey as! String {
+                                    let captionedImage = MWPhoto(url: URL(string: url as! String))
+                                    captionedImage!.caption = "\(modifiedKey)"
+                                    self.photos.append(captionedImage!)
+                                }
+                            }
+                        }
                     })
                 }
             }
@@ -255,9 +270,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
-                        if key as! String == photoBrowser.photo(at: index).caption!() {
-                            self.selectedImageName.set(key as! String)
-                            self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
+                        if photoBrowser.photo(at: index).caption?() != nil {
+                            if key as! String == photoBrowser.photo(at: index).caption!() {
+                                self.selectedImageName.set(key as! String)
+                                self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
+                            }
+                        } else {
+                            let selectedImageAlert = UIAlertController(title: "Cannot set as selected image", message: "The photo is not in your phone's cache, so it cannot be set as the selected image.", preferredStyle: UIAlertControllerStyle.alert)
+                            selectedImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(selectedImageAlert, animated: true, completion: nil)
                         }
                     }
                 })
