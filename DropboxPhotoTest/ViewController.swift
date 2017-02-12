@@ -73,7 +73,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                         if snap.childrenCount == 0 {
-                            let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no image URLs for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                            let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
                             noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                             self.present(noImageAlert, animated: true, completion: nil)
                         } else {
