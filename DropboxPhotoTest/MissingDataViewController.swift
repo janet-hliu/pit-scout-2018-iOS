@@ -18,9 +18,9 @@ class MissingDataViewController : UIViewController {
         }
     }
     
-    let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDidUseStandardTankDrive", "pitOrganization", "pitSelectedImageName", "pitDidDemonstrateCheesecakePotential"]
+    let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDidUseStandardTankDrive", "pitOrganization", "pitDidDemonstrateCheesecakePotential"]
     
-    let ignoreKeys = ["pitNotes", "pitAvailableWeight", "imageKeys"]
+    let ignoreKeys = ["imageKeys", "pitAllImageURLs"]
     
     override func viewWillAppear(_ animated: Bool) {
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100
@@ -31,8 +31,8 @@ class MissingDataViewController : UIViewController {
         if let snap = self.snap {
             for team in snap.children.allObjects {
                 let t = (team as! FIRDataSnapshot).value as! [String: AnyObject]
-                if t["selectedImageName"] == nil {
-                    self.updateWithText("\nTeam \(t["number"]!) has no selected image URL.", color: UIColor.blue)
+                if t["pitSelectedImageName"] == nil {
+                    self.updateWithText("\nTeam \(t["number"]!) has no selected image name.", color: UIColor.blue)
                 }
                 var dataNils : [String] = []
                 for key in self.firebaseKeys {
@@ -62,7 +62,7 @@ class MissingDataViewController : UIViewController {
     }
     // used to show loading of missing data, come back to later
     func showActivityIndicatory(uiView: UIView) {
-        var actInd: UIActivityIndicatorView = UIActivityIndicatorView()
+        let actInd: UIActivityIndicatorView = UIActivityIndicatorView()
         actInd.frame = CGRect(x: 0.0, y: 0.0, width: 0.0, height: 40.0);
         actInd.center = uiView.center
         actInd.hidesWhenStopped = true
