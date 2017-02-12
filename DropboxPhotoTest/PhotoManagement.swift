@@ -196,9 +196,12 @@ class PhotoManager : NSObject {
     }
     
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
-        let date = String(describing: Date())
-        // Format of keys will be teamNumber_date. Will use _ to distinguish between number and date
-        let key = "\(number)_\(date)"
+        // Formatting date to be date in PST time (local time)
+        let date = NSDate()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSS ZZZ"
+        let localTimeZoneStr = formatter.string(from: date as Date)
+        let key = "\(number)_\(localTimeZoneStr)"
         addImageKey(key: key, number: number)
         imageCache.set(value: image, key: key)
     }
