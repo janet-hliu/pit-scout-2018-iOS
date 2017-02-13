@@ -123,8 +123,9 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
         super.viewDidAppear(animated)
         self.textField.delegate = self
         self.label.text = super.titleText
-        // THE PROBLEM IS HEREREERERERERE
-        self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
+        if String(describing: super.initialValue) != "" && String(describing: super.initialValue) != "nil" {
+            self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
+        }
         if neededType == .int {
             textField.keyboardType = UIKeyboardType.decimalPad
         }

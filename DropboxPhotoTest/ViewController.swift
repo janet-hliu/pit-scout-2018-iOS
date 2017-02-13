@@ -188,7 +188,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         })
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        print("NOW WRITING TO  CACHE: \([[String: [String]]]())")
+        print("NOW WRITING TO CACHE: \([[String: [String]]]())")
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -275,10 +275,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                 self.selectedImageName.set(key as! String)
                                 self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
                             }
-                        } else {
-                            let selectedImageAlert = UIAlertController(title: "Cannot set as selected image", message: "The photo is not in your phone's cache, so it cannot be set as the selected image.", preferredStyle: UIAlertControllerStyle.alert)
-                            selectedImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                            self.present(selectedImageAlert, animated: true, completion: nil)
                         }
                     }
                 })

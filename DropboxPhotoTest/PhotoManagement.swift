@@ -143,7 +143,7 @@ class PhotoManager : NSObject {
                     break
                 }
             }
-            print("NOW WRITING TO  CACHE: \(keysArray)")
+            print("NOW WRITING TO CACHE: \(keysArray)")
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
             done()
@@ -199,14 +199,14 @@ class PhotoManager : NSObject {
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            print("NOW WRITING TO  CACHE: \(keysArray)")
+            print("NOW WRITING TO CACHE: \(keysArray)")
             self.teamsList.set(value: data, key: "teams")
             print("image key in cache")
         }).onFailure({ Void in
                 var keysArray: [String] = []
                 keysArray.append(key)
                 let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-                print("NOW WRITING TO  CACHE: \(keysArray)")
+                print("NOW WRITING TO CACHE: \(keysArray)")
                 self.teamsList.set(value: data, key: "teams")
                 print("image key in cache")
             })
