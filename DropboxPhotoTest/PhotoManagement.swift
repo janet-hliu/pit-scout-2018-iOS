@@ -37,7 +37,7 @@ class PhotoManager : NSObject {
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
-    
+    var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
         
         self.teamNumbers = teamNumbers
@@ -76,7 +76,7 @@ class PhotoManager : NSObject {
     
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+            self.backgroundQueue.async {
                  print("in get next, has teams")
                 // Choose key in index 0 of cache and find the corresponding image
                 var teamNum : Int
@@ -95,10 +95,13 @@ class PhotoManager : NSObject {
                             nextPhoto = image
                             done(nextPhoto, nextKey!, teamNum, date)
                         }).onFailure({ Void in
+                            self.backgroundQueue.async {
                             self.keyIndex += 1
+                            sleep(60)
                             self.getNext(done: { (image, key, number, date) in
                                 done(image, key, number, date)
                             })
+                            }
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
@@ -111,6 +114,7 @@ class PhotoManager : NSObject {
                         })
                     }
                 } else {
+                    
                     self.keyIndex = 0
                     // Retry again in a minute
                     print("sleeps")
@@ -121,12 +125,14 @@ class PhotoManager : NSObject {
                 }
             }
         }).onFailure({ Void in
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-                sleep(2)
+            self.backgroundQueue.async {
+            //DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                sleep(60)
                 self.getNext(done: { (image, key, number, date) in
                     done(image, key, number, date)
                 })
             }
+            //}
         })
     }
     
@@ -151,7 +157,7 @@ class PhotoManager : NSObject {
     }
     
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+        self.backgroundQueue.async {
             self.storeOnFirebase(number: teamNum, date: date, image: photo, done: { didSucceed in
                 if didSucceed {
                     //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
