@@ -282,16 +282,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.dismiss(animated: true, completion: nil)
                 // Deleting images from firebase database but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                    let teamNum = snap.childSnapshot(forPath: "number").value as! Int
                     let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
-                    for (key, value) in imageKeysDict {
-                        if value as! String == photoBrowser.photo(at: index).caption!() {
-                            self.photoManager.imageCache.remove(key: value as! String)
+                    let caption = photoBrowser.photo(at: index).caption!()
+                    for (key, date) in imageKeysDict {
+                        if date as! String == caption {
+                            // Removing photo from image cache
+                            self.photoManager.imageCache.remove(key: date as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
                             let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
                             // If deleted image is also selected image, delete key value on firebase
-                            if currentSelectedImageName == value as! String {
+                            if currentSelectedImageName == date as! String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
                             }
+                            self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+                                // Deleting from the keys cache
+                                self.photoManager.backgroundQueue.async {
+                                    var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+                                    for i in 0..<keysArray.count {
+                                        if keysArray[i] == caption {
+                                            keysArray.remove(at: i)
+                                        }
+                                    }
+                                let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                                self.teamsList.set(value: keysData, key: "teams")
+                                }
+                            })
                         }
                     }
                     
