@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "192BEABD1C3463B900992A8A"
-               BuildableName = "DropboxPhotoTest.app"
-               BlueprintName = "DropboxPhotoTest"
-               ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+               BuildableName = "PitScout.app"
+               BlueprintName = "PitScout"
+               ReferencedContainer = "container:PitScout.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "192BEAD11C3463BA00992A8A"
-               BuildableName = "DropboxPhotoTestTests.xctest"
-               BlueprintName = "DropboxPhotoTestTests"
-               ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+               BuildableName = "PitScoutTests.xctest"
+               BlueprintName = "PitScoutTests"
+               ReferencedContainer = "container:PitScout.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "192BEADC1C3463BA00992A8A"
-               BuildableName = "DropboxPhotoTestUITests.xctest"
-               BlueprintName = "DropboxPhotoTestUITests"
-               ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+               BuildableName = "PitScoutUITests.xctest"
+               BlueprintName = "PitScoutUITests"
+               ReferencedContainer = "container:PitScout.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "192BEABD1C3463B900992A8A"
-            BuildableName = "DropboxPhotoTest.app"
-            BlueprintName = "DropboxPhotoTest"
-            ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+            BuildableName = "PitScout.app"
+            BlueprintName = "PitScout"
+            ReferencedContainer = "container:PitScout.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "192BEABD1C3463B900992A8A"
-            BuildableName = "DropboxPhotoTest.app"
-            BlueprintName = "DropboxPhotoTest"
-            ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+            BuildableName = "PitScout.app"
+            BlueprintName = "PitScout"
+            ReferencedContainer = "container:PitScout.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,9 +95,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "192BEABD1C3463B900992A8A"
-            BuildableName = "DropboxPhotoTest.app"
-            BlueprintName = "DropboxPhotoTest"
-            ReferencedContainer = "container:DropboxPhotoTest.xcodeproj">
+            BuildableName = "PitScout.app"
+            BlueprintName = "PitScout"
+            ReferencedContainer = "container:PitScout.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
