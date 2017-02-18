@@ -126,13 +126,11 @@ class PhotoManager : NSObject {
             }
         }).onFailure({ Void in
             self.backgroundQueue.async {
-            //DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
                 sleep(60)
                 self.getNext(done: { (image, key, number, date) in
                     done(image, key, number, date)
                 })
             }
-            //}
         })
     }
     
@@ -209,13 +207,13 @@ class PhotoManager : NSObject {
             self.teamsList.set(value: data, key: "teams")
             print("image key in cache")
         }).onFailure({ Void in
-                var keysArray: [String] = []
-                keysArray.append(key)
-                let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-                print("NOW WRITING TO CACHE: \(keysArray)")
-                self.teamsList.set(value: data, key: "teams")
-                print("image key in cache")
-            })
+            var keysArray: [String] = []
+            keysArray.append(key)
+            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+            print("NOW WRITING TO CACHE: \(keysArray)")
+            self.teamsList.set(value: data, key: "teams")
+            print("image key in cache")
+        })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
         currentImageKeys.childByAutoId().setValue(key)
     }
@@ -229,6 +227,8 @@ class PhotoManager : NSObject {
         let key = "\(number)_\(localTimeZoneStr)"
         addImageKey(key: key, number: number)
         imageCache.set(value: image, key: key)
+        // THIS LINE OF CODE WILL BE FOR CHAMPS
+        // teamsFirebase.child("\(number)").child("pitSelectedImageName").setValue(key)
     }
 }
 

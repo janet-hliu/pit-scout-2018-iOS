@@ -101,7 +101,6 @@ class PSUIFirebaseViewController : UIViewController {
             self.previousValue = snapshot.value as Any?
         }
     }
-    
 }
 
 /// Just a few customizations of the text input view for the pit scout. See the `PSUIFirebaseViewController`.
