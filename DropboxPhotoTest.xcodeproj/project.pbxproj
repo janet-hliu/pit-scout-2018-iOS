@@ -57,17 +57,17 @@
 		190DBEC71C5598FC00C4D1C2 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
 		190DBED01C5599B200C4D1C2 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		190DBED21C5599D200C4D1C2 /* libicucore.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.A.tbd; path = usr/lib/libicucore.A.tbd; sourceTree = SDKROOT; };
-		192BEABE1C3463B900992A8A /* PitScout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PitScout.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DropboxPhotoTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAC11C3463B900992A8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		192BEAC31C3463B900992A8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		192BEAC61C3463B900992A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		192BEAC81C3463B900992A8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		192BEACB1C3463B900992A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		192BEACD1C3463B900992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		192BEAD21C3463BA00992A8A /* PitScoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PitScoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DropboxPhotoTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAD61C3463BA00992A8A /* DropboxPhotoTestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxPhotoTestTests.swift; sourceTree = "<group>"; };
 		192BEAD81C3463BA00992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		192BEADD1C3463BA00992A8A /* PitScoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PitScoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DropboxPhotoTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		192BEAE11C3463BA00992A8A /* DropboxPhotoTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxPhotoTestUITests.swift; sourceTree = "<group>"; };
 		192BEAE31C3463BA00992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		194587931C7D326D00507019 /* PhotoLibrarySaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoLibrarySaver.swift; sourceTree = "<group>"; };
@@ -149,9 +149,9 @@
 		192BEABF1C3463B900992A8A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				192BEABE1C3463B900992A8A /* PitScout.app */,
-				192BEAD21C3463BA00992A8A /* PitScoutTests.xctest */,
-				192BEADD1C3463BA00992A8A /* PitScoutUITests.xctest */,
+				192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */,
+				192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */,
+				192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -231,9 +231,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		192BEABD1C3463B900992A8A /* PitScout */ = {
+		192BEABD1C3463B900992A8A /* DropboxPhotoTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScout" */;
+			buildConfigurationList = 192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTest" */;
 			buildPhases = (
 				FD714B0B8FA6903A8EDA9E4D /* [CP] Check Pods Manifest.lock */,
 				192BEABA1C3463B900992A8A /* Sources */,
@@ -246,14 +246,14 @@
 			);
 			dependencies = (
 			);
-			name = PitScout;
+			name = DropboxPhotoTest;
 			productName = DropboxPhotoTest;
-			productReference = 192BEABE1C3463B900992A8A /* PitScout.app */;
+			productReference = 192BEABE1C3463B900992A8A /* DropboxPhotoTest.app */;
 			productType = "com.apple.product-type.application";
 		};
-		192BEAD11C3463BA00992A8A /* PitScoutTests */ = {
+		192BEAD11C3463BA00992A8A /* DropboxPhotoTestTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScoutTests" */;
+			buildConfigurationList = 192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestTests" */;
 			buildPhases = (
 				192BEACE1C3463BA00992A8A /* Sources */,
 				192BEACF1C3463BA00992A8A /* Frameworks */,
@@ -264,14 +264,14 @@
 			dependencies = (
 				192BEAD41C3463BA00992A8A /* PBXTargetDependency */,
 			);
-			name = PitScoutTests;
+			name = DropboxPhotoTestTests;
 			productName = DropboxPhotoTestTests;
-			productReference = 192BEAD21C3463BA00992A8A /* PitScoutTests.xctest */;
+			productReference = 192BEAD21C3463BA00992A8A /* DropboxPhotoTestTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		192BEADC1C3463BA00992A8A /* PitScoutUITests */ = {
+		192BEADC1C3463BA00992A8A /* DropboxPhotoTestUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScoutUITests" */;
+			buildConfigurationList = 192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestUITests" */;
 			buildPhases = (
 				192BEAD91C3463BA00992A8A /* Sources */,
 				192BEADA1C3463BA00992A8A /* Frameworks */,
@@ -282,9 +282,9 @@
 			dependencies = (
 				192BEADF1C3463BA00992A8A /* PBXTargetDependency */,
 			);
-			name = PitScoutUITests;
+			name = DropboxPhotoTestUITests;
 			productName = DropboxPhotoTestUITests;
-			productReference = 192BEADD1C3463BA00992A8A /* PitScoutUITests.xctest */;
+			productReference = 192BEADD1C3463BA00992A8A /* DropboxPhotoTestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -314,7 +314,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "PitScout" */;
+			buildConfigurationList = 192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "DropboxPhotoTest" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -327,9 +327,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				192BEABD1C3463B900992A8A /* PitScout */,
-				192BEAD11C3463BA00992A8A /* PitScoutTests */,
-				192BEADC1C3463BA00992A8A /* PitScoutUITests */,
+				192BEABD1C3463B900992A8A /* DropboxPhotoTest */,
+				192BEAD11C3463BA00992A8A /* DropboxPhotoTestTests */,
+				192BEADC1C3463BA00992A8A /* DropboxPhotoTestUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -453,12 +453,12 @@
 /* Begin PBXTargetDependency section */
 		192BEAD41C3463BA00992A8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 192BEABD1C3463B900992A8A /* PitScout */;
+			target = 192BEABD1C3463B900992A8A /* DropboxPhotoTest */;
 			targetProxy = 192BEAD31C3463BA00992A8A /* PBXContainerItemProxy */;
 		};
 		192BEADF1C3463BA00992A8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 192BEABD1C3463B900992A8A /* PitScout */;
+			target = 192BEABD1C3463B900992A8A /* DropboxPhotoTest */;
 			targetProxy = 192BEADE1C3463BA00992A8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -640,7 +640,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PitScout.app/PitScout";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Debug;
 		};
@@ -653,7 +653,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PitScout.app/PitScout";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Release;
 		};
@@ -686,7 +686,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "PitScout" */ = {
+		192BEAB91C3463B900992A8A /* Build configuration list for PBXProject "DropboxPhotoTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAE41C3463BA00992A8A /* Debug */,
@@ -695,7 +695,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScout" */ = {
+		192BEAE61C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAE71C3463BA00992A8A /* Debug */,
@@ -704,7 +704,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScoutTests" */ = {
+		192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAEA1C3463BA00992A8A /* Debug */,
@@ -713,7 +713,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "PitScoutUITests" */ = {
+		192BEAEC1C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				192BEAED1C3463BA00992A8A /* Debug */,

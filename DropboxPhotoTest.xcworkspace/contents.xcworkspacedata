@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/jliu/Documents/Robotics/pit-scout-2017-iOS/PitScout.xcodeproj">
+      location = "group:DropboxPhotoTest.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
