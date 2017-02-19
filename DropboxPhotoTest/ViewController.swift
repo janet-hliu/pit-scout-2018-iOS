@@ -50,13 +50,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             
             //Adding the PSUI Elements
-            //Buttons
+            //Adding/Viewing/Deleting Images Buttons
             let screenWidth = Int(self.view.frame.width)
             let addImageButton = PSUIButton(title: "Add Image", width: screenWidth, y: 0, buttonPressed: { (sender) -> () in
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
                 picker.sourceType = .camera
-                picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
+                // Allows videos as well
+                // picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
                 picker.delegate = self
                 self.present(picker, animated: true, completion: nil)
             })
@@ -73,12 +74,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                         if snap.childrenCount == 0 {
+                            // If no photos in firebase cache for team
                             let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
                             noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                             self.present(noImageAlert, animated: true, completion: nil)
                         } else {
                             self.deleteImagePhotoBrowser = false
                             self.notActuallyLeavingViewController = true
+                            // Displaying photos in photo browser
                             self.updateMyPhotos { [unowned self] in
                                 let nav = UINavigationController(rootViewController: browser)
                                 nav.delegate = self
@@ -99,6 +102,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.makeNewBrowser(done: { browser in
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                        // If there are no photos in firebase cache for team
                         if snap.childrenCount == 0 {
                             let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no images for this team.", preferredStyle: UIAlertControllerStyle.alert)
                             noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -106,6 +110,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         } else {
                             self.deleteImagePhotoBrowser = true
                             self.notActuallyLeavingViewController = true
+                            // Displaying photos in photo browser
                             self.updateMyPhotos { [unowned self] in
                                 let nav = UINavigationController(rootViewController: browser)
                                 nav.delegate = self
@@ -127,6 +132,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
              numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
              numberOfWheels.neededType = .int */
             
+            // Text Field
             self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value as? String)
             self.selectedImageName.neededType = .string
             
@@ -136,7 +142,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             programmingLanguage.segments = ["Java", "C++", "Labview", "Other"]
             programmingLanguage.neededType = .string
             
-            //Switch
+            // Switch
             let tankDrive = PSUISwitchViewController()
             tankDrive.setup("Has Tank Tread:", firebaseRef: self.ourTeam.child("pitDidUseStandardTankDrive"), initialValue: snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value)
             
@@ -163,6 +169,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.addChildViewController(availableWeight)
             self.addChildViewController(willCheesecake)
             
+            // UI Elements
             for childViewController in self.childViewControllers {
                 self.scrollView.addSubview(childViewController.view)
                 childViewController.view.frame.origin.y = verticalPlacement
@@ -179,7 +186,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         
         self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
-            if self.numberOfImagesOnFirebase == -1 { //This is the first time that the firebase event gets called, it gets called once no matter what when you first get here in code.
+            if self.numberOfImagesOnFirebase == -1 { // This is the first time that the firebase event gets called, it gets called once before being set to the actual number of photos on firebase
                 self.numberOfImagesOnFirebase = Int(snap.childrenCount)
                 self.updateMyPhotos({})
             } else {
@@ -187,16 +194,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.updateMyPhotos({})
             }
         })
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil);
-        print("NOW WRITING TO CACHE: \([[String: [String]]]())")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
-                self.teamsList.set(value: [[String: [String]]]().asData(), key: "teams")
+                // teamsList is the cache of keys to be placed on firebase. It is an array of strings [teamNum_date]
+                self.teamsList.set(value: [String]().asData(), key: "teams")
             }
         })
     }
     
+    // Formatting a new photo browser for viewing photos
     func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
         var browser = MWPhotoBrowser()
         browser = MWPhotoBrowser.init(delegate: self)
@@ -210,11 +220,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         done(browser)
     }
     
+    // Long press to access photo library, not camera
     func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
         notActuallyLeavingViewController = true
         if recognizer.state == UIGestureRecognizerState.ended {
             let picker = UIImagePickerController()
-            
             picker.sourceType = .photoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
             picker.delegate = self
@@ -224,17 +234,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func updateMyPhotos(_ callback: @escaping ()->()) {
         ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            // Pulling images from cache and firebase
             self.photos.removeAll()
             let imageKeysArray = snap.childSnapshot(forPath: "imageKeys").value as? NSDictionary
-            // Pulling from cache and not firebase- photo browser will not load images that were not taken from the phone that the app is running on
             if imageKeysArray != nil {
                 for imageKey in imageKeysArray!.allValues {
-                    // use imageKey to find corresponding image in imageCache
+                    // Use imageKey to find corresponding image in imageCache
                     self.photoManager.imageCache.fetch(key: String(describing: imageKey)).onSuccess ({ (image) in
                         let captionedImage = MWPhoto(image: image)
                         captionedImage!.caption = "\(String(describing: imageKey))"
                         self.photos.append(captionedImage!)
-                    }).onFailure({ Void in //if photo doesn't exist in cache, pull from firebase
+                    }).onFailure({ Void in
+                        // If photo doesn't exist in cache, pull from firebase
                         let imageURLs = snap.childSnapshot(forPath: "pitAllImageURLs").value as? NSDictionary
                         if imageURLs != nil {
                             for url in imageURLs!.allValues {
@@ -282,17 +293,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.dismiss(animated: true, completion: nil)
                 // Deleting images from firebase database but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let teamNum = snap.childSnapshot(forPath: "number").value as! Int
                     let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
                     let caption = photoBrowser.photo(at: index).caption!()
                     for (key, date) in imageKeysDict {
-                        if date as! String == caption {
+                        if date as? String == caption {
                             // Removing photo from image cache
                             self.photoManager.imageCache.remove(key: date as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
                             let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
                             // If deleted image is also selected image, delete key value on firebase
-                            if currentSelectedImageName == date as! String {
+                            if currentSelectedImageName == date as? String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
                             }
                             self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
@@ -382,7 +392,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         notActuallyLeavingViewController = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) { //If you are leaving the view controller, and only have one image, make that the selected one.
+    override func viewWillDisappear(_ animated: Bool) {
+        /*
+        //If you are leaving the view controller, and only have one image, make that the selected one.
         super.viewWillDisappear(animated)
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
             if urls?.count == 1 {
@@ -397,7 +409,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                 })
             }
-        }
+        } */
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             if snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value as? Bool == nil {

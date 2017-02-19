@@ -112,7 +112,6 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
         if !hasOverriddenUIResponse {
             self.UIResponse = { value in
                 currentResponse!(value)
-                //print(String(value))
                 self.textField.text = value as? String ?? (value as? NSNumber)?.stringValue ?? ""
             }
         }

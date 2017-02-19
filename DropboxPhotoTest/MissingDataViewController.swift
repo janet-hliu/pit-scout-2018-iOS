@@ -60,6 +60,7 @@ class MissingDataViewController : UIViewController {
         _ controller: UIPresentationController!) -> UIModalPresentationStyle {
             return .none
     }
+    
     // used to show loading of missing data, come back to later
     func showActivityIndicatory(uiView: UIView) {
         let actInd: UIActivityIndicatorView = UIActivityIndicatorView()

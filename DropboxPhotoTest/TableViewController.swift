@@ -68,7 +68,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.scoutedTeamInfo = []
         self.teamNums = []
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
-        for (team, info) in teamsDatabase {
+        for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
             self.teams.add(teamInfo)
@@ -275,7 +275,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     options: JSONSerialization.WritingOptions())
                 let theJSONText = NSString(data: theJSONData,
                                            encoding: String.Encoding.ascii.rawValue)
-                let activityViewController = UIActivityViewController(activityItems: [theJSONText], applicationActivities: nil)
+                let activityViewController = UIActivityViewController(activityItems: [theJSONText ?? ""], applicationActivities: nil)
                 self.present(activityViewController, animated: true, completion: {})
             } catch {
                 print(error.localizedDescription)

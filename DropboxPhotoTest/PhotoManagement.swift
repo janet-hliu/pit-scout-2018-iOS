@@ -31,15 +31,15 @@ class PhotoManager : NSObject {
     var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2017-5f51c.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
-    // teamsList is used to upload images to firebase, imageKeys on firebase is used to find selectedImage via imageCache (even if device is offline)
+    // teamsList is a cache of keys used to find photos from the imageCache which will then be uploaded to firebase
     var teamsList = Shared.dataCache
     let imageCache = Shared.imageCache
     let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
     var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
+    
     init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
-        
         self.teamNumbers = teamNumbers
         self.teamsFirebase = teamsFirebase
         for number in teamNumbers {
@@ -48,6 +48,7 @@ class PhotoManager : NSObject {
         super.init()
     }
     
+    // Gets all the urls in firebase for a team
     func getSharedURLsForTeam(_ num: Int, fetched: @escaping (NSMutableArray?)->()) {
         if self.mayKeepWorking {
             teamsFirebase.child("\(num)").child("pitAllImageURLs").observeSingleEvent(of: .value , with: { (updateURL) in
@@ -77,16 +78,14 @@ class PhotoManager : NSObject {
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             self.backgroundQueue.async {
-                 print("in get next, has teams")
                 // Choose key in index 0 of cache and find the corresponding image
                 var teamNum : Int
                 var date: String
                 var nextPhoto = UIImage()
                 let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
                 if keysArray.count != 0 {
-                    print("cache has stuff")
                     if keysArray.count > self.keyIndex {
-                        print("keysArray: \(keysArray)")
+                        print("KEYSARRAY: \(keysArray)")
                         let nextKey = String(keysArray[self.keyIndex])
                         let nextKeyArray = nextKey!.components(separatedBy: "_")
                         teamNum = Int(nextKeyArray[0])!
@@ -96,27 +95,27 @@ class PhotoManager : NSObject {
                             done(nextPhoto, nextKey!, teamNum, date)
                         }).onFailure({ Void in
                             self.backgroundQueue.async {
-                            self.keyIndex += 1
-                            sleep(60)
-                            self.getNext(done: { (image, key, number, date) in
-                                done(image, key, number, date)
-                            })
+                                // Loops back through keysArray, skipping any keys that do not fetch an image
+                                self.keyIndex += 1
+                                sleep(60)
+                                self.getNext(done: { (image, key, number, date) in
+                                    done(image, key, number, date)
+                                })
                             }
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
                         sleep(1)
                     } else {
-                        print("\(keysArray.count)")
+                        // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
                         self.keyIndex = 0
                         self.getNext(done: { (image, key, number, date) in
                             done(image, key, number, date)
                         })
                     }
                 } else {
-                    
+                    // Nothing to be cached, retry in a minute
                     self.keyIndex = 0
-                    // Retry again in a minute
                     print("sleeps")
                     sleep(60)
                     self.getNext(done: { (image, key, number, date) in
@@ -135,9 +134,8 @@ class PhotoManager : NSObject {
     }
     
     func removeFromCache(key: String, done: @escaping ()->()) {
-        // Removes key from dataCache
+        // Removes key from dataCache but leaves it in imageCache for image viewing
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            print("removing from cache")
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             for var i in 0 ..< keysArray.count {
                 if String(keysArray[i]) != key {
@@ -155,10 +153,10 @@ class PhotoManager : NSObject {
     }
     
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
+        // Uploads images to firebase
         self.backgroundQueue.async {
             self.storeOnFirebase(number: teamNum, date: date, image: photo, done: { didSucceed in
                 if didSucceed {
-                    //self.updateUrl(teamNumber: teamNum, photoIndex: photoIndex)
                     self.removeFromCache(key: key, done: {
                         self.getNext(done: { nextPhoto, nextKey, nextNumber, nextDate in
                             self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber, date: nextDate)
@@ -195,24 +193,18 @@ class PhotoManager : NSObject {
         })
     }
     
-    // Photo storage stuff - work on waiting till wifi
     func addImageKey(key : String, number: Int) {
         // Adding to teamsList cache to upload photos
-        print("added image key")
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            print("NOW WRITING TO CACHE: \(keysArray)")
             self.teamsList.set(value: data, key: "teams")
-            print("image key in cache")
         }).onFailure({ Void in
             var keysArray: [String] = []
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            print("NOW WRITING TO CACHE: \(keysArray)")
             self.teamsList.set(value: data, key: "teams")
-            print("image key in cache")
         })
         let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
         currentImageKeys.childByAutoId().setValue(key)
