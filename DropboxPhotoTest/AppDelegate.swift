@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         FIRDatabase.database().persistenceEnabled = true
         //Dropbox.setupWithAppKey("dekmb3lm9fzcd32")
-        Instabug.start(withToken: "ab53034b6c6a246e5f5c74f489a49488", invocationEvent: IBGInvocationEvent.shake)
+        Instabug.start(withToken: "98616ae556601b6b72101615cd3f7f9a", invocationEvent: IBGInvocationEvent.shake)
         return true
     }
 
