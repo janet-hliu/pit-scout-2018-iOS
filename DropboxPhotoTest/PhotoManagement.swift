@@ -25,10 +25,8 @@ class PhotoManager : NSObject {
     var timer : Timer = Timer()
     var teamsFirebase : FIRDatabaseReference
     var numberOfPhotosForTeam = [Int: Int]()
-    var callbackForPhotoCasheUpdated = { }
     var currentlyNotifyingTeamNumber = 0
     let photoSaver = CustomPhotoAlbum()
-    var activeImages = [[String: AnyObject]]()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/firebase-scouting-2017-5f51c.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
     // teamsList is a cache of keys used to find photos from the imageCache which will then be uploaded to firebase
@@ -71,10 +69,6 @@ class PhotoManager : NSObject {
         return String(teamNum) + "_" + date + ".png"
     }
     
-    func makeURLForFileName(_ fileName: String) -> String {
-        return self.firebaseImageDownloadURLBeginning + String(fileName)
-    }
-    
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             self.backgroundQueue.async {
@@ -97,7 +91,7 @@ class PhotoManager : NSObject {
                             self.backgroundQueue.async {
                                 // Loops back through keysArray, skipping any keys that do not fetch an image
                                 self.keyIndex += 1
-                                self.photomangersleep(number: 60)
+                                self.photoManagerSleep(time: 60)
                                 self.getNext(done: { (image, key, number, date) in
                                     done(image, key, number, date)
                                 })
@@ -105,7 +99,7 @@ class PhotoManager : NSObject {
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
-                        self.photomangersleep(number: 1)
+                        self.photoManagerSleep(time: 1)
                     } else {
                         // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
                         self.keyIndex = 0
@@ -116,7 +110,7 @@ class PhotoManager : NSObject {
                 } else {
                     // Nothing to be cached, retry in a minute
                     self.keyIndex = 0
-                    self.photomangersleep(number: 60)
+                    self.photoManagerSleep(time: 60)
                     self.getNext(done: { (image, key, number, date) in
                         done(image, key, number, date)
                     })
@@ -124,7 +118,7 @@ class PhotoManager : NSObject {
             }
         }).onFailure({ Void in
             self.backgroundQueue.async {
-                self.photomangersleep(number: 60)
+                self.photoManagerSleep(time: 60)
                 self.getNext(done: { (image, key, number, date) in
                     done(image, key, number, date)
                 })
@@ -162,7 +156,7 @@ class PhotoManager : NSObject {
                         })
                     })
                 } else {
-                    self.photomangersleep(number: 60)
+                    self.photoManagerSleep(time: 60)
                     self.getNext(done: { (image, key, number, date) in
                         self.startUploadingImageQueue(photo: image, key: key, teamNum: number, date: date)
                     })
@@ -222,9 +216,9 @@ class PhotoManager : NSObject {
         // teamsFirebase.child("\(number)").child("pitSelectedImageName").setValue(key)
     }
     
-    func photomangersleep(number: Int) {
-        print("Photo Manager is tired, going to take a nap for \(number) seconds.")
-        sleep(UInt32(number))
+    func photoManagerSleep(time: Int) {
+        print("Photo Manager is tired, going to take a nap for \(time) seconds.")
+        sleep(UInt32(time))
         print("Ahh... that felt good. Photo Manager is awake and ready to MANAGE!!!!!")
     }
     
