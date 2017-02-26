@@ -326,8 +326,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "197"
             endingLineNumber = "197"
-            landmarkName = "PhotoManager"
-            landmarkType = "3">
+            landmarkName = "addImageKey(key:number:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"

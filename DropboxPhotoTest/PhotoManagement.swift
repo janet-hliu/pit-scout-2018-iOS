@@ -97,7 +97,7 @@ class PhotoManager : NSObject {
                             self.backgroundQueue.async {
                                 // Loops back through keysArray, skipping any keys that do not fetch an image
                                 self.keyIndex += 1
-                                sleep(60)
+                                self.photomangersleep(number: 60)
                                 self.getNext(done: { (image, key, number, date) in
                                     done(image, key, number, date)
                                 })
@@ -105,7 +105,7 @@ class PhotoManager : NSObject {
                         })
                         self.keyIndex += 1
                         // Gives time for the cache fetch to occur
-                        sleep(1)
+                        self.photomangersleep(number: 1)
                     } else {
                         // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
                         self.keyIndex = 0
@@ -116,8 +116,7 @@ class PhotoManager : NSObject {
                 } else {
                     // Nothing to be cached, retry in a minute
                     self.keyIndex = 0
-                    print("sleeps")
-                    sleep(60)
+                    self.photomangersleep(number: 60)
                     self.getNext(done: { (image, key, number, date) in
                         done(image, key, number, date)
                     })
@@ -125,7 +124,7 @@ class PhotoManager : NSObject {
             }
         }).onFailure({ Void in
             self.backgroundQueue.async {
-                sleep(60)
+                self.photomangersleep(number: 60)
                 self.getNext(done: { (image, key, number, date) in
                     done(image, key, number, date)
                 })
@@ -163,7 +162,7 @@ class PhotoManager : NSObject {
                         })
                     })
                 } else {
-                    sleep(60)
+                    self.photomangersleep(number: 60)
                     self.getNext(done: { (image, key, number, date) in
                         self.startUploadingImageQueue(photo: image, key: key, teamNum: number, date: date)
                     })
@@ -222,6 +221,13 @@ class PhotoManager : NSObject {
         // THIS LINE OF CODE WILL BE FOR CHAMPS
         // teamsFirebase.child("\(number)").child("pitSelectedImageName").setValue(key)
     }
+    
+    func photomangersleep(number: Int) {
+        print("Photo Manager is tired, going to take a nap for \(number) seconds.")
+        sleep(UInt32(number))
+        print("Ahh... that felt good. Photo Manager is awake and ready to MANAGE!!!!!")
+    }
+    
 }
 
 extension UIImage {
