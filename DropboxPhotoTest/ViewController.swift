@@ -127,11 +127,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             self.scrollView.addSubview(deleteImagesButton)
             
-            /* Text Input
-             let numberOfWheels = PSUITextInputViewController()
-             numberOfWheels.setup("Num. Wheels", firebaseRef: self.ourTeam.child("pitNumberOfWheels"), initialValue: snap.childSnapshot(forPath: "pitNumberOfWheels").value)
-             numberOfWheels.neededType = .int */
-            
             // Text Field
             self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value as? String)
             self.selectedImageName.neededType = .string
@@ -206,6 +201,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
+    /** 
+     This function makes a new photo browser for viewing photos.
+     */
     // Formatting a new photo browser for viewing photos
     func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
         var browser = MWPhotoBrowser()
@@ -220,6 +218,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         done(browser)
     }
     
+    /**
+     This function allows access to the photo library if button is long pressed.
+     */
     // Long press to access photo library, not camera
     func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
         notActuallyLeavingViewController = true
@@ -232,6 +233,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    /**
+     This function displays the photos, pulling from the cache and Firebase.
+     */
     func updateMyPhotos(_ callback: @escaping ()->()) {
         ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             // Pulling images from cache and firebase
@@ -272,6 +276,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return UInt(self.photos.count)
     }
     
+    /**
+     This function sets up the photo browser, and allows photo selecting or deletion.
+     */
     func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt, selectedChanged selected: Bool) {
         if selected {
             if self.deleteImagePhotoBrowser == false {

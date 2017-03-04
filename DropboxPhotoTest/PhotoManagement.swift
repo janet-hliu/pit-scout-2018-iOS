@@ -46,6 +46,9 @@ class PhotoManager : NSObject {
         super.init()
     }
     
+    /**
+     This function gets all the URLs in Firebase under "pitAllImageURLs".
+     */
     // Gets all the urls in firebase for a team
     func getSharedURLsForTeam(_ num: Int, fetched: @escaping (NSMutableArray?)->()) {
         if self.mayKeepWorking {
@@ -59,16 +62,25 @@ class PhotoManager : NSObject {
         }
     }
     
+    /** 
+     This function puts the URL link onto firebase, linking it to a randomnly generated string.
+     */
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
         let currentURLs = teamFirebase.child("pitAllImageURLs")
         currentURLs.childByAutoId().setValue(link)
     }
     
+    /**
+     This function makes the file name for the photo on Firebase Storage.
+     */
     func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
         return String(teamNum) + "_" + date + ".png"
     }
     
+    /**
+     This function fetches an image key and its corresponding photo from the cache. If there are no photos, the function will wait one minute before calling itself again.
+     */
     func getNext (done: @escaping (_ nextPhoto: UIImage, _ nextKey: String, _ nextNumber: Int, _ nextDate: String)->()) {
         self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             self.backgroundQueue.async {
@@ -125,7 +137,11 @@ class PhotoManager : NSObject {
             }
         })
     }
+    //FIXME: hi
     
+    /**
+     This function removes the uploaded image key from the cache.
+     */
     func removeFromCache(key: String, done: @escaping ()->()) {
         // Removes key from dataCache but leaves it in imageCache for image viewing
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
@@ -145,6 +161,9 @@ class PhotoManager : NSObject {
         })
     }
     
+    /**
+     This function is the master function behind uploading photos.
+     */
     func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
         // Uploads images to firebase
         self.backgroundQueue.async {
@@ -165,6 +184,9 @@ class PhotoManager : NSObject {
         }
     }
     
+    /**
+     This function stores the image onto Firebase Storage.
+     */
     func storeOnFirebase(number: Int, date: String, image: UIImage, done: @escaping (_ didSucceed : Bool) ->()) {
         self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
@@ -186,6 +208,9 @@ class PhotoManager : NSObject {
         })
     }
     
+    /**
+     This function adds the image key to the cache.
+     */
     func addImageKey(key : String, number: Int) {
         // Adding to teamsList cache to upload photos
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
@@ -203,6 +228,9 @@ class PhotoManager : NSObject {
         currentImageKeys.childByAutoId().setValue(key)
     }
     
+    /**
+     This function adds the image to the cache.
+     */
     func addToFirebaseStorageQueue(image: UIImage, number: Int) {
         // Formatting date to be date in PST time (local time)
         let date = NSDate()
@@ -216,6 +244,9 @@ class PhotoManager : NSObject {
         // teamsFirebase.child("\(number)").child("pitSelectedImageName").setValue(key)
     }
     
+    /**
+     This function makes the code sleep.
+     */
     func photoManagerSleep(time: Int) {
         print("Photo Manager is tired, going to take a nap for \(time) seconds.")
         sleep(UInt32(time))
