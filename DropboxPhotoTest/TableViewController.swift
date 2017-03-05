@@ -35,8 +35,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
         firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
         
-        
-        
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
         
@@ -48,7 +46,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         self.firebase = FIRDatabase.database().reference()
         
-        self.firebase!.observe( .value, with: { (snapshot) in
+        self.firebase!.observe(.value, with: { (snapshot) in
             self.setup(snapshot.childSnapshot(forPath: "Teams"))
         })
         

@@ -21,7 +21,6 @@ class PhotoManager : NSObject {
         }
     }
     
-    
     var timer : Timer = Timer()
     var teamsFirebase : FIRDatabaseReference
     var numberOfPhotosForTeam = [Int: Int]()
@@ -62,7 +61,63 @@ class PhotoManager : NSObject {
         }
     }
     
-    /** 
+    /**
+     This function makes the file name for the photo on Firebase Storage.
+     */
+    func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
+        return String(teamNum) + "_" + date + ".png"
+    }
+    
+    //MARK: Uploading Photos
+    
+    /**
+     This function is the master function behind uploading photos.
+     */
+    func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
+        // Uploads images to firebase
+        self.backgroundQueue.async {
+            self.storeOnFirebase(number: teamNum, date: date, image: photo, done: { didSucceed in
+                if didSucceed {
+                    self.removeFromCache(key: key, done: {
+                        self.getNext(done: { nextPhoto, nextKey, nextNumber, nextDate in
+                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber, date: nextDate)
+                        })
+                    })
+                } else {
+                    self.photoManagerSleep(time: 60)
+                    self.getNext(done: { (image, key, number, date) in
+                        self.startUploadingImageQueue(photo: image, key: key, teamNum: number, date: date)
+                    })
+                }
+            })
+        }
+    }
+    
+    /**
+     This function stores the image onto Firebase Storage.
+     */
+    func storeOnFirebase(number: Int, date: String, image: UIImage, done: @escaping (_ didSucceed : Bool) ->()) {
+        self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
+            var e: Bool = false
+            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
+                
+                if (error != nil) {
+                    print("LOOK! 0_0 no wifi")
+                    print("ERROR: \(error.debugDescription)")
+                } else {
+                    // Metadata contains file metadata such as size, content-type, and download URL.
+                    let downloadURL = metadata!.downloadURL()?.absoluteString
+                    self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number)
+                    e = true
+                    print("UPLOADED: \(downloadURL!)")
+                }
+                done(e)
+            }
+        })
+    }
+    
+    /**
      This function puts the URL link onto firebase, linking it to a randomnly generated string.
      */
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
@@ -72,12 +127,27 @@ class PhotoManager : NSObject {
     }
     
     /**
-     This function makes the file name for the photo on Firebase Storage.
+     This function removes the uploaded image key from the cache.
      */
-    func makeFilenameForTeamNumAndIndex(_ teamNum: Int, date: String) -> String {
-        return String(teamNum) + "_" + date + ".png"
+    func removeFromCache(key: String, done: @escaping ()->()) {
+        // Removes key from dataCache but leaves it in imageCache for image viewing
+        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            for var i in 0 ..< keysArray.count {
+                if String(keysArray[i]) != key {
+                    i += 1
+                } else {
+                    keysArray.remove(at: i)
+                    break
+                }
+            }
+            print("NOW WRITING TO CACHE: \(keysArray)")
+            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+            self.teamsList.set(value: data, key: "teams")
+            done()
+        })
     }
-    
+
     /**
      This function fetches an image key and its corresponding photo from the cache. If there are no photos, the function will wait one minute before calling itself again.
      */
@@ -137,76 +207,8 @@ class PhotoManager : NSObject {
             }
         })
     }
-    //FIXME: hi
     
-    /**
-     This function removes the uploaded image key from the cache.
-     */
-    func removeFromCache(key: String, done: @escaping ()->()) {
-        // Removes key from dataCache but leaves it in imageCache for image viewing
-        teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-            for var i in 0 ..< keysArray.count {
-                if String(keysArray[i]) != key {
-                    i += 1
-                } else {
-                    keysArray.remove(at: i)
-                    break
-                }
-            }
-            print("NOW WRITING TO CACHE: \(keysArray)")
-            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            self.teamsList.set(value: data, key: "teams")
-            done()
-        })
-    }
-    
-    /**
-     This function is the master function behind uploading photos.
-     */
-    func startUploadingImageQueue(photo: UIImage, key: String, teamNum: Int, date: String) {
-        // Uploads images to firebase
-        self.backgroundQueue.async {
-            self.storeOnFirebase(number: teamNum, date: date, image: photo, done: { didSucceed in
-                if didSucceed {
-                    self.removeFromCache(key: key, done: {
-                        self.getNext(done: { nextPhoto, nextKey, nextNumber, nextDate in
-                            self.startUploadingImageQueue(photo: nextPhoto, key: nextKey, teamNum: nextNumber, date: nextDate)
-                        })
-                    })
-                } else {
-                    self.photoManagerSleep(time: 60)
-                    self.getNext(done: { (image, key, number, date) in
-                        self.startUploadingImageQueue(photo: image, key: key, teamNum: number, date: date)
-                    })
-                }
-            })
-        }
-    }
-    
-    /**
-     This function stores the image onto Firebase Storage.
-     */
-    func storeOnFirebase(number: Int, date: String, image: UIImage, done: @escaping (_ didSucceed : Bool) ->()) {
-        self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
-            var e: Bool = false
-            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
-                
-                if (error != nil) {
-                    print("LOOK no wifi")
-                    print("ERROR: \(error.debugDescription)")
-                } else {
-                    // Metadata contains file metadata such as size, content-type, and download URL.
-                    let downloadURL = metadata!.downloadURL()?.absoluteString
-                    self.putPhotoLinkToFirebase(downloadURL!, teamNumber: number)
-                    e = true
-                    print("UPLOADED: \(downloadURL!)")
-                }
-                done(e)
-            }
-        })
-    }
+    //MARK: Updating Cache
     
     /**
      This function adds the image key to the cache.
