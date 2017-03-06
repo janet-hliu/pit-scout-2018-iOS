@@ -96,9 +96,35 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         self.tableView.reloadData()
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
-            self.scoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
-            self.tableView.reloadData()
-            
+            let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
+            var cacheTeams: [Int] = []
+            var firebaseTeams: [Int] = []
+            for i in 0..<cacheScoutedTeamInfo.count {
+                let teamInfo = cacheScoutedTeamInfo[i]
+                cacheTeams.append(teamInfo["num"]!)
+            }
+            for i in 0..<self.scoutedTeamInfo.count {
+                let teamInfo = self.scoutedTeamInfo[i]
+                firebaseTeams.append(teamInfo["num"]!)
+            }
+            // If the teams in the cache are the same as the teams on Firebase, use the information inside the cache to update the table view
+            if Set(cacheTeams) == Set(firebaseTeams) {
+                self.scoutedTeamInfo = cacheScoutedTeamInfo
+                self.tableView.reloadData()
+            } else {
+                // Some or all teams have changed on Firebase, but if there are any identical teams, we want to keep the data on that team
+                let commonTeamSet = Set(cacheTeams).intersection(Set(firebaseTeams))
+                var commonTeams = Array(commonTeamSet)
+                firebaseTeams = firebaseTeams.filter { !commonTeams.contains($0) }
+                // Appending the cached information about the common teams
+                self.scoutedTeamInfo = self.scoutedTeamInfo.filter { !commonTeams.contains($0["num"]!) }
+                for i in 0..<commonTeams.count {
+                    // Add cached info to cacheScoutedTeamInfo
+                    let teamDictionary = cacheScoutedTeamInfo.filter { $0["num"] == commonTeams[i] }
+                    self.scoutedTeamInfo.append(teamDictionary[0])
+                }
+                self.tableView.reloadData()
+            }
         })
     }
     
@@ -190,11 +216,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             let longPressLocation = recognizer.location(in: self.tableView)
             if let longPressedIndexPath = tableView.indexPathForRow(at: longPressLocation) {
                 if let longPressedCell = self.tableView.cellForRow(at: longPressedIndexPath) {
+                    // If cell is becoming unchecked
                     if longPressedCell.accessoryType == UITableViewCellAccessoryType.checkmark {
                         longPressedCell.accessoryType = UITableViewCellAccessoryType.none
                         let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == Int((longPressedCell.textLabel?.text)!) }
                         scoutedTeamInfo[scoutedTeamInfoIndex!]["hasBeenScouted"] = 0
-                    } else {
+                    } else { // Cell is becoming checked
                         longPressedCell.accessoryType = UITableViewCellAccessoryType.checkmark
                         let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == Int((longPressedCell.textLabel?.text)!) }
                         scoutedTeamInfo[scoutedTeamInfoIndex!]["hasBeenScouted"] = 1

@@ -41,6 +41,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
     
+    //MARK: Setup
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Dismisses keyboard when tapping outside of keyboard
@@ -217,6 +219,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         browser.autoPlayOnAppear = false; // Auto-play first video
         done(browser)
     }
+    
+    //MARK: Photo Browser
     
     /**
      This function allows access to the photo library if button is long pressed.

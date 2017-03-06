@@ -45,6 +45,17 @@ class PhotoManager : NSObject {
         super.init()
     }
     
+    //MARK: Setup
+    
+    /**
+     This function makes the code sleep.
+     */
+    func photoManagerSleep(time: Int) {
+        print("Photo Manager is tired, going to take a nap for \(time) seconds.")
+        sleep(UInt32(time))
+        print("Ahh... that felt good. Photo Manager is awake and ready to MANAGE!!!!!")
+    }
+    
     /**
      This function gets all the URLs in Firebase under "pitAllImageURLs".
      */
@@ -244,15 +255,6 @@ class PhotoManager : NSObject {
         imageCache.set(value: image, key: key)
         // THIS LINE OF CODE WILL BE FOR CHAMPS
         // teamsFirebase.child("\(number)").child("pitSelectedImageName").setValue(key)
-    }
-    
-    /**
-     This function makes the code sleep.
-     */
-    func photoManagerSleep(time: Int) {
-        print("Photo Manager is tired, going to take a nap for \(time) seconds.")
-        sleep(UInt32(time))
-        print("Ahh... that felt good. Photo Manager is awake and ready to MANAGE!!!!!")
     }
     
 }
