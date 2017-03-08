@@ -110,7 +110,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             // If the teams in the cache are the same as the teams on Firebase, use the information inside the cache to update the table view
             if Set(cacheTeams) == Set(firebaseTeams) {
                 self.scoutedTeamInfo = cacheScoutedTeamInfo
-                self.tableView.reloadData()
             } else {
                 // Some or all teams have changed on Firebase, but if there are any identical teams, we want to keep the data on that team
                 let commonTeamSet = Set(cacheTeams).intersection(Set(firebaseTeams))
@@ -123,8 +122,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     let teamDictionary = cacheScoutedTeamInfo.filter { $0["num"] == commonTeams[i] }
                     self.scoutedTeamInfo.append(teamDictionary[0])
                 }
-                self.tableView.reloadData()
             }
+            // Sorts the scouted teams into numerical order
+            self.scoutedTeamInfo.sort {
+                $0["num"]! < $1["num"]!
+            }
+            self.tableView.reloadData()
         })
     }
     
