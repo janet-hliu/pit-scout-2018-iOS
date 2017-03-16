@@ -140,8 +140,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             programmingLanguage.neededType = .string
             
             // Switch
-            let tankDrive = PSUISwitchViewController()
-            tankDrive.setup("Has Tank Tread:", firebaseRef: self.ourTeam.child("pitDidUseStandardTankDrive"), initialValue: snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value)
+            let driveTrain = PSUISegmentedViewController()
+            driveTrain.setup("Drive Train:", firebaseRef: self.ourTeam.child("pitDriveTrain"), initialValue: snap.childSnapshot(forPath: "pitDriveTrain").value)
+            driveTrain.segments = ["Tank Drive", "Swerve", "Mecanum", "Other"]
+            driveTrain.neededType = .string
             
             // Segmented Control
             let pitOrganization = PSUISegmentedViewController()
@@ -157,11 +159,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             // Switch
             let willCheesecake = PSUISwitchViewController()
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
-            
+    
             // self.addChildViewController(numberOfWheels)
             self.addChildViewController(self.selectedImageName)
             self.addChildViewController(programmingLanguage)
-            self.addChildViewController(tankDrive)
+            self.addChildViewController(driveTrain)
             self.addChildViewController(pitOrganization)
             self.addChildViewController(availableWeight)
             self.addChildViewController(willCheesecake)
@@ -423,9 +425,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } */
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            if snap.childSnapshot(forPath: "pitDidUseStandardTankDrive").value as? Bool == nil {
-                self.ourTeam.child("pitDidUseStandardTankDrive").setValue(false)
-            }
             if snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value as? Bool == nil {
                 self.ourTeam.child("pitDidDemonstrateCheesecakePotential").setValue(false)
             }
