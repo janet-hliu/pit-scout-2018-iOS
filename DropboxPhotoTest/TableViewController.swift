@@ -272,8 +272,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             teamViewController.title = "\(number)"
             teamViewController.photoManager = self.photoManager
             teamViewController.firebaseStorageRef = self.firebaseStorageRef
-        }
-        else if segue.identifier == "popoverSegue" {
+        } else if segue.identifier == "popoverSegue" {
             let popoverViewController = segue.destination
             popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
             popoverViewController.popoverPresentationController!.delegate = self
