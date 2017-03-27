@@ -31,7 +31,7 @@ class PhotoManager : NSObject {
     // teamsList is a cache of keys used to find photos from the imageCache which will then be uploaded to firebase
     var teamsList = Shared.dataCache
     let imageCache = Shared.imageCache
-    let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
+    let firebaseStorageRef = FIRStorage.storage().reference()
     var teamKeys : [String]?
     var keyIndex : Int = 0
     var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)

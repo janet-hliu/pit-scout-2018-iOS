@@ -33,7 +33,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
-        firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
+        firebaseStorageRef = FIRStorage.storage().reference()
         
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
@@ -68,10 +68,20 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
+            var allPhotosUploaded = 0
             let teamInfo = info as! [String: AnyObject]
+            let imageURLs = teamInfo["pitAllImageURLs"] as? NSDictionary
+            let imageKeys = teamInfo["imageKeys"] as? NSDictionary
+            if imageURLs != nil && imageKeys != nil {
+                if imageURLs!.count == imageKeys!.count {
+                    allPhotosUploaded = 1
+                    self.tableView.reloadData()
+                }
+            }
+
             self.teams.add(teamInfo)
             if let teamNum = teamInfo["number"] as? Int {
-                let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
+                let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0, "allPhotosUploaded": allPhotosUploaded]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
                 self.teamNums.append(teamNum)
                 if let urlsForTeam = teamInfo["pitAllImageURLs"] as? NSMutableDictionary {
@@ -183,10 +193,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath) as UITableViewCell
         cell.textLabel?.text = "Please Wait..."
         if self.scoutedTeamInfo.count == 0 { return cell }
-        
+
         var text = "shouldntBeThis"
         if (indexPath as NSIndexPath).section == 1 {
             let scoutedTeamNums = NSMutableArray()
@@ -205,7 +216,16 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row])"
         }
+
         cell.textLabel?.text = "\(text)"
+        for i in 0 ..< scoutedTeamInfo.count {
+            let teamData = scoutedTeamInfo[i]
+            if teamData["num"] == Int(text) {
+                if teamData["allPhotosUploaded"] == 1 {
+                    cell.backgroundColor = UIColor(red: 0, green: 200, blue: 0, alpha: 0.1)
+                }
+            }
+        }
         if((indexPath as NSIndexPath).section == 1) {
             cell.accessoryType = UITableViewCellAccessoryType.checkmark
         } else {
@@ -236,6 +256,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
         }
     }
+        
     // MARK:  UITableViewDelegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
