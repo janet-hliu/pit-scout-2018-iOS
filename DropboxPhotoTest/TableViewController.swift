@@ -17,8 +17,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cellReuseId = "teamCell"
     var firebase : FIRDatabaseReference?
     var teams : NSMutableArray = []
-    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
-    
+    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0, "allPhotosUploaded": 0]
+    // 0 is false, 1 is true
     var teamNums = [Int]()
     var timer = Timer()
     var photoManager : PhotoManager?
@@ -33,7 +33,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
-        firebaseStorageRef = FIRStorage.storage().reference()
+        firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
         
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
@@ -68,15 +68,16 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
-            var allPhotosUploaded = 0
+            var allPhotosUploaded = 1
             let teamInfo = info as! [String: AnyObject]
-            let imageURLs = teamInfo["pitAllImageURLs"] as? NSDictionary
-            let imageKeys = teamInfo["imageKeys"] as? NSDictionary
-            if imageURLs != nil && imageKeys != nil {
-                if imageURLs!.count == imageKeys!.count {
-                    allPhotosUploaded = 1
-                    self.tableView.reloadData()
-                }
+            let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
+            let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+            if imageURLs.count != imageKeys.count {
+                allPhotosUploaded = 0
+                self.tableView.reloadData()
+            } else {
+                allPhotosUploaded = 1
+                self.tableView.reloadData()
             }
 
             self.teams.add(teamInfo)
@@ -84,15 +85,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0, "allPhotosUploaded": allPhotosUploaded]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
                 self.teamNums.append(teamNum)
-                if let urlsForTeam = teamInfo["pitAllImageURLs"] as? NSMutableDictionary {
-                    let urlsArr = NSMutableArray()
-                    for (_, value) in urlsForTeam {
-                        urlsArr.add(value)
-                    }
-                    urlsDict[teamNum] = urlsArr
-                } else {
-                    urlsDict[teamNum] = NSMutableArray()
-                }
             } else {
                 print("No Num")
             }
@@ -221,8 +213,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         for i in 0 ..< scoutedTeamInfo.count {
             let teamData = scoutedTeamInfo[i]
             if teamData["num"] == Int(text) {
-                if teamData["allPhotosUploaded"] == 1 {
-                    cell.backgroundColor = UIColor(red: 0, green: 200, blue: 0, alpha: 0.1)
+                if teamData["allPhotosUploaded"] == 0 {
+                    cell.backgroundColor = UIColor(red: 207/255, green: 61/255, blue: 0/255, alpha: 0.3)
+                } else {
+                    cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
                 }
             }
         }
