@@ -53,8 +53,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             //Adding the PSUI Elements
             //Adding/Viewing/Deleting Images Buttons
-            let screenWidth = Int(self.view.frame.width)
-            let addImageButton = PSUIButton(title: "Add Image", width: screenWidth, y: 0, buttonPressed: { (sender) -> () in
+            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-16 to give a buffer of 8 on either side
+            let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-16, y: 0, buttonPressed: { (sender) -> () in
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
                 picker.sourceType = .camera
@@ -71,7 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             self.scrollView.addSubview(addImageButton)
             
-            let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+            let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth-16, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
                 self.makeNewBrowser(done: { browser in
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -100,7 +100,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             self.scrollView.addSubview(viewImagesButton)
             
-            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth-16, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
                 self.makeNewBrowser(done: { browser in
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -145,11 +145,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             driveTrain.segments = ["Tank Drive", "Swerve", "Mecanum", "Other"]
             driveTrain.neededType = .string
             
-            // Segmented Control
+            /*// Segmented Control
             let pitOrganization = PSUISegmentedViewController()
             pitOrganization.setup("Pit Organization:", firebaseRef: self.ourTeam.child("pitOrganization"), initialValue: snap.childSnapshot(forPath: "pitOrganization").value)
             pitOrganization.segments = ["Terrible", "Bad", "Okay", "Good", "Great"]
-            pitOrganization.neededType = .string
+            pitOrganization.neededType = .string */
             
             // Text Field
             let availableWeight = PSUITextInputViewController()
@@ -161,10 +161,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
     
             // self.addChildViewController(numberOfWheels)
+            // self.addChildViewController(pitOrganization)
             self.addChildViewController(self.selectedImageName)
             self.addChildViewController(programmingLanguage)
             self.addChildViewController(driveTrain)
-            self.addChildViewController(pitOrganization)
             self.addChildViewController(availableWeight)
             self.addChildViewController(willCheesecake)
             
@@ -356,7 +356,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        notActuallyLeavingViewController = false
+        notActuallyLeavingViewController = true
         canViewPhotos = false
         picker.dismiss(animated: true, completion: nil)
         self.photos.append(MWPhoto(image: image))
@@ -437,7 +437,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-    func dismissKeyboard () {
+    func dismissKeyboard() {
         view.endEditing(true)
     }
     

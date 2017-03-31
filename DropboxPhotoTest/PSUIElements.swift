@@ -90,7 +90,6 @@ class PSUIFirebaseViewController : UIViewController {
             self.firebaseRef?.setValue(value)
             UIResponse!(value)
         }
-        
     }
     
     func connectWithFirebase() {
@@ -101,14 +100,29 @@ class PSUIFirebaseViewController : UIViewController {
             self.previousValue = snapshot.value as Any?
         }
     }
+    
+    func setDoneOnKeyboard(textField: UITextField) {
+        let keyboardToolbar = UIToolbar()
+        keyboardToolbar.sizeToFit()
+        let flexBarButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(PSUIFirebaseViewController.dismissKeyboard))
+        keyboardToolbar.items = [flexBarButton, doneBarButton]
+        textField.inputAccessoryView = keyboardToolbar
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 /// Just a few customizations of the text input view for the pit scout. See the `PSUIFirebaseViewController`.
 class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDelegate {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField : UITextField!
+    
     override func viewDidLoad() {
         let currentResponse = self.UIResponse
+        super.setDoneOnKeyboard(textField: textField)
         if !hasOverriddenUIResponse {
             self.UIResponse = { value in
                 currentResponse!(value)
@@ -130,6 +144,7 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
     }
     
     @IBAction func textFieldEditingDidEnd(_ sender: UITextField) {
+        initialValue = sender.text
         super.set(sender.text!)
     }
 }
@@ -187,6 +202,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
     
     @IBAction func selectedSegmentChanged(_ sender: UISegmentedControl) {
         let index = segmentedController.selectedSegmentIndex
+        initialValue = segments[index] as String
         super.set(segments[index] as String)
     }
 }
@@ -195,8 +211,8 @@ class PSUIButton : UIButton {
     let green = UIColor(colorLiteralRed: 91/255, green: 227/255, blue: 0/255, alpha: 1)
     var press : (_ sender : UIButton)->() = {_ in } //This is an empty function of the type (sender : UIButton)->().
     convenience init(title : String, width : Int, y: Int, buttonPressed : @escaping (_ sender : UIButton)->()) {
-        //Adding the Add Image Button to the UI
-        self.init(frame: CGRect(x: 0, y: y, width: width, height: 45))
+        // Starts 8 from the left side to give a button buffer
+        self.init(frame: CGRect(x: 8, y: y, width: width, height: 45))
         self.press = buttonPressed
         self.titleLabel?.font = UIFont.systemFont(ofSize: 32)
         self.setTitle(title, for: UIControlState())

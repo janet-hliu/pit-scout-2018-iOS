@@ -17,7 +17,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cellReuseId = "teamCell"
     var firebase : FIRDatabaseReference?
     var teams : NSMutableArray = []
-    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0, "allPhotosUploaded": 0]
+    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
+    var uploadedPhotoInfo : [[String: Int]] = [] // ["num": 254, "allPhotosUploaded": 0]
     // 0 is false, 1 is true
     var teamNums = [Int]()
     var timer = Timer()
@@ -64,6 +65,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     func setup(_ snap: FIRDataSnapshot) {
         self.teams = NSMutableArray()
         self.scoutedTeamInfo = []
+        self.uploadedPhotoInfo = []
         self.teamNums = []
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
@@ -79,11 +81,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 allPhotosUploaded = 1
                 self.tableView.reloadData()
             }
-
+            
             self.teams.add(teamInfo)
             if let teamNum = teamInfo["number"] as? Int {
-                let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0, "allPhotosUploaded": allPhotosUploaded]
+                let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
+                let uploadedPhotoInfoDict = ["num": teamNum, "allPhotosUploaded": allPhotosUploaded]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
+                self.uploadedPhotoInfo.append(uploadedPhotoInfoDict)
                 self.teamNums.append(teamNum)
             } else {
                 print("No Num")
@@ -96,6 +100,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             return false
         }
+        
         self.tableView.reloadData()
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
@@ -143,20 +148,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         self.tableView.allowsSelection = true
     }
-    
-    func teamHasBeenPitScouted(_ snap: [String: AnyObject]) -> Bool { //For some reason it wasn't working other ways
-        for key in firebaseKeys {
-            if let _ = (snap[key]) as? NSString {
-            } else {
-                if let _ = (snap[key]) as? NSNumber {
-                } else {
-                    return false
-                }
-            }
-        }
-        return true
-    }
-    
     
     // MARK:  UITextFieldDelegate Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -210,11 +201,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
 
         cell.textLabel?.text = "\(text)"
-        for i in 0 ..< scoutedTeamInfo.count {
-            let teamData = scoutedTeamInfo[i]
+        for i in 0 ..< uploadedPhotoInfo.count {
+            let teamData = uploadedPhotoInfo[i]
             if teamData["num"] == Int(text) {
                 if teamData["allPhotosUploaded"] == 0 {
-                    cell.backgroundColor = UIColor(red: 207/255, green: 61/255, blue: 0/255, alpha: 0.3)
+                    cell.backgroundColor = UIColor(red: 209/255, green: 20/255, blue: 0/255, alpha: 1.0)
                 } else {
                     cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
                 }
