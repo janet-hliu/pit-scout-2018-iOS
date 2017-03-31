@@ -53,8 +53,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             //Adding the PSUI Elements
             //Adding/Viewing/Deleting Images Buttons
-            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-16 to give a buffer of 8 on either side
-            let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-16, y: 0, buttonPressed: { (sender) -> () in
+            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-30 to give a buffer of 15 on either side
+            let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-30, y: 0, buttonPressed: { (sender) -> () in
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
                 picker.sourceType = .camera
@@ -71,7 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             self.scrollView.addSubview(addImageButton)
             
-            let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth-16, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+            let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth-30, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
                 self.makeNewBrowser(done: { browser in
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -100,7 +100,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             self.scrollView.addSubview(viewImagesButton)
             
-            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth-16, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
+            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth-30, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
                 self.makeNewBrowser(done: { browser in
                     let imageURLs = self.ourTeam.child("imageKeys")
                     imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
