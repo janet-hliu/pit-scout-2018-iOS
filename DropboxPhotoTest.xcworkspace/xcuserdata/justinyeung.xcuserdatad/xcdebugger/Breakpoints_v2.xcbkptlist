@@ -216,8 +216,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
             endingLineNumber = "117"
-            landmarkName = "TableViewController"
-            landmarkType = "3">
+            landmarkName = "setup(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -231,7 +231,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "277"
-            endingLineNumber = "277">
+            endingLineNumber = "277"
+            landmarkName = "imageRotatedByDegrees(_:flip:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -326,7 +328,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "197"
             endingLineNumber = "197"
-            landmarkName = "addImageKey(key:number:)"
+            landmarkName = "getNext(done:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -374,7 +376,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "192"
             endingLineNumber = "192"
-            landmarkName = "storeOnFirebase(number:date:image:done:)"
+            landmarkName = "getNext(done:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -390,7 +392,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "getNext(done:)"
+            landmarkName = "storeOnFirebase(number:date:image:done:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -453,7 +455,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "78"
             endingLineNumber = "78"
-            landmarkName = "getNext(done:)"
+            landmarkName = "makeFilenameForTeamNumAndIndex(_:date:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -501,7 +503,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "103"
             endingLineNumber = "103"
-            landmarkName = "getNext(done:)"
+            landmarkName = "startUploadingImageQueue(photo:key:teamNum:date:)"
             landmarkType = "7">
             <Locations>
                <Location

@@ -212,7 +212,10 @@ class PSUIButton : UIButton {
     var press : (_ sender : UIButton)->() = {_ in } //This is an empty function of the type (sender : UIButton)->().
     convenience init(title : String, width : Int, y: Int, buttonPressed : @escaping (_ sender : UIButton)->()) {
         // Starts 15 from the left side to give a button buffer
-        self.init(frame: CGRect(x: 15, y: y, width: width, height: 45))
+        self.init(frame: CGRect(x: 80, y: y, width: width, height: 45))
+        layer.cornerRadius = 5
+        layer.borderWidth = 1
+        layer.borderColor =  UIColor.green.cgColor
         self.press = buttonPressed
         self.titleLabel?.font = UIFont.systemFont(ofSize: 32)
         self.setTitle(title, for: UIControlState())
