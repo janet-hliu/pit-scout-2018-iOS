@@ -53,13 +53,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             
             //Adding the PSUI Elements
             //Adding/Viewing/Deleting Images Buttons
-            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-30 to give a buffer of 15 on either side
+            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-160 to give a buffer of 80 on either side
             let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-160, y: 0, buttonPressed: { (sender) -> () in
                 self.notActuallyLeavingViewController = true
                 let picker = UIImagePickerController()
                 picker.sourceType = .camera
-                // Allows videos as well
-                // picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera)!
                 picker.delegate = self
                 self.present(picker, animated: true, completion: nil)
             })

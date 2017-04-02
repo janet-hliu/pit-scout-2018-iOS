@@ -205,7 +205,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             let teamData = uploadedPhotoInfo[i]
             if teamData["num"] == Int(text) {
                 if teamData["allPhotosUploaded"] == 0 {
-                    cell.backgroundColor = UIColor(red: 209/255, green: 20/255, blue: 0/255, alpha: 1.0)
+                    // 255, 102, 102
+                    cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                 } else {
                     cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
                 }

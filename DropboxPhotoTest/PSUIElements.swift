@@ -135,8 +135,11 @@ class PSUITextInputViewController : PSUIFirebaseViewController, UITextFieldDeleg
         super.viewDidAppear(animated)
         self.textField.delegate = self
         self.label.text = super.titleText
-        if String(describing: super.initialValue) != "" && String(describing: super.initialValue) != "nil" {
-            self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
+        if String(describing: textField.text) == "" {
+            if String(describing: super.initialValue) != "" && String(describing: super.initialValue) != "nil" {
+                self.textField.text = super.initialValue as? String ?? (super.initialValue as? NSNumber)?.stringValue ?? ""
+            }
+    
         }
         if neededType == .int {
             textField.keyboardType = UIKeyboardType.decimalPad
@@ -208,18 +211,20 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
 }
 
 class PSUIButton : UIButton {
+    let white = UIColor(colorLiteralRed: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     let green = UIColor(colorLiteralRed: 91/255, green: 227/255, blue: 0/255, alpha: 1)
     var press : (_ sender : UIButton)->() = {_ in } //This is an empty function of the type (sender : UIButton)->().
     convenience init(title : String, width : Int, y: Int, buttonPressed : @escaping (_ sender : UIButton)->()) {
-        // Starts 15 from the left side to give a button buffer
+        // Starts 80 from the left side to give a button buffer
         self.init(frame: CGRect(x: 80, y: y, width: width, height: 45))
         layer.cornerRadius = 5
         layer.borderWidth = 1
-        layer.borderColor =  UIColor.green.cgColor
+        layer.borderColor =  UIColor.white.cgColor
+        layer.backgroundColor = UIColor.lightGray.cgColor
         self.press = buttonPressed
         self.titleLabel?.font = UIFont.systemFont(ofSize: 32)
         self.setTitle(title, for: UIControlState())
-        self.setTitleColor(green, for: UIControlState())
+        self.setTitleColor(white, for: UIControlState())
         self.isUserInteractionEnabled = true
         let tapAddImageButton = UITapGestureRecognizer(target: self, action: #selector(PSUIButton.buttonPressed(_:)))
         self.addGestureRecognizer(tapAddImageButton)
@@ -231,6 +236,7 @@ class PSUIButton : UIButton {
     }
     
     func buttonPressed(_ button : UIButton) {
+        // layer.backgroundColor = UIColor.green.cgColor
         self.press(button)
     }
     
