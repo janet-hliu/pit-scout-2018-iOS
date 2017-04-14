@@ -197,10 +197,17 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     notScoutedTeamNums.add(team["num"]!)
                 }
             }
-            text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row])"
+            //print("\(notScoutedTeamNums[(indexPath as NSIndexPath).row])")
+            let blah = FIRDatabase.database().reference().child("Teams").child(String(describing: notScoutedTeamNums[(indexPath as NSIndexPath).row])).child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+                text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row]), \(snapshot)"
+            }) { (error) in
+                print(error.localizedDescription)
+            }
         }
 
         cell.textLabel?.text = "\(text)"
+        print("Text: \(text)")
+        print("Title: \(cell.textLabel?.text)")
         for i in 0 ..< uploadedPhotoInfo.count {
             let teamData = uploadedPhotoInfo[i]
             if teamData["num"] == Int(text) {
