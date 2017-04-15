@@ -70,8 +70,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
-            var allPhotosUploaded = 1
             let teamInfo = info as! [String: AnyObject]
+            var allPhotosUploaded = 1
             let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
             let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
             if imageURLs.count != imageKeys.count {
@@ -182,14 +182,23 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         if self.scoutedTeamInfo.count == 0 { return cell }
 
         var text = "shouldntBeThis"
+        var teamName : String = ""
         if (indexPath as NSIndexPath).section == 1 {
+            // If the team has been scouted before
             let scoutedTeamNums = NSMutableArray()
             for team in self.scoutedTeamInfo {
                 if team["hasBeenScouted"] == 1 {
                     scoutedTeamNums.add(team["num"]!)
                 }
             }
-            text = "\(scoutedTeamNums[(indexPath as NSIndexPath).row])"
+            // Finding the team name
+            for team in 0..<teams.count {
+                let teamInfo = self.teams[team] as! [String : AnyObject]
+                if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
+                    teamName = teamInfo["name"] as! String
+                }
+            }
+            text = "\(scoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
         } else if (indexPath as NSIndexPath).section == 0 {
             let notScoutedTeamNums = NSMutableArray()
             for team in self.scoutedTeamInfo {
@@ -197,7 +206,14 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     notScoutedTeamNums.add(team["num"]!)
                 }
             }
-            text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row])"
+            // Finding the team name
+            for team in 0..<teams.count {
+                let teamInfo = self.teams[team] as! [String : AnyObject]
+                if teamInfo["number"] as! Int == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
+                    teamName = teamInfo["name"] as! String
+                }
+            }
+            text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
         }
 
         cell.textLabel?.text = "\(text)"
@@ -228,13 +244,21 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     // If cell is becoming unchecked
                     if longPressedCell.accessoryType == UITableViewCellAccessoryType.checkmark {
                         longPressedCell.accessoryType = UITableViewCellAccessoryType.none
-                        let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == Int((longPressedCell.textLabel?.text)!) }
+                        // Pulling out the team number from the cell text
+                        let cellText = (longPressedCell.textLabel?.text)!
+                        let cellTextArray = cellText.components(separatedBy: " - ")
+                        let teamNum: Int = Int(cellTextArray[0])!
+                        let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == teamNum }
                         scoutedTeamInfo[scoutedTeamInfoIndex!]["hasBeenScouted"] = 0
                     } else { // Cell is becoming checked
                         longPressedCell.accessoryType = UITableViewCellAccessoryType.checkmark
-                        let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == Int((longPressedCell.textLabel?.text)!) }
+                        let cellText = (longPressedCell.textLabel?.text)!
+                        let cellTextArray = cellText.components(separatedBy: " - ")
+                        let teamNum: Int = Int(cellTextArray[0])!
+                        let scoutedTeamInfoIndex = self.scoutedTeamInfo.index { $0["num"]! == teamNum }
                         scoutedTeamInfo[scoutedTeamInfoIndex!]["hasBeenScouted"] = 1
                     }
+                    
                     self.cache.set(value: NSKeyedArchiver.archivedData(withRootObject: scoutedTeamInfo), key: "scoutedTeamInfo")
                     
                     self.tableView.reloadData()
@@ -251,6 +275,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Team View Segue" {
             var number = -1
+            var name = ""
             let indexPath = self.tableView.indexPath(for: sender as! UITableViewCell)
             if (indexPath! as NSIndexPath).section == 1 {
                 let scoutedTeamNums = NSMutableArray()
@@ -260,6 +285,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     }
                 }
                 number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
+                // Finding the team name
+                for team in 0..<teams.count {
+                    let teamInfo = self.teams[team] as! [String : AnyObject]
+                    if teamInfo["number"] as! Int == number {
+                        name = teamInfo["name"] as! String
+                    }
+                }
             } else if (indexPath! as NSIndexPath).section == 0 {
                 
                 let notScoutedTeamNums = NSMutableArray()
@@ -269,6 +301,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     }
                 }
                 number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
+                // Finding the team name
+                for team in 0..<teams.count {
+                    let teamInfo = self.teams[team] as! [String : AnyObject]
+                    if teamInfo["number"] as! Int == number {
+                        name = teamInfo["name"] as! String
+                    }
+                }
             }
             let teamViewController = segue.destination as! ViewController
             
@@ -276,7 +315,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             teamViewController.ourTeam = teamFB
             teamViewController.firebase = self.firebase!
             teamViewController.number = number
-            teamViewController.title = "\(number)"
+            teamViewController.title = "\(number) - \(name)"
             teamViewController.photoManager = self.photoManager
             teamViewController.firebaseStorageRef = self.firebaseStorageRef
         } else if segue.identifier == "popoverSegue" {

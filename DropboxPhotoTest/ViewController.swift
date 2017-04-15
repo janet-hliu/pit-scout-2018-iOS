@@ -143,12 +143,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             driveTrain.segments = ["Tank Drive", "Swerve", "Mecanum", "Other"]
             driveTrain.neededType = .string
             
-            /*// Segmented Control
-            let pitOrganization = PSUISegmentedViewController()
-            pitOrganization.setup("Pit Organization:", firebaseRef: self.ourTeam.child("pitOrganization"), initialValue: snap.childSnapshot(forPath: "pitOrganization").value)
-            pitOrganization.segments = ["Terrible", "Bad", "Okay", "Good", "Great"]
-            pitOrganization.neededType = .string */
-            
             // Text Field
             let availableWeight = PSUITextInputViewController()
             availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
@@ -158,8 +152,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let willCheesecake = PSUISwitchViewController()
             willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
     
-            // self.addChildViewController(numberOfWheels)
-            // self.addChildViewController(pitOrganization)
             self.addChildViewController(self.selectedImageName)
             self.addChildViewController(programmingLanguage)
             self.addChildViewController(driveTrain)
