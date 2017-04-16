@@ -18,7 +18,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var firebase : FIRDatabaseReference?
     var teams : NSMutableArray = []
     var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
-    var uploadedPhotoInfo : [[String: Int]] = [] // ["num": 254, "allPhotosUploaded": 0]
     // 0 is false, 1 is true
     var teamNums = [Int]()
     var timer = Timer()
@@ -65,7 +64,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     func setup(_ snap: FIRDataSnapshot) {
         self.teams = NSMutableArray()
         self.scoutedTeamInfo = []
-        self.uploadedPhotoInfo = []
         self.teamNums = []
         var td : NSDictionary?
         if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
@@ -75,23 +73,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
-            var allPhotosUploaded = 1
-            let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-            let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
-            if imageURLs.count != imageKeys.count {
-                allPhotosUploaded = 0
-                self.tableView.reloadData()
-            } else {
-                allPhotosUploaded = 1
-                self.tableView.reloadData()
-            }
             
             self.teams.add(teamInfo)
             if let teamNum = teamInfo["number"] as? Int {
                 let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
-                let uploadedPhotoInfoDict = ["num": teamNum, "allPhotosUploaded": allPhotosUploaded]
                 self.scoutedTeamInfo.append(scoutedTeamInfoDict)
-                self.uploadedPhotoInfo.append(uploadedPhotoInfoDict)
                 self.teamNums.append(teamNum)
             } else {
                 print("No Num")
@@ -200,6 +186,14 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let teamInfo = self.teams[team] as! [String : AnyObject]
                 if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = teamInfo["name"] as! String
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    if imageURLs.count != imageKeys.count {
+                        // 255, 102, 102
+                        cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
+                    } else {
+                        cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                    }
                 }
             }
             text = "\(scoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
@@ -215,23 +209,21 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let teamInfo = self.teams[team] as! [String : AnyObject]
                 if teamInfo["number"] as! Int == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = teamInfo["name"] as! String
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    if imageURLs.count != imageKeys.count {
+                        // 255, 102, 102
+                        cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
+                    } else {
+                        cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                    }
                 }
             }
             text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
         }
 
         cell.textLabel?.text = "\(text)"
-        for i in 0 ..< uploadedPhotoInfo.count {
-            let teamData = uploadedPhotoInfo[i]
-            if teamData["num"] == Int(text) {
-                if teamData["allPhotosUploaded"] == 0 {
-                    // 255, 102, 102
-                    cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
-                } else {
-                    cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                }
-            }
-        }
+        
         if((indexPath as NSIndexPath).section == 1) {
             cell.accessoryType = UITableViewCellAccessoryType.checkmark
         } else {

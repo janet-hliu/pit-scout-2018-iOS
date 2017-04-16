@@ -45,13 +45,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Dismisses keyboard when tapping outside of keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             
-            //Adding the PSUI Elements
             //Adding/Viewing/Deleting Images Buttons
             let screenWidth = Int(self.view.frame.width) // Width is screenWidth-160 to give a buffer of 80 on either side
             let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-160, y: 0, buttonPressed: { (sender) -> () in
@@ -184,6 +185,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         })
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
@@ -365,9 +368,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         activeField = textField
     }
     
-    func keyboardWillHide(_ notification:Notification){
-        // scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
-        print(self.view.frame.midY)
+    func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
+        guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
+        let keyboardFrame = value.cgRectValue
+        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
+        scrollView.contentInset.bottom += adjustmentHeight
+        scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
+    }
+    
+    func keyboardWillShow(_ notification: NSNotification){
+        adjustInsetForKeyboardShow(true, notification: notification)
+    }
+    func keyboardWillHide(_ notification: NSNotification){
+        adjustInsetForKeyboardShow(true, notification: notification)
     }
     
     override func didReceiveMemoryWarning() {
