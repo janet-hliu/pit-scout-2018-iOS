@@ -192,7 +192,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                     } else {
-                        cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                        if imageURLs.count != 0 {
+                            cell.textLabel!.textColor = UIColor(red: 42/255, green: 204/255, blue: 72/255, alpha: 1.0)
+                        } else{
+                            cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                        }
                     }
                 }
             }
@@ -215,7 +219,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                     } else {
-                        cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                        if imageURLs.count != 0 {
+                            cell.textLabel!.textColor = UIColor(red: 42/255, green: 204/255, blue: 72/255, alpha: 1.0)
+                        } else{
+                            cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+                        }
                     }
                 }
             }
