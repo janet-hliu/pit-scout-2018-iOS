@@ -212,7 +212,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
 
 class PSUIButton : UIButton {
     let white = UIColor(colorLiteralRed: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-    let green = UIColor(colorLiteralRed: 91/255, green: 227/255, blue: 0/255, alpha: 1)
+    let green = UIColor(colorLiteralRed: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
     var press : (_ sender : UIButton)->() = {_ in } //This is an empty function of the type (sender : UIButton)->().
     convenience init(title : String, width : Int, y: Int, buttonPressed : @escaping (_ sender : UIButton)->()) {
         // Starts 80 from the left side to give a button buffer
