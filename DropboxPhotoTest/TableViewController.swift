@@ -16,8 +16,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     let cellReuseId = "teamCell"
     var firebase : FIRDatabaseReference?
-    var teams : NSMutableArray = []
-    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
+    var teams : NSMutableDictionary = [String: [String: AnyObject]]() as! NSMutableDictionary
+    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
     // 0 is false, 1 is true
     var teamNums = [Int]()
     var timer = Timer()
@@ -62,7 +62,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func setup(_ snap: FIRDataSnapshot) {
-        self.teams = NSMutableArray()
+        self.teams = NSMutableDictionary()
         self.scoutedTeamInfo = []
         self.teamNums = []
         var td : NSDictionary?
@@ -73,12 +73,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
+            let teamNum = teamInfo["number"] as? Int
             
-            self.teams.add(teamInfo)
-            if let teamNum = teamInfo["number"] as? Int {
-                let scoutedTeamInfoDict = ["num": teamNum, "hasBeenScouted": 0]
-                self.scoutedTeamInfo.append(scoutedTeamInfoDict)
-                self.teamNums.append(teamNum)
+            if teamNum != nil {
+                self.teams[String(describing: teamNum!)] = teamInfo
+                let scoutedTeamInfoDict = ["num": teamNum!, "hasBeenScouted": 0]
+                self.scoutedTeamInfo.append(scoutedTeamInfoDict )
+                self.teamNums.append(teamNum!)
             } else {
                 print("No Num")
             }
@@ -182,8 +183,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
             }
             // Finding the team name
-            for team in 0..<teams.count {
-                let teamInfo = self.teams[team] as! [String : AnyObject]
+            for (_, team) in teams {
+                let teamInfo = team as! [String : AnyObject]
                 if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = teamInfo["name"] as! String
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
@@ -209,9 +210,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
             }
             // Finding the team name
-            for team in 0..<teams.count {
-                let teamInfo = self.teams[team] as! [String : AnyObject]
-                if teamInfo["number"] as! Int == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
+            for (_, team) in teams {
+                let teamInfo = team as! NSDictionary
+                let teamNum = teamInfo["number"] as! Int
+                if teamNum == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = teamInfo["name"] as! String
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
                     let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
@@ -290,8 +292,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
                 number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
-                for team in 0..<teams.count {
-                    let teamInfo = self.teams[team] as! [String : AnyObject]
+                for (_, team) in self.teams {
+                    let teamInfo = team as! [String : AnyObject]
                     if teamInfo["number"] as! Int == number {
                         name = teamInfo["name"] as! String
                     }
@@ -306,8 +308,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
                 number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
-                for team in 0..<teams.count {
-                    let teamInfo = self.teams[team] as! [String : AnyObject]
+                for (_, team) in self.teams {
+                    let teamInfo = team as! [String : AnyObject]
                     if teamInfo["number"] as! Int == number {
                         name = teamInfo["name"] as! String
                     }
@@ -350,6 +352,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let theJSONData = try JSONSerialization.data(
                     withJSONObject: self.teams ,
                     options: JSONSerialization.WritingOptions())
+                
                 let theJSONText = NSString(data: theJSONData,
                                            encoding: String.Encoding.ascii.rawValue)
                 let activityViewController = UIActivityViewController(activityItems: [theJSONText ?? ""], applicationActivities: nil)
