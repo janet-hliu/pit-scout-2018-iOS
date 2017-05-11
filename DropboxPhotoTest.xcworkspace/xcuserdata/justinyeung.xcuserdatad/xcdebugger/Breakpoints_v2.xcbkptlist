@@ -82,38 +82,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DropboxPhotoTest/TableViewController.swift"
-            timestampString = "507321988.906805"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DropboxPhotoTest/TableViewController.swift"
-            timestampString = "507321990.297454"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/PhotoManagement.swift"
             timestampString = "507922606.403064"
             startingColumnNumber = "9223372036854775807"
@@ -163,7 +131,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/TableViewController.swift"
-            timestampString = "508628859.452084"
+            timestampString = "515644062.103626"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
@@ -211,7 +179,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/TableViewController.swift"
-            timestampString = "508628859.452084"
+            timestampString = "515644062.103626"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
@@ -243,77 +211,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DropboxPhotoTest/TableViewController.swift"
-            timestampString = "508302901.36884"
+            timestampString = "515644062.103626"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "79"
             endingLineNumber = "79"
             landmarkName = "setup(_:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DropboxPhotoTest/ViewController.swift"
-            timestampString = "508631989.733292"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DropboxPhotoTest/ViewController.swift"
-            timestampString = "508629931.253629"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.ViewController.viewDidLoad () -&gt; ()"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/ViewController.swift"
-                  timestampString = "508722017.722197"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "192"
-                  endingLineNumber = "192"
-                  offsetFromSymbolStart = "2464">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.ViewController.(viewDidLoad () -&gt; ()).(closure #3)"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/ViewController.swift"
-                  timestampString = "508722017.723915"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "193"
-                  endingLineNumber = "193"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -330,38 +234,6 @@
             endingLineNumber = "197"
             landmarkName = "getNext(done:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.storeOnFirebase (number : Swift.Int, date : Swift.String, image : __ObjC.UIImage, done : (Swift.Bool) -&gt; ()) -&gt; ()"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.727997"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
-                  offsetFromSymbolStart = "364">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(storeOnFirebase (number : Swift.Int, date : Swift.String, image : __ObjC.UIImage, done : (Swift.Bool) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.729445"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "195"
-                  endingLineNumber = "195"
-                  offsetFromSymbolStart = "1008">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -378,6 +250,38 @@
             endingLineNumber = "192"
             landmarkName = "getNext(done:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1).(closure #1)"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.240873"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "2844">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1).(closure #1).(closure #2)"
+                  moduleName = "DropboxPhotoTest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.242364"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "324">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -399,46 +303,31 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(storeOnFirebase (number : Swift.Int, date : Swift.String, image : __ObjC.UIImage, done : (Swift.Bool) -&gt; ()) -&gt; ()).(closure #1)"
                   moduleName = "DropboxPhotoTest"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.734728"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.245765"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "524">
+                  offsetFromSymbolStart = "808">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1)"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(storeOnFirebase (number : Swift.Int, date : Swift.String, image : __ObjC.UIImage, done : (Swift.Bool) -&gt; ()) -&gt; ()).(closure #1).(closure #1)"
                   moduleName = "DropboxPhotoTest"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.736005"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.247059"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "127"
                   endingLineNumber = "127"
-                  offsetFromSymbolStart = "336">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #2)"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.737233"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "129"
-                  endingLineNumber = "129"
-                  offsetFromSymbolStart = "32">
+                  offsetFromSymbolStart = "1632">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -457,38 +346,6 @@
             endingLineNumber = "78"
             landmarkName = "makeFilenameForTeamNumAndIndex(_:date:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.740711"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "78"
-                  endingLineNumber = "78"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1)"
-                  moduleName = "DropboxPhotoTest"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.742939"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "79"
-                  endingLineNumber = "79"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -510,31 +367,31 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1).(closure #1).(closure #2).(closure #1)"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(startUploadingImageQueue (photo : __ObjC.UIImage, key : Swift.String, teamNum : Swift.Int, date : Swift.String) -&gt; ()).(closure #1)"
                   moduleName = "DropboxPhotoTest"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.747582"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.252126"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "103"
                   endingLineNumber = "103"
-                  offsetFromSymbolStart = "320">
+                  offsetFromSymbolStart = "232">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "DropboxPhotoTest.PhotoManager.(getNext (done : (__ObjC.UIImage, Swift.String, Swift.Int, Swift.String) -&gt; ()) -&gt; ()).(closure #1).(closure #1).(closure #2).(closure #1).(closure #1)"
+                  symbolName = "DropboxPhotoTest.PhotoManager.(startUploadingImageQueue (photo : __ObjC.UIImage, key : Swift.String, teamNum : Swift.Int, date : Swift.String) -&gt; ()).(closure #1).(closure #1)"
                   moduleName = "DropboxPhotoTest"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/justinyeung/Documents/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
-                  timestampString = "508722017.74992"
+                  urlString = "file:///Users/justinyeung/Documents/Citrus%20Circuits/Programming/pit-scout-2017-iOS/DropboxPhotoTest/PhotoManagement.swift"
+                  timestampString = "515644063.253329"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "103"
                   endingLineNumber = "103"
-                  offsetFromSymbolStart = "188">
+                  offsetFromSymbolStart = "356">
                </Location>
             </Locations>
          </BreakpointContent>
