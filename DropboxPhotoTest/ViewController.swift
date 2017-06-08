@@ -9,8 +9,7 @@
 import UIKit
 import AVFoundation
 import Firebase
-//import SwiftyDropbox
-//import SwiftPhotoGallery
+import FirebaseStorage
 import Haneke
 import MWPhotoBrowser
 
@@ -21,9 +20,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var photoManager : PhotoManager!
     var number : Int!
-    var firebase = FIRDatabase.database().reference()
-    var firebaseStorageRef : FIRStorageReference!
-    var ourTeam : FIRDatabaseReference!
+    var firebase = Database.database().reference()
+    var firebaseStorageRef : StorageReference!
+    var ourTeam : DatabaseReference!
     var photos = [MWPhoto]()
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.
     var numberOfImagesOnFirebase = -1

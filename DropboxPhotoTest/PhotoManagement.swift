@@ -9,6 +9,7 @@
 import Foundation
 //import SwiftyDropbox
 import Firebase
+import FirebaseStorage
 import Haneke
 
 class PhotoManager : NSObject {
@@ -22,7 +23,7 @@ class PhotoManager : NSObject {
     }
     
     var timer : Timer = Timer()
-    var teamsFirebase : FIRDatabaseReference
+    var teamsFirebase : DatabaseReference
     var numberOfPhotosForTeam = [Int: Int]()
     var currentlyNotifyingTeamNumber = 0
     let photoSaver = CustomPhotoAlbum()
@@ -31,12 +32,12 @@ class PhotoManager : NSObject {
     // teamsList is a cache of keys used to find photos from the imageCache which will then be uploaded to firebase
     var teamsList = Shared.dataCache
     let imageCache = Shared.imageCache
-    let firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
+    let firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
     var teamKeys : [String]?
     var keyIndex : Int = 0
     var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
     
-    init(teamsFirebase : FIRDatabaseReference, teamNumbers : [Int]) {
+    init(teamsFirebase : DatabaseReference, teamNumbers : [Int]) {
         self.teamNumbers = teamNumbers
         self.teamsFirebase = teamsFirebase
         for number in teamNumbers {
@@ -111,7 +112,7 @@ class PhotoManager : NSObject {
         self.teamsFirebase.observeSingleEvent(of: .value, with: { (snap) -> Void in
             let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
             var e: Bool = false
-            self.firebaseStorageRef.child(name).put(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
+            self.firebaseStorageRef.child(name).putData(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
                 
                 if (error != nil) {
                     print("LOOK! 0_0 no wifi")

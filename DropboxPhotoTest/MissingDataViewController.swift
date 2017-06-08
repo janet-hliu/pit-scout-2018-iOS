@@ -12,7 +12,7 @@ import Firebase
 class MissingDataViewController : UIViewController {
     @IBOutlet weak var mdTextView: UITextView!
     /// Teams Firebase Snapshot
-    var snap : FIRDataSnapshot? = nil{
+    var snap : DataSnapshot? = nil{
         didSet {
             self.viewDidLoad()
         }
@@ -30,7 +30,7 @@ class MissingDataViewController : UIViewController {
     override func viewDidLoad() {
         if let snap = self.snap {
             for team in snap.children.allObjects {
-                let t = (team as! FIRDataSnapshot).value as! [String: AnyObject]
+                let t = (team as! DataSnapshot).value as! [String: AnyObject]
                 if t["number"] != nil {
                     if t["pitSelectedImageName"] == nil {
                         self.updateWithText("\nTeam \(t["number"]!) has no selected image name.", color: UIColor.blue)

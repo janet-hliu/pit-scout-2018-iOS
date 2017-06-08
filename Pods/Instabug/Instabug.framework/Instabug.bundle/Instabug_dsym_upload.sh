@@ -21,31 +21,31 @@ echo "Instabug: Started uploading dSYM"
 
 # Check for simulator builds
 if [ "$EFFECTIVE_PLATFORM_NAME" == "-iphonesimulator" ]; then
-if [ "${SKIP_SIMULATOR_BUILDS}" ] && [ "${SKIP_SIMULATOR_BUILDS}" -eq 1 ]; then
-echo "Instabug: Skipping simulator build"
-exit 0
-fi
+  if [ "${SKIP_SIMULATOR_BUILDS}" ] && [ "${SKIP_SIMULATOR_BUILDS}" -eq 1 ]; then
+    echo "Instabug: Skipping simulator build"
+    exit 0
+  fi
 fi
 
 # Check to make sure the app token exists
 if [ ! "${APP_TOKEN}" ]; then
-APP_TOKEN=$(grep -r 'Instabug startWithToken:@\"[0-9a-zA-Z]*\"' ./ -m 1 | grep -o '\"[0-9a-zA-Z]*\"' | cut -d "\"" -f 2)
+  APP_TOKEN=$(grep -r 'Instabug startWithToken:@\"[0-9a-zA-Z]*\"' ./ -m 1 | grep -o '\"[0-9a-zA-Z]*\"' | cut -d "\"" -f 2)
 fi
 
 if [ ! "${APP_TOKEN}" ]; then
-APP_TOKEN=$(grep -r 'Instabug.startWithToken(\"[0-9a-zA-Z]*\"' ./ -m 1 | grep -o '\"[0-9a-zA-Z]*\"' | cut -d "\"" -f 2)
+  APP_TOKEN=$(grep -r 'Instabug.startWithToken(\"[0-9a-zA-Z]*\"' ./ -m 1 | grep -o '\"[0-9a-zA-Z]*\"' | cut -d "\"" -f 2)
 fi
 
 if [ ! "${APP_TOKEN}" ] || [ -z "${APP_TOKEN}" ];then
-echo "Instabug: err: APP_TOKEN not found. Make sure you've added the SDK initialization line [Instabug startWithToken: invocationEvent:]"
-exit 1
+  echo "Instabug: err: APP_TOKEN not found. Make sure you've added the SDK initialization line [Instabug startWithToken: invocationEvent:]"
+  exit 1
 fi
 echo "Instabug: found APP_TOKEN=${APP_TOKEN}"
 
 # Check internet connection
 if [ "`curl -s https://api.instabug.com | grep status | grep -c OK`" != "1" ]; then
-echo "ERROR connecting to api.instabug.com."
-exit 0
+  echo "ERROR connecting to api.instabug.com."
+  exit 0
 fi
 
 # Create temp directory if not exists
@@ -61,11 +61,11 @@ fi
 
 # Check dSYM file
 if [ ! "${DSYM_PATH}" ]; then
-if [ ! "${DWARF_DSYM_FOLDER_PATH}" ] || [ ! "${DWARF_DSYM_FILE_NAME}" ]; then
-echo "Instabug: err: DWARF_DSYM_FOLDER_PATH or DWARF_DSYM_FILE_NAME not defined"
-exit 0
-fi
-DSYM_PATH=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+  if [ ! "${DWARF_DSYM_FOLDER_PATH}" ] || [ ! "${DWARF_DSYM_FILE_NAME}" ]; then
+    echo "Instabug: err: DWARF_DSYM_FOLDER_PATH or DWARF_DSYM_FILE_NAME not defined"
+    exit 0
+  fi
+  DSYM_PATH=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
 fi
 echo "Instabug: found DSYM_PATH=${DSYM_PATH}"
 
@@ -73,7 +73,7 @@ echo "Instabug: found DSYM_PATH=${DSYM_PATH}"
 DSYMS_DIR="${TEMP_DIRECTORY}/dSYM"
 
 if [ -d "${DSYMS_DIR}" ]; then
-rm -rf "${DSYMS_DIR}"
+    rm -rf "${DSYMS_DIR}"
 fi
 
 mkdir "$DSYMS_DIR"
@@ -84,25 +84,25 @@ DSYM_UUIDs_PATH="${TEMP_DIRECTORY}/UUIDs.dat"
 
 find "${DWARF_DSYM_FOLDER_PATH}" -name "*.dSYM" | (while read -r file
 do
-UUIDs=$(dwarfdump --uuid "${file}" | cut -d ' ' -f2)
-if [ -f "${DSYM_UUIDs_PATH}" ]; then
-for uuid in $UUIDs
-do
-UUIDTOKEN="${uuid}"-"${APP_TOKEN}"
-if ! grep -w "${UUIDTOKEN}" "${DSYM_UUIDs_PATH}" ; then
-cp -r "${file}" "${DSYMS_DIR}"
-DSYM_UUIDs+=$uuid$SEPARATOR
-fi
-done
-else
-cp -r "${file}" "${DSYMS_DIR}"
-DSYM_UUIDs+=${UUIDs}$SEPARATOR
-fi
+    UUIDs=$(dwarfdump --uuid "${file}" | cut -d ' ' -f2)
+    if [ -f "${DSYM_UUIDs_PATH}" ]; then
+        for uuid in $UUIDs
+            do
+                UUIDTOKEN="${uuid}"-"${APP_TOKEN}"
+                if ! grep -w "${UUIDTOKEN}" "${DSYM_UUIDs_PATH}" ; then
+                    cp -r "${file}" "${DSYMS_DIR}"
+                    DSYM_UUIDs+=$uuid$SEPARATOR
+                fi
+        done
+    else
+        cp -r "${file}" "${DSYMS_DIR}"
+        DSYM_UUIDs+=${UUIDs}$SEPARATOR
+    fi
 done
 
 if [ -z $DSYM_UUIDs ]; then
-rm -rf "${DSYMS_DIR}"
-exit 0
+    rm -rf "${DSYMS_DIR}"
+    exit 0
 fi
 
 
@@ -111,8 +111,8 @@ DSYM_UUIDs_TOKEN="${DSYM_UUIDs//${SEPARATOR}/-${APP_TOKEN}$'\n'}"
 # Create dSYM .zip file
 DSYM_PATH_ZIP="${TEMP_DIRECTORY}/$DWARF_DSYM_FILE_NAME.zip"
 if [ ! -d "$DSYM_PATH" ]; then
-echo "Instabug: err: dSYM not found: ${DSYM_PATH}"
-exit 0
+  echo "Instabug: err: dSYM not found: ${DSYM_PATH}"
+  exit 0
 fi
 echo "Instabug: Compressing dSYM file..."
 (/usr/bin/zip --recurse-paths --quiet "${DSYM_PATH_ZIP}" "${DSYMS_DIR}") || exit 0
@@ -122,10 +122,10 @@ echo "Instabug: Uploading dSYM file..."
 ENDPOINT="https://api.instabug.com/api/sdk/v3/symbols_files"
 STATUS=$(curl "${ENDPOINT}" --write-out %{http_code} --silent --output /dev/null -F symbols_file=@"${DSYM_PATH_ZIP}" -F application_token="${APP_TOKEN}")
 if [ $STATUS -ne 200 ]; then
-echo "Instabug: err: dSYM archive not succesfully uploaded."
-echo "Instabug: deleting temporary dSYM archive..."
-rm -f "${DSYM_PATH_ZIP}"
-exit 0
+  echo "Instabug: err: dSYM archive not succesfully uploaded."
+  echo "Instabug: deleting temporary dSYM archive..."
+  rm -f "${DSYM_PATH_ZIP}"
+  exit 0
 fi
 
 # Remove temp dSYM archive and dSYM DIR
@@ -139,7 +139,7 @@ echo "${DSYM_UUIDs_TOKEN}" >> "${DSYM_UUIDs_PATH}"
 # Finalize
 echo "Instabug: dSYM upload complete."
 if [ "$?" -ne 0 ]; then
-echo "Instabug: err: an error was encountered uploading dSYM"
-exit 0
+  echo "Instabug: err: an error was encountered uploading dSYM"
+  exit 0
 fi
 )

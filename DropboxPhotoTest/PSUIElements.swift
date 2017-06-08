@@ -30,9 +30,9 @@ class PSUIFirebaseViewController : UIViewController {
             hasOverriddenUIResponse = true
         }
     }
-    var firebaseRef : FIRDatabaseReference?
+    var firebaseRef : DatabaseReference?
     
-    func setup(_ titleText : String, firebaseRef : FIRDatabaseReference, initialValue : Any?) {
+    func setup(_ titleText : String, firebaseRef : DatabaseReference, initialValue : Any?) {
         self.titleText = titleText
         self.initialValue = initialValue
         self.firebaseRef = firebaseRef
@@ -93,7 +93,7 @@ class PSUIFirebaseViewController : UIViewController {
     }
     
     func connectWithFirebase() {
-        self.firebaseRef!.observe(FIRDataEventType.value) { (snapshot : FIRDataSnapshot) -> Void in
+        self.firebaseRef!.observe(DataEventType.value) { (snapshot : DataSnapshot) -> Void in
             if String(describing: snapshot.value) != String(describing: self.previousValue) {
                 self.set(snapshot.value! as Any)
             }

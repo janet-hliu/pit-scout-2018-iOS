@@ -8,6 +8,7 @@
 import UIKit
 import Foundation
 import Firebase
+import FirebaseStorage
 import Haneke
 
 let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageName"]
@@ -15,7 +16,7 @@ let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageName"]
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
     let cellReuseId = "teamCell"
-    var firebase : FIRDatabaseReference?
+    var firebase : DatabaseReference?
     var teams : NSMutableDictionary = [String: [String: AnyObject]]() as! NSMutableDictionary
     var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
     // 0 is false, 1 is true
@@ -25,15 +26,15 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
     var dontNeedNotification = true
     let cache = Shared.dataCache
-    var refHandle = FIRDatabaseHandle()
-    var firebaseStorageRef : FIRStorageReference?
+    var refHandle = DatabaseHandle()
+    var firebaseStorageRef : StorageReference?
     
     @IBOutlet weak var uploadPhotos: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
-        firebaseStorageRef = FIRStorage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
         
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
@@ -44,7 +45,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         tableView.delegate = self
         tableView.dataSource = self
         
-        self.firebase = FIRDatabase.database().reference()
+        self.firebase = Database.database().reference()
         
         self.firebase!.observe(.value, with: { (snapshot) in
             self.setup(snapshot.childSnapshot(forPath: "Teams"))
@@ -61,7 +62,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
     }
     
-    func setup(_ snap: FIRDataSnapshot) {
+    func setup(_ snap: DataSnapshot) {
         self.teams = NSMutableDictionary()
         self.scoutedTeamInfo = []
         self.teamNums = []
@@ -353,7 +354,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
-        self.firebase?.observeSingleEvent(of: FIRDataEventType.value, with: { (snap) -> Void in
+        self.firebase?.observeSingleEvent(of: DataEventType.value, with: { (snap) -> Void in
             do {
                 let theJSONData = try JSONSerialization.data(
                     withJSONObject: self.teams ,

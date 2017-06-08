@@ -60,6 +60,8 @@ extern NSString * const kIBGSurveyNoAnswerTitle;
 extern NSString * const kIBGSurveyNoAnswerMessage;
 extern NSString * const kIBGSurveySubmitTitle;
 extern NSString * const kIBGVideoPressRecordTitle;
+extern NSString * const kIBGLowDiskStorageTitle;
+extern NSString * const kIBGLowDiskStorageMessage;
 
 /// -----------
 /// @name Enums
@@ -236,5 +238,16 @@ typedef NS_ENUM(NSInteger, IBGString) {
     kIBGStringSurveyNoAnswerTitle,
     kIBGStringSurveyNoAnswerMessage,
     kIBGStringSurveySubmitTitle,
-    kIBGStringVideoPressRecordTitle
+    kIBGStringVideoPressRecordTitle,
+    kIBGStringLowDiskStorageTitle,
+    kIBGStringLowDiskStorageMessage
+};
+
+/**
+ The prompt option selected in Instabug prompt.
+ */
+typedef NS_ENUM(NSInteger, IBGPromptOption) {
+    IBGPromptOptionChat,
+    IBGPromptOptionBug,
+    IBGPromptOptionFeedback
 };
