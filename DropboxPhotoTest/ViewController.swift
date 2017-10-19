@@ -175,13 +175,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
         
         self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
-            if self.numberOfImagesOnFirebase == -1 { // This is the first time that the firebase event gets called, it gets called once before being set to the actual number of photos on firebase
-                self.numberOfImagesOnFirebase = Int(snap.childrenCount)
-                self.updateMyPhotos({})
-            } else {
-                self.numberOfImagesOnFirebase = Int(snap.childrenCount)
-                self.updateMyPhotos({})
-            }
+            self.numberOfImagesOnFirebase = Int(snap.childrenCount)
+            self.updateMyPhotos({})
         })
         
         

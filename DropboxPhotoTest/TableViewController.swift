@@ -17,7 +17,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     let cellReuseId = "teamCell"
     var firebase : DatabaseReference?
-    var teams : NSMutableDictionary = [String: [String: AnyObject]]() as! NSMutableDictionary
+    var teams = [String: [String: AnyObject]]()
+    
     var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
     // 0 is false, 1 is true
     var teamNums = [Int]()
@@ -63,7 +64,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func setup(_ snap: DataSnapshot) {
-        self.teams = NSMutableDictionary()
+        self.teams = NSMutableDictionary() as! [String : [String : AnyObject]]
         self.scoutedTeamInfo = []
         self.teamNums = []
         var td : NSDictionary?

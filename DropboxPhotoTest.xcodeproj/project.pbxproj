@@ -299,7 +299,7 @@
 				TargetAttributes = {
 					192BEABD1C3463B900992A8A = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = S2C8988WQX;
+						DevelopmentTeam = 4QL94Y49Z9;
 						LastSwiftMigration = 0800;
 					};
 					192BEAD11C3463BA00992A8A = {
@@ -586,7 +586,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = S2C8988WQX;
+				DEVELOPMENT_TEAM = 4QL94Y49Z9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -614,7 +614,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = S2C8988WQX;
+				DEVELOPMENT_TEAM = 4QL94Y49Z9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
