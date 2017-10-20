@@ -245,13 +245,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         // If photo doesn't exist in cache, pull from firebase
                         let imageURLs = snap.childSnapshot(forPath: "pitAllImageURLs").value as? NSDictionary
                         if imageURLs != nil {
+                            // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
                             for url in imageURLs!.allValues {
                                 let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2017-5f51c.appspot.com/o/", with: "")
                                 let componentArray: [String] = urlArray.components(separatedBy: ".png?")
                                 let key = componentArray[0]
-                                // This is the final key extracted from the image url
+                                // This is the image key extracted from the image url, which will be modified to follow the format of
                                 let modifiedKey = key.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
                                 if modifiedKey == imageKey as! String {
+                                    // Adding the firebase image to the local cache
                                     let captionedImage = MWPhoto(url: URL(string: url as! String))
                                     captionedImage!.caption = "\(modifiedKey)"
                                     self.photos.append(captionedImage!)
@@ -265,22 +267,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         callback()
     }
     
+    // This function is a mandatory requirement for the MWPhotoBrowser class. Removing it will cause the code to fail build.
     func numberOfPhotos(in photoBrowser: MWPhotoBrowser!) -> UInt {
         return UInt(self.photos.count)
     }
     
     /**
-     This function sets up the photo browser, and allows photo selecting or deletion.
+     This function sets up the photo browser, and allows photo selection or deletion. Everytime a photo is selected in the photo browser, this function will run.
      */
     func photoBrowser(_ photoBrowser: MWPhotoBrowser!, photoAt index: UInt, selectedChanged selected: Bool) {
         if selected {
             if self.deleteImagePhotoBrowser == false {
-                // Setting selected image
+                // Since deleteImagePhotoBrowser is false, the user must be in the photo browser to view images - they want to set the selected image
                 self.dismiss(animated: true, completion: nil)
-                let imageKeys = ourTeam.child("imageKeys")
-                imageKeys.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                ourTeam.child("imageKeys").observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
+                        //MAY FIX
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
                                 self.selectedImageName.set(key as! String)
@@ -291,7 +294,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 })
             } else {
                 self.dismiss(animated: true, completion: nil)
-                // Deleting images from firebase database but not from firebase storage
+                // Deleting images from firebase database, but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
                     let caption = photoBrowser.photo(at: index).caption!()
@@ -304,6 +307,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             // If deleted image is also selected image, delete key value on firebase
                             if currentSelectedImageName == date as? String {
                                 self.ourTeam.child("pitSelectedImageName").removeValue()
+                            }
+                            // Deletes image URL from pitAllImageURLs
+                            let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
+                            if imageURLDictionary != nil {
+                                for (key, url) in imageURLDictionary! {
+                                    let modifiedURL: String = url.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
+                                    if modifiedURL.contains(caption!){
+                                        self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
+                                    }
+                                }
                             }
                             self.teamsList.fetch(key: "teams").onSuccess({ (keysData) in
                                 // Deleting from the keys cache
@@ -318,17 +331,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                 self.teamsList.set(value: keysData, key: "teams")
                                 }
                             })
-                        }
-                    }
-                    
-                    // Deletes image URL from pitAllImageURLs
-                    let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
-                    if imageURLDictionary != nil {
-                        for (key, url) in imageURLDictionary! {
-                            let modifiedURL: String = url.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
-                            if modifiedURL.contains(photoBrowser.photo(at: index).caption!()){
-                                self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
-                            }
                         }
                     }
                 })
@@ -382,12 +384,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Dispose of any resources that can be recreated.
     }
     
-    func isNull(_ object: AnyObject?) -> Bool {
+    /*func isNull(_ object: AnyObject?) -> Bool {
         if object_getClass(object) == object_getClass(NSNull()) {
             return true
         }
         return false
-    }
+    }*/
     
     override var shouldAutorotate : Bool {
         return false
@@ -422,6 +424,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } */
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            //If cheescake not selected, automatically make it false
             if snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value as? Bool == nil {
                 self.ourTeam.child("pitDidDemonstrateCheesecakePotential").setValue(false)
             }
