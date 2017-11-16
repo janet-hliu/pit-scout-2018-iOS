@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>62327054481-1kgsu2ea7l35ohug2s4p7n6on31hnvmc.apps.googleusercontent.com</string>
+	<string>62327054481-l971ggoon6ppsn0bg7ordlcfep8s40as.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.62327054481-1kgsu2ea7l35ohug2s4p7n6on31hnvmc</string>
+	<string>com.googleusercontent.apps.62327054481-l971ggoon6ppsn0bg7ordlcfep8s40as</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDDv-KbKOJTW84uWCKB_-ZcHkUFIdspsg0</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.pit-scout-2017.ios</string>
+	<string>org.brytonmoeller.ios-viewer</string>
 	<key>PROJECT_ID</key>
 	<string>scouting-2017-5f51c</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:62327054481:ios:34a68ff756233318</string>
+	<string>1:62327054481:ios:1575a8e1dd22e384</string>
 	<key>DATABASE_URL</key>
 	<string>https://scouting-2017-5f51c.firebaseio.com</string>
 </dict>
