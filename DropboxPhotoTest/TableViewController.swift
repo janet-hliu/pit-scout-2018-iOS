@@ -188,7 +188,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             for (_, team) in teams {
                 let teamInfo = team as! [String : AnyObject]
                 if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
-                    teamName = teamInfo["name"] as! String
+                    teamName = ""
+                    if teamInfo["name"] != nil{
+                        teamName = String(describing: teamInfo["name"]!)
+                    } else {
+                        teamName = "Offseason Bot"
+                    }
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
                     let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
                     if imageURLs.count != imageKeys.count {
@@ -219,7 +224,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let teamInfo = team as! NSDictionary
                 let teamNum = teamInfo["number"] as! Int
                 if teamNum == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
-                    teamName = teamInfo["name"] as! String
+                    //Offseason bots don't have team names (8671, 9971)
+                    teamName = ""
+                    if teamInfo["name"] != nil{
+                        teamName = String(describing: teamInfo["name"]!)
+                    } else {
+                        teamName = "Offseason Bot"
+                    }
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
                     let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
                     if imageURLs.count != imageKeys.count {
@@ -302,8 +313,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 // Finding the team name
                 for (_, team) in self.teams {
                     let teamInfo = team as! [String : AnyObject]
+                     var teamName = ""
                     if teamInfo["number"] as! Int == number {
-                        name = teamInfo["name"] as! String
+                        if teamInfo["name"] != nil{
+                            teamName = String(describing: teamInfo["name"]!)
+                        } else {
+                            teamName = "Offseason Bot"
+                        }
                     }
                 }
             } else if (indexPath! as NSIndexPath).section == 0 {
@@ -318,8 +334,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 // Finding the team name
                 for (_, team) in self.teams {
                     let teamInfo = team as! [String : AnyObject]
+                    name = ""
                     if teamInfo["number"] as! Int == number {
-                        name = teamInfo["name"] as! String
+                        if teamInfo["name"] != nil{
+                            name = teamInfo["name"] as! String
+                        } else {
+                            name = "Offseason Bot"
+                        }
                     }
                 }
             }
