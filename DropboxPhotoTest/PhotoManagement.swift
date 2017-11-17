@@ -49,7 +49,7 @@ class PhotoManager : NSObject {
     //MARK: Setup
     
     /**
-     This function makes the code sleep.
+     This function makes the code sleep, measured in seconds.
      */
     func photoManagerSleep(time: Int) {
         print("Photo Manager is tired, going to take a nap for \(time) seconds.")
@@ -159,7 +159,16 @@ class PhotoManager : NSObject {
             done()
         })
     }
-
+    
+    /*func pullFromCache() {
+        
+    }
+    
+    func removeFromCache(dataArray: []){
+        let keysData = NSKeyedArchiver.archivedData(withRootObject: dataArray)
+        self.teamsList.set(value: keysData, key: "teams")
+    }
+    */
     /**
      This function fetches an image key and its corresponding photo from the cache. If there are no photos, the function will wait one minute before calling itself again.
      */
@@ -170,7 +179,7 @@ class PhotoManager : NSObject {
                 var teamNum : Int
                 var date: String
                 var nextPhoto = UIImage()
-                let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+                var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
                 if keysArray.count != 0 {
                     if keysArray.count > self.keyIndex {
                         print("KEYSARRAY: \(keysArray)")
@@ -183,7 +192,9 @@ class PhotoManager : NSObject {
                             done(nextPhoto, nextKey!, teamNum, date)
                         }).onFailure({ Void in
                             self.backgroundQueue.async {
-                                // Loops back through keysArray, skipping any keys that do not fetch an image
+                                // Loops back through keysArray, removing any keys that do not fetch an image
+                                keysArray.remove(at: self.keyIndex)
+                                self.removeFromFirebase(dataToRemove: keysArray[self.keyIndex], teamNum: teamNum, keyToRemove: "imageKeys")
                                 self.keyIndex += 1
                                 self.photoManagerSleep(time: 60)
                                 self.getNext(done: { (image, key, number, date) in
@@ -196,6 +207,8 @@ class PhotoManager : NSObject {
                         self.photoManagerSleep(time: 1)
                     } else {
                         // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
+                        let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                        self.teamsList.set(value: keysData, key: "teams")
                         self.keyIndex = 0
                         self.getNext(done: { (image, key, number, date) in
                             done(image, key, number, date)
@@ -216,6 +229,20 @@ class PhotoManager : NSObject {
                 self.getNext(done: { (image, key, number, date) in
                     done(image, key, number, date)
                 })
+            }
+        })
+    }
+    
+    /**
+        This function removes something from firebase.
+    */
+    func removeFromFirebase(dataToRemove: Any, teamNum: Int, keyToRemove: String) {
+        teamsFirebase.child(String(teamNum)).observeSingleEvent(of: .value, with: { (snap) in
+            var dataToChange = snap.childSnapshot(forPath: keyToRemove)
+            if keyToRemove == "imageKeys" || keyToRemove == "pitAllImageURLs"{
+                //dataToChange is a dictionary of arrays [[randomnKey: value], [randomnKey: value]]
+            } else {
+                //dataToChange is an dictionary of [keyToRemove: value]
             }
         })
     }
