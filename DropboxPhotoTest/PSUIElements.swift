@@ -187,7 +187,7 @@ class PSUISegmentedViewController : PSUIFirebaseViewController {
         }
         
         if String(describing:initialValue) != "Optional(<null>)" {
-            selectedIndex = segments.index(of: String(describing: initialValue!))
+            selectedIndex = segments.index(of: String(describing: initialValue as? Int))
         }
         if selectedIndex != nil {
             segmentedController.selectedSegmentIndex = selectedIndex!
