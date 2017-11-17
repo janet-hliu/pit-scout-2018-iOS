@@ -16,6 +16,9 @@ let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageName"]
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
     let cellReuseId = "teamCell"
+    @IBAction func addTeam(_ sender: UIButton) {
+        showInputDialog()
+    }
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
@@ -29,8 +32,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
     var firebaseStorageRef : StorageReference?
-    
-    @IBOutlet weak var uploadPhotos: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,6 +146,37 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     // MARK:  UITextFieldDelegate Methods
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2 //One section is for checked cells, the other unchecked
+    }
+    
+    func showInputDialog() {
+        //Creating UIAlertController and setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+            
+            //getting input values
+            let teamNum = alertController.textFields?[0].text
+            let teamName = alertController.textFields?[1].text
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        
+        //adding textfields to our dialog box
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter Team Number"
+        }
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter Team Name"
+        }
+        
+        //adding the action to dialogbox2
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
