@@ -18,12 +18,24 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cellReuseId = "teamCell"
     @IBAction func addTeam(_ sender: UIButton) {
         showInputDialog()
+        //sleep(10)
+        addATeam()
+    }
+    
+    func addATeam() {
+        if teamName != nil && teamNum != nil {
+            self.teamAdder(self.teamNum!, self.teamName!)
+        } else {
+            print("AHHHHH WHY")
+            
+        }
     }
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
     var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
     // 0 is false, 1 is true
+    let operationQueue = OperationQueue()
     var teamNums = [Int]()
     var timer = Timer()
     var photoManager : PhotoManager?
@@ -32,6 +44,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
     var firebaseStorageRef : StorageReference?
+    var teamNum : Int?
+    var teamName : String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,10 +170,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
             
             //getting input values
-            let teamNum = alertController.textFields?[0].text
-            let teamName = alertController.textFields?[1].text
+            self.teamNum = Int((alertController.textFields?[0].text)!)
+            self.teamName = alertController.textFields?[1].text
+            self.addATeam()
         }
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
         
         //adding textfields to our dialog box
@@ -168,15 +182,24 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         alertController.addTextField { (textField) in
             textField.placeholder = "Enter Team Name"
-        }
+            
         
         //adding the action to dialogbox2
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
         
         //finally presenting the dialog box
+        
         self.present(alertController, animated: true, completion: nil)
         
+        }
+    }
+    
+    func teamAdder(_ teamNum: Int, _ teamName: String) {
+        if !self.teamNums.contains(self.teamNum!) {
+            firebase?.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
+            firebase?.child("Teams").child(String(teamNum)).child("number").setValue(String(teamNum))
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
