@@ -5,3 +5,5 @@ Use Notes:
 To select the "selected image", view the images and then tap on the one you want to select. This will set the selected image url, and dismiss the image gallery so that you can continue adding data.
 
 If you add 5 or more images for a given team, you run the risk of causing the image gallery to significantly lag, and possibly crash.
+
+lalalallaal
