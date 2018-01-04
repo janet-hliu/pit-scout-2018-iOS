@@ -214,6 +214,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         //adding textfields to our dialog box
         alertController.addTextField { (textField) in
+            textField.keyboardType = UIKeyboardType.numberPad
             textField.placeholder = "Enter Team Number"
         }
         alertController.addTextField { (textField) in
@@ -233,6 +234,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
+            //keyboardType = UIKeyboardType.numberPad
             firebase?.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
             firebase?.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }
