@@ -45,21 +45,10 @@ Here's how to get your code into the main project repository:
 1. Fork the repo
   	+ Login to github and navigate to the repo.
   	+ Click the "Fork" button in the upper right corner of the screen.
-2. Clone your forked repo.
- 	 + `git clone https://github.com/<your_name>/<repo_name>.git`, where `<your_name>` is your github username and `<repo_name>` is the project repository name (eg. scout-2017, server-2017).
-
-
-### Keeping your fork up to date:
-
-1. Add a remote for the upstream main repository you forked.
-	* `git remote add upstream https://github.com/frc1678/<repo_name>`, where `<repo_name>` is the name of the app you are trying to update.
-2. Whenever you want to update your fork with the latest updates on the main repository, fetch the upstream branches and merge the upstream remote's master into your local master branch.
-	* `git fetch upstream` to fetch all the branches
-	* `git branch -a` to see all the branches, both local and remote
-	* `git checkout master` to checkout to your local branch master
-	* `git merge remotes/upstream/master` to update your local branch master with the main repository's master branch
-See [here](https://gist.github.com/Chaser324/ce0505fbed06b947d962) for more information.
-
+2. Clone the main repo.
+ 	+ `git clone https://github.com/frc1678/<repo_name>.git`, where `<repo_name>` is the project repository name (eg. scout-2017, server-2017).
+3. Add your fork as a remote.
+        + `git remote add <what_you_want_to_refer_to_it_as> https://github.com/<your_github_username>/<repo_name>`
 
 ### Anytime you want to make a change:
 
@@ -73,7 +62,7 @@ See [here](https://gist.github.com/Chaser324/ce0505fbed06b947d962) for more info
  	 + If your change is anything more than a few lines or small fixes, don't skip the extended description. If you are always using git commit with the -m option, stop doing that.
 See this [stackoverflow question](https://stackoverflow.com/questions/9562304/github-commit-with-extended-message) for instructions on how to write an extended commit description.
 5. Push to your forked repo.
- 	 + `git push origin <your_branch_name>`.
+ 	 + `git push <your_remote> <your_branch_name>`.
 6. Submit a pull request.
  	 1. Log into github.
  	 2. Go to the page for your forked repo.
