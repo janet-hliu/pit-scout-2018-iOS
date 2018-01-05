@@ -52,30 +52,29 @@ Here's how to get your code into the main project repository:
 
 ### Anytime you want to make a change:
 
-1. Update your fork's master branch.
-2. Create and checkout a new branch.
+1. Create and checkout a new branch.
  	 * `git checkout -b <your-branch-name>`, where `<your-branch-name>` is a descriptive name for your branch. Use dashes in the branch name, not underscores.
-3. Make whatever code changes you want/need/ to make. Be sure to test your changes!
-4. Commit your work locally.
+2. Make whatever code changes you want/need/ to make. Be sure to test your changes!
+3. Commit your work locally.
   	+ Try to make your commits as atomic (small) as possible. For example, moving functions around should be different from adding features, and changes to one subsystem should be in a different commit than changes to another subsystem.
  	 + Follow [these](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html) conventions for commit messages.
  	 + If your change is anything more than a few lines or small fixes, don't skip the extended description. If you are always using git commit with the -m option, stop doing that.
 See this [stackoverflow question](https://stackoverflow.com/questions/9562304/github-commit-with-extended-message) for instructions on how to write an extended commit description.
-5. Push to your forked repo.
+4. Push to your forked repo.
  	 + `git push <your_remote> <your_branch_name>`.
-6. Submit a pull request.
+5. Submit a pull request.
  	 1. Log into github.
  	 2. Go to the page for your forked repo.
  	 3. Select the branch that you just pushed from the "Branch" dropdown menu.
  	 4. Click "New Pull Request".
  	 5. Review the changes that you made.
  	 6. If you are happy with your changes, click "Create Pull Request".
- 7. Wait
+6. Wait
  	 + People must review (and approve of) your changes before they are merged.
   	 + Specifically, ***2 experienced students*** contributing to that project have to approve it
  	 + If there are any concerns about your pull request, fix them. Depending on how severe the concerns are, the pull request may be merged without it, but everyone will be happier if you fix your code. To update your PR, just push to the branch on your forked repo.
   	+ Don't dismiss someone's review when you make changes - instead, ask them to re-review it.
-8. Merge your changes into master
+7. Merge your changes into master
 	  + If there are no conflicts, push the "Squash and merge" button, write a good commit message, and merge the changes.
  	 + If there are conflicts, fix them locally on your branch, push them, and then squash and merge.
 
