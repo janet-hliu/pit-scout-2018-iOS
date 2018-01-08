@@ -44,14 +44,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        /*
         // Dismisses keyboard when tapping outside of keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
-            
+          
             //Adding/Viewing/Deleting Images Buttons
             let screenWidth = Int(self.view.frame.width) // Width is screenWidth-160 to give a buffer of 80 on either side
             let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-160, y: 0, buttonPressed: { (sender) -> () in
@@ -187,7 +187,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
+        */
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
