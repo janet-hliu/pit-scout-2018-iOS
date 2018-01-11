@@ -70,7 +70,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.updateTitle(_:)), name: NSNotification.Name(rawValue: "titleUpdated"), object: nil)
     }
     
-    func updateTitle(_ note : Notification) {
+    @objc func updateTitle(_ note : Notification) {
         DispatchQueue.main.async { () -> Void in
             self.title = note.object as? String
         }
@@ -143,6 +143,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             self.tableView.reloadData()
         })
     }
+    
     func updateTeams() {
          print("Updating teams")
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
@@ -278,7 +279,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             // Finding the team name
             for (_, team) in teams {
-                let teamInfo = team as! [String : AnyObject]
+                let teamInfo = team 
                 if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = ""
                     if teamInfo["name"] != nil{
@@ -313,7 +314,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             // Finding the team name
             for (_, team) in teams {
-                let teamInfo = team as! NSDictionary
+                let teamInfo = team as NSDictionary
                 let teamNum = teamInfo["number"] as! Int
                 if teamNum == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     //Offseason bots don't have team names (8671, 9971)
@@ -353,7 +354,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         return cell
     }
     
-    func didLongPress(_ recognizer: UIGestureRecognizer) {
+    @objc func didLongPress(_ recognizer: UIGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.ended {
             let longPressLocation = recognizer.location(in: self.tableView)
             if let longPressedIndexPath = tableView.indexPathForRow(at: longPressLocation) {
@@ -404,8 +405,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
                 for (_, team) in self.teams {
-                    let teamInfo = team as! [String : AnyObject]
-                     var teamName = ""
+                    let teamInfo = team 
+                    var teamName = ""
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
                             teamName = String(describing: teamInfo["name"]!)
@@ -425,7 +426,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
                 for (_, team) in self.teams {
-                    let teamInfo = team as! [String : AnyObject]
+                    let teamInfo = team 
                     name = ""
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
