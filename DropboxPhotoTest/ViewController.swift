@@ -345,7 +345,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         notActuallyLeavingViewController = true
         canViewPhotos = false
         picker.dismiss(animated: true, completion: nil)
