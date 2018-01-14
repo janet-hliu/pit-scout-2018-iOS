@@ -195,6 +195,11 @@
                                                 <state key="normal" title="Add Images">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="addImagePressed:" destination="GaD-O8-v2V" eventType="touchUpInside" id="FcR-Vt-iHS"/>
+                                                    <action selector="addImagePressed:forEvent:" destination="GaD-O8-v2V" eventType="touchUpInside" id="1cI-nq-xc4"/>
+                                                    <action selector="test:forEvent:" destination="GaD-O8-v2V" eventType="touchUpInside" id="bzq-P7-OYr"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tQ6-hx-Xci">
                                                 <rect key="frame" x="116" y="54" width="143" height="38"/>
@@ -206,6 +211,9 @@
                                                 <state key="normal" title="View Images">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="viewImagePressed:" destination="GaD-O8-v2V" eventType="touchUpInside" id="6cE-RT-bKZ"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4UH-nJ-vrD">
                                                 <rect key="frame" x="116" y="100" width="143" height="38"/>
@@ -217,6 +225,9 @@
                                                 <state key="normal" title="Delete Images">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="deleteImagePressed:" destination="GaD-O8-v2V" eventType="touchUpInside" id="deR-kQ-7yw"/>
+                                                </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max Height:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oT-SL-mmu">
                                                 <rect key="frame" x="8" y="227" width="98" height="22"/>
@@ -330,7 +341,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Miscellaneous Notes, especially climb-related" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ig1-zK-KJQ">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Miscellaneous Notes: climber notes, possible autos, etc" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ig1-zK-KJQ">
                                                 <rect key="frame" x="30" y="528" width="337" height="144"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -436,7 +447,10 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
+                        <outlet property="addImageButton" destination="IXY-QS-9WT" id="ONi-Fm-qRB"/>
+                        <outlet property="deleteImageButton" destination="4UH-nJ-vrD" id="3tG-Nw-Ikq"/>
                         <outlet property="scrollView" destination="qah-pQ-L5G" id="H2y-Wr-Rjb"/>
+                        <outlet property="viewImageButton" destination="tQ6-hx-Xci" id="7ew-HQ-tKw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2da-iZ-Fh7" userLabel="First Responder" sceneMemberID="firstResponder"/>

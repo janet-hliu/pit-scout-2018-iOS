@@ -16,7 +16,9 @@ import MWPhotoBrowser
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, MWPhotoBrowserDelegate {
     
     @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet weak var bottomScrollViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var addImageButton: UIButton!
+    @IBOutlet weak var viewImageButton: UIButton!
+    @IBOutlet weak var deleteImageButton: UIButton!
     
     var photoManager : PhotoManager!
     var number : Int!
@@ -44,89 +46,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*
+        
         // Dismisses keyboard when tapping outside of keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        // To recognize different types of taps on addImageButton
+        let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
+        let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
+        addImageButton.addGestureRecognizer(normalTapGestureAddImage)
+        addImageButton.addGestureRecognizer(longGestureAddImage)
+        
+        // To set up image browser on viewImageButton
+        let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
+        viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
+        
+        // To set up image browser on deleteImageButton
+        let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
+        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
+        
+        
+        /*
+        
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
-          
-            //Adding/Viewing/Deleting Images Buttons
-            let screenWidth = Int(self.view.frame.width) // Width is screenWidth-160 to give a buffer of 80 on either side
-            let addImageButton = PSUIButton(title: "Add Image", width: screenWidth-160, y: 0, buttonPressed: { (sender) -> () in
-                self.notActuallyLeavingViewController = true
-                let picker = UIImagePickerController()
-                picker.sourceType = .camera
-                picker.delegate = self
-                self.present(picker, animated: true, completion: nil)
-            })
-            
-            var verticalPlacement : CGFloat = addImageButton.frame.origin.y + addImageButton.frame.height
-            
-            let longPressImageButton = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongPressImageButton(_:)))
-            addImageButton.addGestureRecognizer(longPressImageButton)
-            
-            self.scrollView.addSubview(addImageButton)
-            
-            let viewImagesButton = PSUIButton(title: "View Images", width: screenWidth-160, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                self.makeNewBrowser(done: { browser in
-                    let imageURLs = self.ourTeam.child("imageKeys")
-                    imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                        if snap.childrenCount == 0 {
-                            // If no photos in firebase cache for team
-                            let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
-                            noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                            self.present(noImageAlert, animated: true, completion: nil)
-                        } else {
-                            self.deleteImagePhotoBrowser = false
-                            self.notActuallyLeavingViewController = true
-                            // Displaying photos in photo browser
-                            self.updateMyPhotos { [unowned self] in
-                                let nav = UINavigationController(rootViewController: browser)
-                                nav.delegate = self
-                                self.present(nav, animated: true, completion: {
-                                    browser.reloadData()
-                                })
-                            }
-                        }
-                    })
-                })
-            })
-            
-            verticalPlacement = viewImagesButton.frame.origin.y + viewImagesButton.frame.height
-            
-            self.scrollView.addSubview(viewImagesButton)
-            
-            let deleteImagesButton = PSUIButton(title: "Delete Images", width: screenWidth-160, y: Int(verticalPlacement), buttonPressed: { (sender) -> () in
-                self.makeNewBrowser(done: { browser in
-                    let imageURLs = self.ourTeam.child("imageKeys")
-                    imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                        // If there are no photos in firebase cache for team
-                        if snap.childrenCount == 0 {
-                            let noImageAlert = UIAlertController(title: "No Images", message: "Firebase has no images for this team.", preferredStyle: UIAlertControllerStyle.alert)
-                            noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                            self.present(noImageAlert, animated: true, completion: nil)
-                        } else {
-                            self.deleteImagePhotoBrowser = true
-                            self.notActuallyLeavingViewController = true
-                            // Displaying photos in photo browser
-                            self.updateMyPhotos { [unowned self] in
-                                let nav = UINavigationController(rootViewController: browser)
-                                nav.delegate = self
-                                self.present(nav, animated: true, completion: {
-                                    browser.reloadData()
-                                })
-                            }
-                        }
-                    })
-                })
-            })
-            
-            verticalPlacement = deleteImagesButton.frame.origin.y + deleteImagesButton.frame.height
-            
-            self.scrollView.addSubview(deleteImagesButton)
-            
+         
             // Text Field
             self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value as? String)
             self.selectedImageName.neededType = .string
@@ -197,7 +141,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-    /** 
+
+    
+    /**
      This function makes a new photo browser for viewing photos.
      */
     // Formatting a new photo browser for viewing photos
@@ -216,13 +162,60 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //MARK: Photo Browser
     
+    /** This function allows access to the camera if button is tapped once
+     */
+    // Normal single tap to access camera
+    @objc func didNormalTapAddImage(_ sender: UIGestureRecognizer) {
+        self.notActuallyLeavingViewController = true
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+    // Setting up viewImageButton
+    @objc func didNormalTapViewImage(_ sender: UIGestureRecognizer) {
+        self.deleteImagePhotoBrowser = false
+        setUpPhotoBrowser()
+    }
+    
+    //Setting up deleteImageButton
+    @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
+         self.deleteImagePhotoBrowser = true
+        setUpPhotoBrowser()
+    }
+    
+    //Setting up photo browser
+    func setUpPhotoBrowser(){
+        self.makeNewBrowser(done: { browser in
+            let imageURLs = self.ourTeam.child("imageKeys")
+            imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
+                if snap.childrenCount == 0 {
+                    // If no photos in firebase for team
+                    let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                    noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(noImageAlert, animated: true, completion: nil)
+                } else {
+                    self.notActuallyLeavingViewController = true
+                    // Displaying photos in photo browser
+                    self.updateMyPhotos { [unowned self] in
+                        let nav = UINavigationController(rootViewController: browser)
+                        nav.delegate = self
+                        self.present(nav, animated: true, completion: {
+                            browser.reloadData()
+                        })
+                    }
+                }
+            })
+        })
+    }
     /**
      This function allows access to the photo library if button is long pressed.
      */
     // Long press to access photo library, not camera
-    func didLongPressImageButton(_ recognizer: UIGestureRecognizer) {
+    @objc func didLongTap(_ sender: UIGestureRecognizer) {
         notActuallyLeavingViewController = true
-        if recognizer.state == UIGestureRecognizerState.ended {
+        if sender.state == .ended {
             let picker = UIImagePickerController()
             picker.sourceType = .photoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
@@ -327,9 +320,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                                 // Deleting from the keys cache
                                 self.photoManager.backgroundQueue.async {
                                     var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
-                                    for i in 0..<keysArray.count-1 {
-                                        if keysArray[i] == caption {
-                                            keysArray.remove(at: i)
+                                    //If there's anything in the cache, check to see if the image key exists. If it does, remove the image key from the cache
+                                    if keysArray.count != 0{
+                                        for i in 0..<keysArray.count-1 {
+                                            if keysArray[i] == caption {
+                                                keysArray.remove(at: i)
+                                            }
                                         }
                                     }
                                 let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
@@ -442,7 +438,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
