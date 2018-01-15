@@ -193,8 +193,8 @@ class PhotoManager : NSObject {
                         }).onFailure({ Void in
                             self.backgroundQueue.async {
                                 // Loops back through keysArray, removing any keys that do not fetch an image
-                                keysArray.remove(at: self.keyIndex)
                                 self.removeFromFirebase(dataToRemove: keysArray[self.keyIndex], teamNum: teamNum, keyToRemove: "imageKeys")
+                                keysArray.remove(at: self.keyIndex)
                                 self.keyIndex += 1
                                 self.photoManagerSleep(time: 60)
                                 self.getNext(done: { (image, key, number, date) in
@@ -202,9 +202,9 @@ class PhotoManager : NSObject {
                                 })
                             }
                         })
-                        self.keyIndex += 1
                         // Gives time for the cache fetch to occur
                         self.photoManagerSleep(time: 1)
+                        self.keyIndex += 1
                     } else {
                         // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
                         let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
@@ -238,9 +238,17 @@ class PhotoManager : NSObject {
     */
     func removeFromFirebase(dataToRemove: Any, teamNum: Int, keyToRemove: String) {
         teamsFirebase.child(String(teamNum)).observeSingleEvent(of: .value, with: { (snap) in
-            var dataToChange = snap.childSnapshot(forPath: keyToRemove)
             if keyToRemove == "imageKeys" || keyToRemove == "pitAllImageURLs"{
+                // This should only every be called when the app crashes, and the key cache and firebase store an image key, but no image has been stored in the image cache.
                 //dataToChange is a dictionary of arrays [[randomnKey: value], [randomnKey: value]]
+                var dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [[String: String]]
+                for i in 0 ..< dataToChange!.count {
+                    for (key, value) in dataToChange![i]{
+                        if value == String(describing: dataToRemove){
+                            self.teamsFirebase.child(String(teamNum)).child(keyToRemove).child(key)
+                        }
+                    }
+                }
             } else {
                 //dataToChange is an dictionary of [keyToRemove: value]
             }
