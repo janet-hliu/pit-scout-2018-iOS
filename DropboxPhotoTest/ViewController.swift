@@ -19,7 +19,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var viewImageButton: UIButton!
     @IBOutlet weak var deleteImageButton: UIButton!
-    
+    @IBOutlet weak var availableWeightTextField: UITextField!
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
@@ -66,6 +66,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
         deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
         
+        // Setting up all the other UI elements
+        self.setup(dataKey: "pitAvailableWeight", neededType: NeededType.Int, done: { initialValue in
+            self.availableWeightTextField.text = String(describing: initialValue!)
+        })
         
         /*
         
@@ -141,7 +145,29 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-
+    enum NeededType {
+        case Int
+        case Float
+        case Bool
+        case String
+    }
+    
+    func setup(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
+        var initialValue: Any?
+        self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            switch neededType {
+            case .Int:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
+            case .Float:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Float ?? "No current value"
+            case .Bool:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
+            case .String:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? String ?? "No current value"
+            }
+            done(initialValue)
+        })
+    }
     
     /**
      This function makes a new photo browser for viewing photos.

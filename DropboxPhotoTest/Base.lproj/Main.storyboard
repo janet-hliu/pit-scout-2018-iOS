@@ -448,6 +448,7 @@
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
                         <outlet property="addImageButton" destination="IXY-QS-9WT" id="ONi-Fm-qRB"/>
+                        <outlet property="availableWeightTextField" destination="PD1-VW-55n" id="N4n-fa-Z2G"/>
                         <outlet property="deleteImageButton" destination="4UH-nJ-vrD" id="3tG-Nw-Ikq"/>
                         <outlet property="scrollView" destination="qah-pQ-L5G" id="H2y-Wr-Rjb"/>
                         <outlet property="viewImageButton" destination="tQ6-hx-Xci" id="7ew-HQ-tKw"/>
