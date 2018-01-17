@@ -20,6 +20,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var viewImageButton: UIButton!
     @IBOutlet weak var deleteImageButton: UIButton!
     @IBOutlet weak var availableWeightTextField: UITextField!
+    @IBOutlet weak var selectedImageTextField: UITextField!
+    @IBOutlet weak var maxHeightTextField: UITextField!
+    @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
+    @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
+    @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
+    @IBOutlet weak var canCheesecakeSwitch: UISwitch!
+    @IBOutlet weak var SEALsNotesTextView: UITextView!
+    
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
@@ -68,49 +76,36 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         // Setting up all the other UI elements
         self.setup(dataKey: "pitAvailableWeight", neededType: NeededType.Int, done: { initialValue in
-            self.availableWeightTextField.text = String(describing: initialValue!)
+            self.setText(textField: self.availableWeightTextField, initialValue: initialValue!)
+        })
+        
+        self.setup(dataKey: "pitSelectedImageName", neededType: NeededType.String, done: { initialValue in
+            self.setText(textField: self.selectedImageTextField, initialValue: initialValue!)
+        })
+    
+        self.setup(dataKey: "pitMaxHeight", neededType: NeededType.Float, done: { initialValue in
+            self.setText(textField: self.maxHeightTextField, initialValue: initialValue!)
+        })
+        
+        self.setup(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
+            self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
+        })
+        
+        self.setup(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
+            self.setSelectedSegment(segControl: self.driveTrainSegControl, initialValue: initialValue! as! String)
+        })
+        
+        self.setup(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
+            self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
+        })
+        
+        self.setup(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
+            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Bool)
         })
         
         /*
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
-         
-            // Text Field
-            self.selectedImageName.setup("Selected Image:", firebaseRef: self.ourTeam.child("pitSelectedImageName"), initialValue: snap.childSnapshot(forPath: "pitSelectedImageName").value as? String)
-            self.selectedImageName.neededType = .string
-            
-            //Segmented Control
-            let programmingLanguage = PSUISegmentedViewController()
-            programmingLanguage.setup("Programming Language:", firebaseRef: self.ourTeam.child("pitProgrammingLanguage"), initialValue: snap.childSnapshot(forPath: "pitProgrammingLanguage").value)
-            programmingLanguage.segments = ["Java", "C++", "Labview", "Other"]
-            programmingLanguage.neededType = .string
-            
-            // Switch
-            let driveTrain = PSUISegmentedViewController()
-            driveTrain.setup("Drive Train:", firebaseRef: self.ourTeam.child("pitDriveTrain"), initialValue: snap.childSnapshot(forPath: "pitDriveTrain").value)
-            driveTrain.segments = ["Tank Drive", "Swerve", "Mecanum", "Other"]
-            driveTrain.neededType = .string
-            
-            // Text Field
-            let availableWeight = PSUITextInputViewController()
-            availableWeight.setup("Available Weight:", firebaseRef: self.ourTeam.child("pitAvailableWeight"), initialValue: snap.childSnapshot(forPath: "pitAvailableWeight").value)
-            availableWeight.neededType = .int
-            
-            // Switch
-            let willCheesecake = PSUISwitchViewController()
-            willCheesecake.setup("Will Cheesecake", firebaseRef: self.ourTeam.child("pitDidDemonstrateCheesecakePotential"), initialValue: snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value)
-    
-            // SEALS Textfield
-            let SEALSNotes = PSUITextInputViewController()
-            SEALSNotes.setup("SEALS Notes:", firebaseRef: self.ourTeam.child("SEALSNotes"), initialValue: snap.childSnapshot(forPath: "SEALSNotes   ").value)
-            
-            self.addChildViewController(self.selectedImageName)
-            self.addChildViewController(programmingLanguage)
-            self.addChildViewController(driveTrain)
-            self.addChildViewController(availableWeight)
-            self.addChildViewController(willCheesecake)
-            self.addChildViewController(SEALSNotes)
-            
             // UI Elements
             for childViewController in self.childViewControllers {
                 self.scrollView.addSubview(childViewController.view)
@@ -131,10 +126,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.numberOfImagesOnFirebase = Int(snap.childrenCount)
             self.updateMyPhotos({})
         })
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         */
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
@@ -152,6 +143,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case String
     }
     
+    // This function sets up various UIElements, with their current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
     func setup(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
         var initialValue: Any?
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -161,7 +153,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             case .Float:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Float ?? "No current value"
             case .Bool:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? false
             case .String:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? String ?? "No current value"
             }
@@ -169,6 +161,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
+    // Abstracted code to set values of UI elements
+    func setText(textField: UITextField, initialValue: Any) {
+        textField.text = String(describing: initialValue)
+    }
+    
+    func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
+        for i in 0..<segControl.numberOfSegments {
+            let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
+            print ("rawSegmentTitle: \(rawSegmentTitle!)")
+            print ("initialValue: \(initialValue)")
+            if rawSegmentTitle! == (initialValue) {
+                segControl.selectedSegmentIndex = i
+                return
+            }
+        }
+    }
+    
+    func setSwitch(toggleSwitch: UISwitch, initialValue: Bool) {
+        if initialValue == true {
+            toggleSwitch.setOn(true, animated: true)
+        } else {
+            toggleSwitch.setOn(false, animated: true)
+        }
+    }
     /**
      This function makes a new photo browser for viewing photos.
      */
@@ -212,7 +228,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     //Setting up photo browser
-    func setUpPhotoBrowser(){
+    func setUpPhotoBrowser() {
         self.makeNewBrowser(done: { browser in
             let imageURLs = self.ourTeam.child("imageKeys")
             imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
@@ -337,7 +353,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             if imageURLDictionary != nil {
                                 for (key, url) in imageURLDictionary! {
                                     let modifiedURL: String = url.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
-                                    if modifiedURL.contains(caption!){
+                                    if modifiedURL.contains(caption!) {
                                         self.ourTeam.child("pitAllImageURLs").child(key).removeValue()
                                     }
                                 }
@@ -399,10 +415,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
     }
     
-    func keyboardWillShow(_ notification: NSNotification){
+    func keyboardWillShow(_ notification: NSNotification) {
         adjustInsetForKeyboardShow(true, notification: notification)
     }
-    func keyboardWillHide(_ notification: NSNotification){
+    func keyboardWillHide(_ notification: NSNotification) {
         adjustInsetForKeyboardShow(true, notification: notification)
     }
     
@@ -451,10 +467,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } */
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            //If cheescake not selected, automatically make it false
-            if snap.childSnapshot(forPath: "pitDidDemonstrateCheesecakePotential").value as? Bool == nil {
-                self.ourTeam.child("pitDidDemonstrateCheesecakePotential").setValue(false)
+            // If cheescake not selected, automatically make it false
+            if snap.childSnapshot(forPath: "pitCanCheesecake").value as? Bool == nil {
+                self.ourTeam.child("pitCanCheesecake").setValue(false)
             }
+            // If selected image doesn't exist, make the first image taken the selected image
             let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
             if imageKeys != nil {
                 if imageKeys!.count == 1 {

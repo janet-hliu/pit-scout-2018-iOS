@@ -164,7 +164,7 @@ class PhotoManager : NSObject {
         
     }
     
-    func removeFromCache(dataArray: []){
+    func removeFromCache(dataArray: []) {
         let keysData = NSKeyedArchiver.archivedData(withRootObject: dataArray)
         self.teamsList.set(value: keysData, key: "teams")
     }
@@ -244,7 +244,7 @@ class PhotoManager : NSObject {
                 var dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [[String: String]]
                 for i in 0 ..< dataToChange!.count {
                     for (key, value) in dataToChange![i]{
-                        if value == String(describing: dataToRemove){
+                        if value == String(describing: dataToRemove) {
                             self.teamsFirebase.child(String(teamNum)).child(keyToRemove).child(key)
                         }
                     }
@@ -320,7 +320,7 @@ extension UIImage {
         // Now, draw the rotated/scaled image into the context
         var yFlip: CGFloat
         
-        if(flip){
+        if(flip) {
             yFlip = CGFloat(-1.0)
         } else {
             yFlip = CGFloat(1.0)
