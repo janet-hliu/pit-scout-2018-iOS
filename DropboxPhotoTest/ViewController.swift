@@ -40,6 +40,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
+    var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
+    var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
     var activeField : UITextField? {
         didSet {
@@ -65,14 +67,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
         addImageButton.addGestureRecognizer(normalTapGestureAddImage)
         addImageButton.addGestureRecognizer(longGestureAddImage)
+        addImageButton.layer.cornerRadius = 5
         
         // To set up image browser on viewImageButton
         let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
         viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
+        viewImageButton.layer.cornerRadius = 5
         
         // To set up image browser on deleteImageButton
         let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
         deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
+        deleteImageButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
         self.setup(dataKey: "pitAvailableWeight", neededType: NeededType.Int, done: { initialValue in
@@ -100,7 +105,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         self.setup(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
-            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Bool)
+            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Any)
         })
         
         /*
@@ -153,7 +158,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             case .Float:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Float ?? "No current value"
             case .Bool:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? false
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
             case .String:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? String ?? "No current value"
             }
@@ -161,28 +166,41 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-    // Abstracted code to set values of UI elements
+    // Abstracted code to set values of UI elements. Sets background to red.
     func setText(textField: UITextField, initialValue: Any) {
-        textField.text = String(describing: initialValue)
-    }
-    
-    func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
-        for i in 0..<segControl.numberOfSegments {
-            let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
-            print ("rawSegmentTitle: \(rawSegmentTitle!)")
-            print ("initialValue: \(initialValue)")
-            if rawSegmentTitle! == (initialValue) {
-                segControl.selectedSegmentIndex = i
-                return
-            }
+        if initialValue as? String != "No current value" {
+            textField.text = String(describing: initialValue)
+        } else {
+            textField.textColor = white
+            textField.backgroundColor = red
+            textField.text = String(describing: initialValue)
         }
     }
     
-    func setSwitch(toggleSwitch: UISwitch, initialValue: Bool) {
-        if initialValue == true {
-            toggleSwitch.setOn(true, animated: true)
+    func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
+        if initialValue as? String != "No current value" {
+            for i in 0..<segControl.numberOfSegments {
+                let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
+                if rawSegmentTitle! == (initialValue) {
+                    segControl.selectedSegmentIndex = i
+                    return
+                }
+            }
         } else {
-            toggleSwitch.setOn(false, animated: true)
+            segControl.backgroundColor = red
+            segControl.layer.cornerRadius = 5
+        }
+    }
+    
+    func setSwitch(toggleSwitch: UISwitch, initialValue: Any) {
+        if initialValue as? String != "No current value" {
+            if initialValue as! Bool == true {
+                toggleSwitch.setOn(true, animated: true)
+            } else {
+                toggleSwitch.setOn(false, animated: true)
+            }
+        } else {
+            toggleSwitch.backgroundColor = red
         }
     }
     /**
