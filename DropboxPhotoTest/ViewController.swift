@@ -166,7 +166,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
-    // Abstracted code to set values of UI elements. Sets background to red.
+    // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
     func setText(textField: UITextField, initialValue: Any) {
         if initialValue as? String != "No current value" {
             textField.text = String(describing: initialValue)
@@ -187,7 +187,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
         } else {
-            segControl.backgroundColor = red
+            segControl.tintColor = red
             segControl.layer.cornerRadius = 5
         }
     }
@@ -200,7 +200,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 toggleSwitch.setOn(false, animated: true)
             }
         } else {
-            toggleSwitch.backgroundColor = red
+            toggleSwitch.tintColor = red
+            toggleSwitch.onTintColor = red
+            toggleSwitch.isOn = true
         }
     }
     /**
