@@ -18,7 +18,7 @@ class MissingDataViewController : UIViewController {
         }
     }
     
-    let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake"]
+    let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes"]
     
     let ignoreKeys = ["imageKeys", "pitAllImageURLs"]
     

@@ -105,9 +105,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         self.setup(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
-            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Any)
+            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
         
+        self.setup(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
+            
+            self.setTextView(textView: self.SEALsNotesTextView, initialValue: "Miscellaneous Notes: climber notes, possible autos, etc")
+        })
         /*
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
@@ -205,6 +209,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             toggleSwitch.isOn = true
         }
     }
+    
+    func setTextView(textView: UITextView, initialValue: Any) {
+        if initialValue as? String != "No current value" && initialValue as? String != "Miscellaneous Notes: climber notes, possible autos, etc"{
+            textView.text = String(describing: initialValue)
+        } else {
+            textView.textColor = white
+            textView.backgroundColor = red
+            textView.text = String(describing: initialValue)
+        }
+    }
+    
     /**
      This function makes a new photo browser for viewing photos.
      */
