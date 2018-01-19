@@ -205,6 +205,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             toggleSwitch.isOn = true
         }
     }
+    
+    func writeToFirebase(dataKey: String, UIElement: Any) {
+        firebase.child("Teams").child(String(describing: ourTeam)).child(dataKey).setValue(UIElement)
+    }
+    
     /**
      This function makes a new photo browser for viewing photos.
      */
