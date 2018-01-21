@@ -108,6 +108,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Any)
         })
         
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         /*
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
@@ -427,19 +430,28 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         activeField = textField
     }
     
-    func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
+    /*func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
         guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
         let keyboardFrame = value.cgRectValue
         let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
         scrollView.contentInset.bottom += adjustmentHeight
         scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
+    }*/
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
     }
     
-    func keyboardWillShow(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
-    }
-    func keyboardWillHide(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
