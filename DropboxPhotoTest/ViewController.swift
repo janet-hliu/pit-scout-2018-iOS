@@ -40,6 +40,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
+    let dataKeys: [String] = ["pitSelectedImage", "pitAllImageURLs", "pitAvailableWeight", "pitDriveTrain", "pitImageKeys", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage", "pitClimberType", "pitMaxHeight", "pitAutoRunTime"]
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -80,31 +81,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         deleteImageButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
-        self.setup(dataKey: "pitAvailableWeight", neededType: NeededType.Int, done: { initialValue in
-            self.setText(textField: self.availableWeightTextField, initialValue: initialValue!)
-        })
+        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 2, neededType: NeededType.Int)
         
-        self.setup(dataKey: "pitSelectedImageName", neededType: NeededType.String, done: { initialValue in
-            self.setText(textField: self.selectedImageTextField, initialValue: initialValue!)
-        })
-    
-        self.setup(dataKey: "pitMaxHeight", neededType: NeededType.Float, done: { initialValue in
-            self.setText(textField: self.maxHeightTextField, initialValue: initialValue!)
-        })
+        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImageName", dataKeyIndex: 0, neededType: NeededType.String)
         
-        self.setup(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
+        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 9, neededType: NeededType.Float)
+        
+        self.getInitialValue(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
+        self.getInitialValue(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.driveTrainSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
+        self.getInitialValue(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
+        self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Any)
         })
         
@@ -148,8 +143,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case String
     }
     
-    // This function sets up various UIElements, with their current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
-    func setup(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
+    func setUpTextField(elementName: UITextField, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+            self.setInitialText(textField: elementName, initialValue: initialValue!)
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+    }
+    
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, neededType: NeededType) {
+    }
+    
+    func setUpSwitch(elementName: UISwitch, dataKey: String, neededType: NeededType) {
+    }
+    
+    func setUpTextView(elementName: UITextView, dataKey: String, neededType: NeededType) {
+    }
+    
+    // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
+    func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
         var initialValue: Any?
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             switch neededType {
@@ -167,7 +179,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
-    func setText(textField: UITextField, initialValue: Any) {
+    func setInitialText(textField: UITextField, initialValue: Any) {
         if initialValue as? String != "No current value" {
             textField.text = String(describing: initialValue)
         } else {
@@ -250,6 +262,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
          self.deleteImagePhotoBrowser = true
         setUpPhotoBrowser()
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        let dataKey: String! = dataKeys[textField.tag]
+        self.ourTeam.child(dataKey).setValue(Int(textField.text!))
     }
     
     //Setting up photo browser
