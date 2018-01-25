@@ -27,6 +27,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!
+    @IBOutlet weak var pitAutoRunTime: UIButton!
+    
     
     var photoManager : PhotoManager!
     var number : Int!
@@ -517,6 +519,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
         })
+    }
+
+    @IBAction func autoTimeSegue(_ sender: UIButton) {
+        performSegue(withIdentifier: "AutoRunTimeSegue", sender: sender)
     }
     
     @objc func dismissKeyboard() {
