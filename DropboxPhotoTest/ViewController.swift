@@ -109,8 +109,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         self.setup(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
-            
-            self.setTextView(textView: self.SEALsNotesTextView, initialValue: "Miscellaneous Notes: climber notes, possible autos, etc")
+            var mutableValue = initialValue
+            if initialValue as! String == "No current value"{
+                mutableValue = "Miscellaneous Notes: climber notes, possible autos, etc"
+            }
+            self.setTextView(textView: self.SEALsNotesTextView, initialValue: mutableValue!, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         })
         /*
         
@@ -182,7 +185,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
-        if initialValue as? String != "No current value" {
+        if initialValue as String != "No current value" {
             for i in 0..<segControl.numberOfSegments {
                 let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
                 if rawSegmentTitle! == (initialValue) {
@@ -210,13 +213,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func setTextView(textView: UITextView, initialValue: Any) {
-        if initialValue as? String != "No current value" && initialValue as? String != "Miscellaneous Notes: climber notes, possible autos, etc"{
+    func setTextView(textView: UITextView, initialValue: Any, placeHolder: String) {
+        if initialValue as! String != placeHolder {
             textView.text = String(describing: initialValue)
         } else {
             textView.textColor = white
             textView.backgroundColor = red
-            textView.text = String(describing: initialValue)
+            textView.text = String(describing: placeHolder)
         }
     }
     
