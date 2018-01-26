@@ -151,7 +151,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
     }
     
-    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, neededType: NeededType) {
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+            self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
+        })
+        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for:.valueChanged)
     }
     
     func setUpSwitch(elementName: UISwitch, dataKey: String, neededType: NeededType) {
@@ -269,6 +273,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.child(dataKey).setValue(Int(textField.text!))
     }
     
+    @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
+        
+    }
     //Setting up photo browser
     func setUpPhotoBrowser() {
         self.makeNewBrowser(done: { browser in
