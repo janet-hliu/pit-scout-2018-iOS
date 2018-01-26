@@ -83,7 +83,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Setting up all the other UI elements
         self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 2, neededType: NeededType.Int)
         
-        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImageName", dataKeyIndex: 0, neededType: NeededType.String)
+        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
         self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 9, neededType: NeededType.Float)
         
@@ -336,7 +336,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if imageURLs != nil {
                             // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
                             for url in imageURLs!.allValues {
-                                let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2017-5f51c.appspot.com/o/", with: "")
+                                let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-temp.appspot.com/o/", with: "")
                                 let componentArray: [String] = urlArray.components(separatedBy: ".png?")
                                 let key = componentArray[0]
                                 // This is the image key extracted from the image url, which will be modified to follow the format of
@@ -376,7 +376,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
                                 self.selectedImageName.set(key as! String)
-                                self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
+                                self.ourTeam.child("pitSelectedImage").setValue(key as! String)
                             }
                         }
                     }
@@ -392,10 +392,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             // Removing photo from image cache
                             self.photoManager.imageCache.remove(key: date as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
-                            let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
+                            let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImage").value as? String
                             // If deleted image is also selected image, delete key value on firebase
                             if currentSelectedImageName == date as? String {
-                                self.ourTeam.child("pitSelectedImageName").removeValue()
+                                self.ourTeam.child("pitSelectedImage").removeValue()
                             }
                             // Deletes image URL from pitAllImageURLs
                             let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
@@ -524,7 +524,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
             if imageKeys != nil {
                 if imageKeys!.count == 1 {
-                    self.ourTeam.child("pitSelectedImageName").setValue(imageKeys![0])
+                    self.ourTeam.child("pitSelectedImage").setValue(imageKeys![0])
                 }
             }
         })
