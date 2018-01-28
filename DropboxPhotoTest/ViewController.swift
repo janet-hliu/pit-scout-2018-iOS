@@ -42,6 +42,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
+    let dataKeys: [String] = ["pitSelectedImage", "pitAllImageURLs", "pitAvailableWeight", "pitDriveTrain", "pitImageKeys", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage", "pitClimberType", "pitMaxHeight", "pitAutoRunTime"]
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -82,40 +83,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         deleteImageButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
-        self.setup(dataKey: "pitAvailableWeight", neededType: NeededType.Int, done: { initialValue in
-            self.setText(textField: self.availableWeightTextField, initialValue: initialValue!)
-        })
+        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 2, neededType: NeededType.Int)
         
-        self.setup(dataKey: "pitSelectedImageName", neededType: NeededType.String, done: { initialValue in
-            self.setText(textField: self.selectedImageTextField, initialValue: initialValue!)
-        })
-    
-        self.setup(dataKey: "pitMaxHeight", neededType: NeededType.Float, done: { initialValue in
-            self.setText(textField: self.maxHeightTextField, initialValue: initialValue!)
-        })
+        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
-        self.setup(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
+        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 9, neededType: NeededType.Float)
+        
+        self.getInitialValue(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
+        self.getInitialValue(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.driveTrainSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
+        self.getInitialValue(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
         })
         
-        self.setup(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
+
+        self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
         
-        self.setup(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
-            var mutableValue = initialValue
-            if initialValue as! String == "No current value"{
-                mutableValue = "Miscellaneous Notes: climber notes, possible autos, etc"
-            }
-            self.setTextView(textView: self.SEALsNotesTextView, initialValue: mutableValue!, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
+        self.getInitialValue(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
+            self.setTextView(textView: self.SEALsNotesTextView, initialValue: initialValue! as! String, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
+            print(initialValue!)
         })
         /*
         
@@ -157,11 +150,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case String
     }
     
-    // This function sets up various UIElements, with their current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
-    func setup(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
+    func setUpTextField(elementName: UITextField, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+            self.setInitialText(textField: elementName, initialValue: initialValue!)
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+    }
+    
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+            self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
+        })
+        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for:.valueChanged)
+    }
+    
+    func setUpSwitch(elementName: UISwitch, dataKey: String, neededType: NeededType) {
+    }
+    
+    func setUpTextView(elementName: UITextView, dataKey: String, neededType: NeededType) {
+    }
+    
+    // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
+    func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
         var initialValue: Any?
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            
             switch neededType {
+                
             case .Int:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
             case .Float:
@@ -169,15 +185,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             case .Bool:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
             case .String:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? String ?? "No current value"
+                if let a = snap.childSnapshot(forPath: dataKey).value as? String, snap.childSnapshot(forPath: dataKey).value as? String != "" {
+                    initialValue = a
+                } else {
+                    initialValue = "No current value"
+                }
             }
             done(initialValue)
         })
     }
     
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
-    func setText(textField: UITextField, initialValue: Any) {
-        if initialValue as? String != "No current value" {
+    func setInitialText(textField: UITextField, initialValue: Any) {
+        if initialValue as? String != "No current value"{
             textField.text = String(describing: initialValue)
         } else {
             textField.textColor = white
@@ -187,7 +207,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
-        if initialValue as String != "No current value" {
+        if initialValue != "No current value"{
             for i in 0..<segControl.numberOfSegments {
                 let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
                 if rawSegmentTitle! == (initialValue) {
@@ -216,13 +236,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func setTextView(textView: UITextView, initialValue: Any, placeHolder: String) {
-        if initialValue as! String != placeHolder {
+        if initialValue as! String != "No current value" {
             textView.text = String(describing: initialValue)
         } else {
             textView.textColor = white
             textView.backgroundColor = red
             textView.text = String(describing: placeHolder)
         }
+    }
+    
+    func writeToFirebase(dataKey: String, UIElement: Any) {
+        firebase.child("Teams").child(String(describing: ourTeam)).child(dataKey).setValue(UIElement)
     }
     
     /**
@@ -267,6 +291,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         setUpPhotoBrowser()
     }
     
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        let dataKey: String! = dataKeys[textField.tag]
+        self.ourTeam.child(dataKey).setValue(Int(textField.text!))
+    }
+    
+    @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
+        
+    }
     //Setting up photo browser
     func setUpPhotoBrowser() {
         self.makeNewBrowser(done: { browser in
@@ -327,7 +359,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if imageURLs != nil {
                             // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
                             for url in imageURLs!.allValues {
-                                let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2017-5f51c.appspot.com/o/", with: "")
+                                let urlArray = (url as! String).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-temp.appspot.com/o/", with: "")
                                 let componentArray: [String] = urlArray.components(separatedBy: ".png?")
                                 let key = componentArray[0]
                                 // This is the image key extracted from the image url, which will be modified to follow the format of
@@ -367,7 +399,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
                                 self.selectedImageName.set(key as! String)
-                                self.ourTeam.child("pitSelectedImageName").setValue(key as! String)
+                                self.ourTeam.child("pitSelectedImage").setValue(key as! String)
                             }
                         }
                     }
@@ -383,10 +415,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                             // Removing photo from image cache
                             self.photoManager.imageCache.remove(key: date as! String)
                             self.ourTeam.child("imageKeys").child(key as! String).removeValue()
-                            let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImageName").value as? String
+                            let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImage").value as? String
                             // If deleted image is also selected image, delete key value on firebase
                             if currentSelectedImageName == date as? String {
-                                self.ourTeam.child("pitSelectedImageName").removeValue()
+                                self.ourTeam.child("pitSelectedImage").removeValue()
                             }
                             // Deletes image URL from pitAllImageURLs
                             let imageURLDictionary = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String: String]
@@ -515,7 +547,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
             if imageKeys != nil {
                 if imageKeys!.count == 1 {
-                    self.ourTeam.child("pitSelectedImageName").setValue(imageKeys![0])
+                    self.ourTeam.child("pitSelectedImage").setValue(imageKeys![0])
                 }
             }
         })
