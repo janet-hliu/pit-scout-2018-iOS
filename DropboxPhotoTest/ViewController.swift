@@ -99,10 +99,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
         })
         
+
         self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
-            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as! Any)
+            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
         
+        self.getInitialValue(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
+            self.setTextView(textView: self.SEALsNotesTextView, initialValue: initialValue! as! String, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
+            print(initialValue!)
+        })
         /*
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
@@ -168,7 +173,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
         var initialValue: Any?
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            
             switch neededType {
+                
             case .Int:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
             case .Float:
@@ -176,7 +183,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             case .Bool:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
             case .String:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? String ?? "No current value"
+                if let a = snap.childSnapshot(forPath: dataKey).value as? String, snap.childSnapshot(forPath: dataKey).value as? String != "" {
+                    initialValue = a
+                } else {
+                    initialValue = "No current value"
+                }
             }
             done(initialValue)
         })
@@ -184,7 +195,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
     func setInitialText(textField: UITextField, initialValue: Any) {
-        if initialValue as? String != "No current value" {
+        if initialValue as? String != "No current value"{
             textField.text = String(describing: initialValue)
         } else {
             textField.textColor = white
@@ -194,7 +205,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
-        if initialValue as? String != "No current value" {
+        if initialValue != "No current value"{
             for i in 0..<segControl.numberOfSegments {
                 let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
                 if rawSegmentTitle! == (initialValue) {
@@ -219,6 +230,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             toggleSwitch.tintColor = red
             toggleSwitch.onTintColor = red
             toggleSwitch.isOn = true
+        }
+    }
+    
+    func setTextView(textView: UITextView, initialValue: Any, placeHolder: String) {
+        if initialValue as! String != "No current value" {
+            textView.text = String(describing: initialValue)
+        } else {
+            textView.textColor = white
+            textView.backgroundColor = red
+            textView.text = String(describing: placeHolder)
         }
     }
     
