@@ -18,16 +18,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let cellReuseId = "teamCell"
     @IBAction func addTeam(_ sender: UIButton) {
         showInputDialog()
-        //sleep(10)
-        addATeam()
     }
     
     func addATeam() {
         if teamName != nil && teamNum != nil {
             self.teamAdder(self.teamNum!, self.teamName!)
         } else {
-            print("AHHHHH WHY")
-            
+            print("This should not happen. addATeam is funking things up.")
         }
     }
     var firebase : DatabaseReference?
@@ -201,41 +198,30 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     func showInputDialog() {
         //Creating UIAlertController and setting title and message for the alert dialog
-        let alertController = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
-        
-        //the confirm action taking the inputs
-        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
-            
-            //getting input values
-            self.teamNum = Int((alertController.textFields?[0].text)!)
-            self.teamName = alertController.textFields?[1].text
-            self.addATeam()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
-        
-        //adding textfields to our dialog box
-        alertController.addTextField { (textField) in
+        let newTeamCreator = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
+        newTeamCreator.addTextField { (textField) in
             textField.keyboardType = UIKeyboardType.numberPad
             textField.placeholder = "Enter Team Number"
         }
-        alertController.addTextField { (textField) in
+        
+        newTeamCreator.addTextField { (textField) in
             textField.placeholder = "Enter Team Name"
-            
-        
-        //adding the action to dialogbox2
-        alertController.addAction(confirmAction)
-        alertController.addAction(cancelAction)
-        
-        //finally presenting the dialog box
-        
-        self.present(alertController, animated: true, completion: nil)
-        
         }
+            
+        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+            self.teamNum = Int((newTeamCreator.textFields?[0].text)!)
+            self.teamName = newTeamCreator.textFields?[1].text
+            self.addATeam()
+        }
+            
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        newTeamCreator.addAction(confirmAction)
+        newTeamCreator.addAction(cancelAction)
+        self.present(newTeamCreator, animated: true, completion: nil)
     }
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
-            //keyboardType = UIKeyboardType.numberPad
             firebase?.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
             firebase?.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }
