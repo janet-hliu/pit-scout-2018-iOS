@@ -54,10 +54,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
     
+    
     //MARK: Setup
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Auto Timer", style: .plain, target: self, action: #selector(performSegue(withIdentifier: "TimerSegue", sender: self.navigationItem.rightBarButtonItem)))
         
         // Dismisses keyboard when tapping outside of keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))

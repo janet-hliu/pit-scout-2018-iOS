@@ -238,10 +238,8 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Selected Image Key" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-Cz-N0g">
                                                 <rect key="frame" x="152" y="197" width="214" height="30"/>
-
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -255,10 +253,8 @@
                                                     <segment title="Other"/>
                                                 </segments>
                                             </segmentedControl>
-
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Maximum Scoring Height (Ft, In)" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tbg-O8-iHv">
                                                 <rect key="frame" x="114" y="235" width="252" height="30"/>
-
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
@@ -281,10 +277,8 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Available Weight" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PD1-VW-55n">
                                                 <rect key="frame" x="154" y="159" width="212" height="30"/>
-
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
@@ -470,11 +464,30 @@
                         <outlet property="scrollView" destination="qah-pQ-L5G" id="H2y-Wr-Rjb"/>
                         <outlet property="selectedImageTextField" destination="Teg-Cz-N0g" id="C7y-gZ-pZM"/>
                         <outlet property="viewImageButton" destination="tQ6-hx-Xci" id="7ew-HQ-tKw"/>
+                        <segue destination="g9E-hr-dmP" kind="show" identifier="TimerSegue" id="TuE-yt-RxM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2da-iZ-Fh7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1053.5999999999999" y="-60.26986506746627"/>
+            <point key="canvasLocation" x="1106" y="-12"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="GMO-iZ-uXb">
+            <objects>
+                <viewController id="g9E-hr-dmP" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oK5-4B-z5e"/>
+                        <viewControllerLayoutGuide type="bottom" id="a0Q-Ud-lt6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xe5-yH-Mq1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uus-qq-6dD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2054" y="-193"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
