@@ -514,14 +514,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    /*func textFieldDidBeginEditing(_ textField: UITextField) {
-        activeField = textField
-        didEnterTextField = true
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        didEnterTextField = false
-        didLeaveTextField = true
-    }*/
     
     func textViewShouldBeginEditing(_ textView: UITextView) {
         activeView = textView
