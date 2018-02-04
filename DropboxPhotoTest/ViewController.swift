@@ -28,6 +28,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!
     
+    @IBAction func AutoTimerSegue(_ sender: UIButton) {
+    }
     
     var photoManager : PhotoManager!
     var number : Int!
@@ -59,8 +61,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Auto Timer", style: .plain, target: self, action: #selector(performSegue(withIdentifier: "TimerSegue", sender: self.navigationItem.rightBarButtonItem)))
         
         // Dismisses keyboard when tapping outside of keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
