@@ -43,7 +43,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [String] = ["pitSelectedImage", "pitAllImageURLs", "pitAvailableWeight", "pitDriveTrain", "pitImageKeys", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage", "pitClimberType", "pitMaxHeight", "pitAutoRunTime"]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]]
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -85,11 +85,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         deleteImageButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
-        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 2, neededType: NeededType.Int)
+        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
         
         self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
-        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 9, neededType: NeededType.Float)
+        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
         
         self.getInitialValue(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
             self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
@@ -160,7 +160,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
     }
     
-    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, neededType: NeededType) {
         self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
             self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
         })
@@ -294,8 +294,29 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let dataKey: String! = dataKeys[textField.tag]
-        self.ourTeam.child(dataKey).setValue(Int(textField.text!))
+        let dataKeyArray: [String: NeededType] = dataKeys[textField.tag]
+        var dataKey: String!
+        var neededType: NeededType!
+        for (key, value) in dataKeyArray{
+            dataKey = key
+            neededType = value
+        }
+        
+        switch neededType {
+            
+        case .Int:
+            self.ourTeam.child(dataKey).setValue(Int(textField.text!))
+        case .Float:
+            self.ourTeam.child(dataKey).setValue(Float(textField.text!))
+        case .Bool:
+           self.ourTeam.child(dataKey).setValue(Bool(textField.text!))
+        case .String:
+            self.ourTeam.child(dataKey).setValue(textField.text!)
+        case .none:
+            print("This should never happen. Switch has case .none")
+        case .some(_):
+            print("This should never happen. Switch has case .some")
+        }
     }
     
     @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
