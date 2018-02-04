@@ -75,6 +75,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        let swipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        swipe.cancelsTouchesInView = false
+        view.addGestureRecognizer(swipe)
+        
         // To recognize different types of taps on addImageButton
         let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
         let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
@@ -514,7 +518,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    
     func textViewShouldBeginEditing(_ textView: UITextView) {
         activeView = textView
         didEnterTextView = true
@@ -529,7 +532,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @objc func keyboardWillShow(notification: NSNotification) {
         if didEnterTextView == true {
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                if self.view.frame.origin.y == 0{
+                if self.view.frame.origin.y == 0 {
                     self.view.frame.origin.y -= keyboardSize.height
                     didEnterTextView = false
                 }
@@ -542,7 +545,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if didLeaveTextView == true {
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 if self.view.frame.origin.y != 0 {
-                    self.view.frame.origin.y = keyboardSize.height
+                    self.view.frame.origin.y = 0
                     didLeaveTextView = false
                 }
             }
