@@ -28,6 +28,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!
     
+    @IBAction func AutoTimerSegue(_ sender: UIButton) {
+    }
+    
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
@@ -52,6 +55,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
+    
     
     //MARK: Setup
     
