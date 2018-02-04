@@ -13,20 +13,20 @@ import FirebaseStorage
 import Haneke
 import MWPhotoBrowser
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, MWPhotoBrowserDelegate {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, UITextViewDelegate, MWPhotoBrowserDelegate {
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var viewImageButton: UIButton!
     @IBOutlet weak var deleteImageButton: UIButton!
-    @IBOutlet weak var availableWeightTextField: UITextField!
-    @IBOutlet weak var selectedImageTextField: UITextField!
-    @IBOutlet weak var maxHeightTextField: UITextField!
+    @IBOutlet weak var availableWeightTextField: UITextField! { didSet { availableWeightTextField.delegate = self } }
+    @IBOutlet weak var selectedImageTextField: UITextField! { didSet { selectedImageTextField.delegate = self } }
+    @IBOutlet weak var maxHeightTextField: UITextField! { didSet { maxHeightTextField.delegate = self } }
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
-    @IBOutlet weak var SEALsNotesTextView: UITextView!
+    @IBOutlet weak var SEALsNotesTextView: UITextView! { didSet { SEALsNotesTextView.delegate = self } }
     
     var photoManager : PhotoManager!
     var number : Int!
@@ -43,7 +43,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]]
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-    
+    var didEnterTextField : Bool?
+    var didLeaveTextField : Bool?
+    var didEnterTextView : Bool?
+    var didLeaveTextView : Bool?
     var activeField : UITextField? {
         didSet {
             scrollPositionBeforeScrollingToTextField = scrollView.contentOffset.y
@@ -52,6 +55,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
+    
+    var activeView : UITextView? {
+        didSet {
+            scrollPositionBeforeScrollingToTextView = scrollView.contentOffset.y
+            print(scrollPositionBeforeScrollingToTextView)
+            self.scrollView.scrollRectToVisible((activeView?.frame)!, animated: true)
+        }
+    }
+    var scrollPositionBeforeScrollingToTextView : CGFloat = 0
     
     //MARK: Setup
     
@@ -108,6 +120,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setTextView(textView: self.SEALsNotesTextView, initialValue: initialValue! as! String, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
             print(initialValue!)
         })
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         /*
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
@@ -493,24 +509,52 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField)
-    {
+    func textViewShouldReturn(_ textView: UITextView) -> Bool { // So that the scroll view can scroll so you can see the text field you are editing
+        textView.resignFirstResponder()
+        return true
+    }
+    
+    /*func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField
+        didEnterTextField = true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        didEnterTextField = false
+        didLeaveTextField = true
+    }*/
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) {
+        activeView = textView
+        didEnterTextView = true
     }
     
-    func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
-        guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = value.cgRectValue
-        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
-        scrollView.contentInset.bottom += adjustmentHeight
-        scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
+    func textViewShouldEndEditing(_ textView: UITextView) {
+        didLeaveTextView = true
     }
     
-    func keyboardWillShow(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if didEnterTextView == true {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                if self.view.frame.origin.y == 0{
+                    self.view.frame.origin.y -= keyboardSize.height
+                    didEnterTextView = false
+                }
+            }
+        }
     }
-    func keyboardWillHide(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+        
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if didLeaveTextView == true {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                if self.view.frame.origin.y != 0 {
+                    self.view.frame.origin.y = keyboardSize.height
+                    didLeaveTextView = false
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
