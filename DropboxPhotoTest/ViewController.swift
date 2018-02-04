@@ -28,6 +28,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!
     
+    var TimerArray: [Float] = []
+    
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
     
@@ -43,7 +45,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTimes": .Float]]
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -143,6 +145,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.teamsList.set(value: [String]().asData(), key: "teams")
             }
         })
+        
+        ourTeam.observeSingleEvent(of: .value) { (snapshot) in
+            for i in snapshot.childSnapshot(forPath: "pitAutoRunTimes").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Float {
+                    self.TimerArray.append(unwrapped)
+                }
+            }
+        }
     }
     
     enum NeededType {
@@ -576,6 +586,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AutoTimerSegue" {
+            if let dest = segue.destination as? TimerViewController {
+                dest.ourTeam = self.ourTeam
+                dest.TimerArray = self.TimerArray
+            }
+        }
+    }
+    
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -614,6 +633,7 @@ extension Dictionary {
          return "Not of Type [String: String], so cannot use FIRJSONString."
          }*/
     }
+    
 }
 
 extension Array : DataConvertible, DataRepresentable {
