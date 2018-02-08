@@ -32,7 +32,8 @@
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5BE05C022019838A007539F8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BE05C012019838A007539F8 /* GoogleService-Info.plist */; };
 		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
-		98EBE1532027B7B1009BF60F /* TimerCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EBE1522027B7B1009BF60F /* TimerCellTableViewCell.swift */; };
+		98EBE1562027D550009BF60F /* TimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EBE1542027D550009BF60F /* TimerTableViewCell.swift */; };
+		98EBE1572027D550009BF60F /* TimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98EBE1552027D550009BF60F /* TimerTableViewCell.xib */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -95,7 +96,8 @@
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
-		98EBE1522027B7B1009BF60F /* TimerCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerCellTableViewCell.swift; sourceTree = "<group>"; };
+		98EBE1542027D550009BF60F /* TimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTableViewCell.swift; sourceTree = "<group>"; };
+		98EBE1552027D550009BF60F /* TimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimerTableViewCell.xib; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -164,9 +166,10 @@
 			isa = PBXGroup;
 			children = (
 				192BEAC51C3463B900992A8A /* Main.storyboard */,
-				98EBE1522027B7B1009BF60F /* TimerCellTableViewCell.swift */,
 				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
+				98EBE1542027D550009BF60F /* TimerTableViewCell.swift */,
+				98EBE1552027D550009BF60F /* TimerTableViewCell.xib */,
 				98991CAB20262E460095A64C /* TimerViewController.swift */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
 				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
@@ -352,6 +355,7 @@
 				19F317621DC9A400008EBFAD /* PSUISwitchViewController.xib in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
 				19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */,
+				98EBE1572027D550009BF60F /* TimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -430,9 +434,9 @@
 				192BEAC41C3463B900992A8A /* ViewController.swift in Sources */,
 				98991CAC20262E460095A64C /* TimerViewController.swift in Sources */,
 				1909B1A11C9B9693004F5E7E /* MissingDataViewController.swift in Sources */,
+				98EBE1562027D550009BF60F /* TimerTableViewCell.swift in Sources */,
 				19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */,
 				194587941C7D326D00507019 /* PhotoLibrarySaver.swift in Sources */,
-				98EBE1532027B7B1009BF60F /* TimerCellTableViewCell.swift in Sources */,
 				19A286201C6916160039C0A4 /* PhotoManagement.swift in Sources */,
 				192BEAC21C3463B900992A8A /* AppDelegate.swift in Sources */,
 				19855CB51E130D83009E97B5 /* Reachability.swift in Sources */,

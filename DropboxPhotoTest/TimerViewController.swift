@@ -13,14 +13,16 @@ import FirebaseStorage
 class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var cells = 2
+        var cells = 0
+        cells = (self.TimerArray?.count)!
         //CODE TO FIND HOW MANY CELLS YOU NEED
         return cells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TimerCell", for: indexPath) as! TimerCellTableViewCell
-        cell.label.text = String(describing: self.TimerArray![indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TimerCell", for: indexPath) as! TimerTableViewCell
+        cell.value.text = "\(String(describing: self.TimerArray![indexPath.row])) sec"
+        cell.dataPoint.text = "Data Point \(String(describing: indexPath.row + 1))"
         return cell
     }
     
@@ -89,7 +91,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
    @IBAction func SubmitButton(_ sender: AnyObject) {
-        if StartStopButton.currentTitle as String! == "Start" {
+        if StartStopButton.currentTitle as String! == "Start" && Float(count) != 0 {
             let AutoRunTime = Float(count) / 100
             print("number of total seconds is \(AutoRunTime)")
             TimerArray?.append(AutoRunTime)
@@ -97,8 +99,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             clearTimer()
             self.viewDidLoad()
         }else{
-            print("Timer is still running. Don't do that.")
-            print(StartStopButton.currentTitle as String!)
+            print("Don't do that.")
     }
     }
     
@@ -109,7 +110,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.table.register(UINib(nibName: "TimerCellTableViewCell", bundle: nil), forCellReuseIdentifier: "TimerCell")
+        self.table.register(UINib(nibName: "TimerTableViewCell", bundle: nil), forCellReuseIdentifier: "TimerCell")
         self.table.delegate = self
         self.table.dataSource = self
         self.table.reloadData()
