@@ -28,6 +28,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView! { didSet { SEALsNotesTextView.delegate = self } }
     
+    @IBAction func AutoTimerSegue(_ sender: UIButton) {
+    }
+    
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
