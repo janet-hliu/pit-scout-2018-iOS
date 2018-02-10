@@ -87,19 +87,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
         
-        self.getInitialValue(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
-        })
+        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
         
-        self.getInitialValue(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.driveTrainSegControl, initialValue: initialValue! as! String)
-        })
+        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
         
-        self.getInitialValue(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
-        })
-        
-
+        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
+    
         self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
@@ -156,10 +149,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
     }
     
-    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, neededType: NeededType) {
-        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int) {
+        self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
             self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
         })
+        elementName.tag = dataKeyIndex
         elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for:.valueChanged)
     }
     
@@ -243,10 +237,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func writeToFirebase(dataKey: String, UIElement: Any) {
-        firebase.child("Teams").child(String(describing: ourTeam)).child(dataKey).setValue(UIElement)
-    }
-    
     /**
      This function makes a new photo browser for viewing photos.
      */
@@ -297,17 +287,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             dataKey = key
             neededType = value
         }
+        var userInput = textField.text!
+        if userInput == "" {
+            userInput = "0"
+        }
         
         switch neededType {
             
         case .Int:
-            self.ourTeam.child(dataKey).setValue(Int(textField.text!))
+            self.ourTeam.child(dataKey).setValue(Int(userInput)!)
         case .Float:
-            self.ourTeam.child(dataKey).setValue(Float(textField.text!))
+            self.ourTeam.child(dataKey).setValue(Float(userInput)!)
         case .Bool:
-           self.ourTeam.child(dataKey).setValue(Bool(textField.text!))
+           self.ourTeam.child(dataKey).setValue(Bool(userInput)!)
         case .String:
-            self.ourTeam.child(dataKey).setValue(textField.text!)
+            self.ourTeam.child(dataKey).setValue(userInput)
         case .none:
             print("This should never happen. Switch has case .none")
         case .some(_):
@@ -316,8 +310,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
-        
+        let dataKeyArray: [String: NeededType] = dataKeys[segmentedControl.tag]
+        var dataKey: String!
+        for (key, _) in dataKeyArray{
+            dataKey = key
+        }
+        print(self.ourTeam.value(forKey: "name") as? String)
+        let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
+        self.ourTeam.child(dataKey).setValue(userInput)
     }
+    
     //Setting up photo browser
     func setUpPhotoBrowser() {
         self.makeNewBrowser(done: { browser in
