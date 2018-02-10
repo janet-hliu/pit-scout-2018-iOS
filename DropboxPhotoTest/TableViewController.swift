@@ -274,8 +274,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         teamName = "Offseason Bot"
                     }
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    if imageURLs.count != imageKeys.count {
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
@@ -284,7 +284,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
                     } else {
                         cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                        if imageURLs.count != 0 && imageURLs.count == imageKeys.count {
+                        if imageURLs.count != 0 && imageURLs.count == pitImageKeys.count {
                             cell.textLabel!.textColor = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
                         }
                     }
@@ -311,8 +311,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         teamName = "Offseason Bot"
                     }
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    if imageURLs.count != imageKeys.count {
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
@@ -321,7 +321,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
                     } else {
                         cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                        if imageURLs.count != 0 && imageURLs.count == imageKeys.count {
+                        if imageURLs.count != 0 && imageURLs.count == pitImageKeys.count {
                             cell.textLabel!.textColor = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
                         }
                     }
