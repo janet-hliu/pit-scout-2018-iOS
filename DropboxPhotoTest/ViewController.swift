@@ -97,6 +97,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
     
+        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
         self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
@@ -158,13 +159,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
         })
         elementName.tag = dataKeyIndex
-        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for:.valueChanged)
+        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for: .valueChanged)
     }
     
-    func setUpSwitch(elementName: UISwitch, dataKey: String, neededType: NeededType) {
+    func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
+        self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
+            if initialValue as! Bool == true {
+                elementName.setOn(true, animated: false)
+            } else {
+                elementName.setOn(false, animated: false)
+            }
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(switchValueChanged(_:)), for: UIControlEvents.valueChanged)
     }
     
-    func setUpTextView(elementName: UITextView, dataKey: String, neededType: NeededType) {
+    func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int) {
     }
     
     // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
@@ -321,6 +331,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
         self.ourTeam.child(dataKey).setValue(userInput)
+    }
+    
+    @objc func switchValueChanged(_ switchElement: UISwitch) {
+        let dataKeyArray: [String: NeededType] = dataKeys[switchElement.tag]
+        var dataKey: String!
+        for (key, _) in dataKeyArray{
+            dataKey = key
+        }
+        var userInput: Bool
+        if switchElement.isOn{
+            userInput = true
+        } else {
+            userInput = false
+        }
+        self.ourTeam.child(dataKey).setValue(userInput)
+    }
+    
+    @objc func textViewValueChanged(_ textView: UITextView) {
+        
     }
     
     //Setting up photo browser
