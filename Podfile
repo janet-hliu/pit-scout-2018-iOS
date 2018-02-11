@@ -28,7 +28,10 @@ target 'DropboxPhotoTest' do
         pod 'Firebase/Storage'
         project 'Pods/Pods.xcodeproj'
     end
-
+    target 'DropboxPhotoTestTests' do
+        inherit! :search_paths
+        pod 'Firebase'
+    end
 
     pod 'Firebase/Core'
     pod 'Firebase/Storage'
