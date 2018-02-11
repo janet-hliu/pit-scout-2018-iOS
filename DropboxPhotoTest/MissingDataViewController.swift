@@ -20,7 +20,7 @@ class MissingDataViewController : UIViewController {
     
     let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes"]
     
-    let ignoreKeys = ["imageKeys", "pitAllImageURLs"]
+    let ignoreKeys = ["pitImageKeys", "pitAllImageURLs"]
     
     override func viewWillAppear(_ animated: Bool) {
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100
