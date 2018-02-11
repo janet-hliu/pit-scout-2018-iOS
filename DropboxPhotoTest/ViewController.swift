@@ -13,7 +13,9 @@ import FirebaseStorage
 import Haneke
 import MWPhotoBrowser
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, UITextViewDelegate, MWPhotoBrowserDelegate {
+
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, MWPhotoBrowserDelegate, UITextViewDelegate {
+
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var addImageButton: UIButton!
@@ -27,6 +29,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView! { didSet { SEALsNotesTextView.delegate = self } }
+    
+    @IBAction func AutoTimerSegue(_ sender: UIButton) {
+    }
     
     var photoManager : PhotoManager!
     var number : Int!
@@ -56,6 +61,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
     
+
     var activeView : UITextView? {
         didSet {
             scrollPositionBeforeScrollingToTextView = scrollView.contentOffset.y
@@ -64,6 +70,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     var scrollPositionBeforeScrollingToTextView : CGFloat = 0
+
     
     //MARK: Setup
     
@@ -99,19 +106,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
         
-        self.getInitialValue(dataKey: "pitProgrammingLanguage", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.programmingLanguageSegControl, initialValue: initialValue! as! String)
-        })
+        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
         
-        self.getInitialValue(dataKey: "pitDriveTrain", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.driveTrainSegControl, initialValue: initialValue! as! String)
-        })
+        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
         
-        self.getInitialValue(dataKey: "pitClimberType", neededType: NeededType.String, done: { initialValue in
-            self.setSelectedSegment(segControl: self.climberTypeSegControl, initialValue: initialValue! as! String)
-        })
-        
-
+        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
+    
+        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
         self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
@@ -125,7 +126,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         /*
+
+        SEALsNotesTextView.delegate = self
         
+        /*
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             // UI Elements
             for childViewController in self.childViewControllers {
@@ -164,27 +168,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case String
     }
     
-    func setUpTextField(elementName: UITextField, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
-        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
-            self.setInitialText(textField: elementName, initialValue: initialValue!)
-        })
-        elementName.tag = dataKeyIndex
-        elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
-    }
-    
-    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, neededType: NeededType) {
-        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
-            self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
-        })
-        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for:.valueChanged)
-    }
-    
-    func setUpSwitch(elementName: UISwitch, dataKey: String, neededType: NeededType) {
-    }
-    
-    func setUpTextView(elementName: UITextView, dataKey: String, neededType: NeededType) {
-    }
-    
     // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
     func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
         var initialValue: Any?
@@ -207,6 +190,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
             done(initialValue)
         })
+    }
+    
+    func setUpTextField(elementName: UITextField, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
+        self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
+            self.setInitialText(textField: elementName, initialValue: initialValue!)
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: UIControlEvents.editingChanged)
+    }
+    
+    func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int) {
+        self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
+            self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(ViewController.segmentedControlValueChanged(_:)), for: .valueChanged)
+    }
+    
+    func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
+        self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
+            if initialValue as! Bool == true {
+                elementName.setOn(true, animated: false)
+            } else {
+                elementName.setOn(false, animated: false)
+            }
+        })
+        elementName.tag = dataKeyIndex
+        elementName.addTarget(self, action: #selector(switchValueChanged(_:)), for: UIControlEvents.valueChanged)
     }
     
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
@@ -259,9 +270,81 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func writeToFirebase(dataKey: String, UIElement: Any) {
-        firebase.child("Teams").child(String(describing: ourTeam)).child(dataKey).setValue(UIElement)
+    
+    // Setting up viewImageButton
+    @objc func didNormalTapViewImage(_ sender: UIGestureRecognizer) {
+        self.deleteImagePhotoBrowser = false
+        setUpPhotoBrowser()
     }
+    
+    //Setting up deleteImageButton
+    @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
+        self.deleteImagePhotoBrowser = true
+        setUpPhotoBrowser()
+    }
+    
+    @objc func textFieldValueChanged(_ textField: UITextField) {
+        let dataKeyArray: [String: NeededType] = dataKeys[textField.tag]
+        var dataKey: String!
+        var neededType: NeededType!
+        for (key, value) in dataKeyArray{
+            dataKey = key
+            neededType = value
+        }
+        var userInput = textField.text!
+        if userInput == "" {
+            userInput = "0"
+        }
+        
+        switch neededType {
+            
+        case .Int:
+            self.ourTeam.child(dataKey).setValue(Int(userInput)!)
+        case .Float:
+            self.ourTeam.child(dataKey).setValue(Float(userInput)!)
+        case .Bool:
+           self.ourTeam.child(dataKey).setValue(Bool(userInput)!)
+        case .String:
+            self.ourTeam.child(dataKey).setValue(userInput)
+        case .none:
+            print("This should never happen. Switch has case .none")
+        case .some(_):
+            print("This should never happen. Switch has case .some")
+        }
+    }
+    
+    @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
+        let dataKeyArray: [String: NeededType] = dataKeys[segmentedControl.tag]
+        var dataKey: String!
+        for (key, _) in dataKeyArray{
+            dataKey = key
+        }
+        let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
+        self.ourTeam.child(dataKey).setValue(userInput)
+    }
+    
+    @objc func switchValueChanged(_ switchElement: UISwitch) {
+        let dataKeyArray: [String: NeededType] = dataKeys[switchElement.tag]
+        var dataKey: String!
+        for (key, _) in dataKeyArray{
+            dataKey = key
+        }
+        var userInput: Bool
+        if switchElement.isOn{
+            userInput = true
+        } else {
+            userInput = false
+        }
+        self.ourTeam.child(dataKey).setValue(userInput)
+    }
+    
+    //THIS CODE NEEDS TO BE ABSTRACTED, make it so you can delete default text
+    
+    func textViewDidChange(_ textView: UITextView) {
+        self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
+    }
+    
+    //MARK: Photo Browser
     
     /**
      This function makes a new photo browser for viewing photos.
@@ -280,8 +363,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         done(browser)
     }
     
-    //MARK: Photo Browser
-    
     /** This function allows access to the camera if button is tapped once
      */
     // Normal single tap to access camera
@@ -293,51 +374,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.present(picker, animated: true, completion: nil)
     }
     
-    // Setting up viewImageButton
-    @objc func didNormalTapViewImage(_ sender: UIGestureRecognizer) {
-        self.deleteImagePhotoBrowser = false
-        setUpPhotoBrowser()
-    }
-    
-    //Setting up deleteImageButton
-    @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
-         self.deleteImagePhotoBrowser = true
-        setUpPhotoBrowser()
-    }
-    
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        let dataKeyArray: [String: NeededType] = dataKeys[textField.tag]
-        var dataKey: String!
-        var neededType: NeededType!
-        for (key, value) in dataKeyArray{
-            dataKey = key
-            neededType = value
-        }
-        
-        switch neededType {
-            
-        case .Int:
-            self.ourTeam.child(dataKey).setValue(Int(textField.text!))
-        case .Float:
-            self.ourTeam.child(dataKey).setValue(Float(textField.text!))
-        case .Bool:
-           self.ourTeam.child(dataKey).setValue(Bool(textField.text!))
-        case .String:
-            self.ourTeam.child(dataKey).setValue(textField.text!)
-        case .none:
-            print("This should never happen. Switch has case .none")
-        case .some(_):
-            print("This should never happen. Switch has case .some")
-        }
-    }
-    
-    @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
-        
-    }
     //Setting up photo browser
     func setUpPhotoBrowser() {
         self.makeNewBrowser(done: { browser in
-            let imageURLs = self.ourTeam.child("imageKeys")
+            let imageURLs = self.ourTeam.child("pitImageKeys")
             imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                 if snap.childrenCount == 0 {
                     // If no photos in firebase for team
@@ -380,7 +420,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             // Pulling images from cache and firebase
             self.photos.removeAll()
-            let imageKeysArray = snap.childSnapshot(forPath: "imageKeys").value as? NSDictionary
+            let imageKeysArray = snap.childSnapshot(forPath: "pitImageKeys").value as? NSDictionary
             if imageKeysArray != nil {
                 for imageKey in imageKeysArray!.allValues {
                     // Use imageKey to find corresponding image in imageCache
@@ -427,7 +467,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if self.deleteImagePhotoBrowser == false {
                 // Since deleteImagePhotoBrowser is false, the user must be in the photo browser to view images - they want to set the selected image
                 self.dismiss(animated: true, completion: nil)
-                ourTeam.child("imageKeys").observeSingleEvent(of: .value, with: { (snap) -> Void in
+                ourTeam.child("pitImageKeys").observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
                         //MAY FIX
@@ -443,13 +483,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.dismiss(animated: true, completion: nil)
                 // Deleting images from firebase database, but not from firebase storage
                 ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let imageKeysDict = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    let imageKeysDict = snap.childSnapshot(forPath: "pitImageKeys").value as! NSDictionary
                     let caption = photoBrowser.photo(at: index).caption!()
                     for (key, date) in imageKeysDict {
                         if date as? String == caption {
                             // Removing photo from image cache
                             self.photoManager.imageCache.remove(key: date as! String)
-                            self.ourTeam.child("imageKeys").child(key as! String).removeValue()
+                            self.ourTeam.child("pitImageKeys").child(key as! String).removeValue()
                             let currentSelectedImageName = snap.childSnapshot(forPath: "pitSelectedImage").value as? String
                             // If deleted image is also selected image, delete key value on firebase
                             if currentSelectedImageName == date as? String {
@@ -509,6 +549,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
+
     func textViewShouldReturn(_ textView: UITextView) -> Bool { // So that the scroll view can scroll so you can see the text field you are editing
         textView.resignFirstResponder()
         return true
@@ -526,13 +567,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func textViewShouldBeginEditing(_ textView: UITextView) {
         activeView = textView
         didEnterTextView = true
-    }
     
     func textViewShouldEndEditing(_ textView: UITextView) {
         didLeaveTextView = true
     }
-    
-    
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if didEnterTextView == true {
