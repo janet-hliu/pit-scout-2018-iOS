@@ -538,7 +538,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if didEnterTextView == true {
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 if self.view.frame.origin.y == 0{
-                    self.view.frame.origin.y -= keyboardSize.height
+                    self.view.frame.origin.y -= (keyboardSize.height * 1.1)
                     didEnterTextView = false
                 }
             }
@@ -550,7 +550,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if didLeaveTextView == true {
             if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
                 if self.view.frame.origin.y != 0 {
-                    self.view.frame.origin.y = keyboardSize.height
+                    self.view.frame.origin.y = 0
                     didLeaveTextView = false
                 }
             }
