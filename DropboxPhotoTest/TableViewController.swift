@@ -17,16 +17,17 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     let cellReuseId = "teamCell"
     @IBAction func addTeam(_ sender: UIButton) {
-        showInputDialog()
+        addTeamDialogue()
     }
     
     func addATeam() {
-        if teamName != nil && teamNum != nil {
+        if teamName != nil && teamName != "" && teamNum != nil {
             self.teamAdder(self.teamNum!, self.teamName!)
         } else {
-            print("This should not happen. addATeam is funking things up.")
+            print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
         }
     }
+    
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
@@ -46,10 +47,13 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-temp.appspot.com/")
+        //You can select once we are done setting up the photo uploader object
+        self.tableView.allowsSelection = false
+        
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-temp.appspot.com/")
+        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(TableViewController.didLongPress(_:)))
         self.tableView.addGestureRecognizer(longPress)
         
@@ -58,8 +62,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         self.firebase = Database.database().reference()
         
-        self.firebase!.observe(.value, with: { (snapshot) in
-            self.setup(snapshot.childSnapshot(forPath: "Teams"))
+        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
+            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
+                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+            })
         })
         
         setupphotoManager()
@@ -81,7 +87,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
         }
-        updateTeams()
+        
         let teamsDatabase: NSDictionary = td ?? snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
@@ -105,44 +111,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         
         self.tableView.reloadData()
-        self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
-            let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
-            var cacheTeams: [Int] = []
-            var firebaseTeams: [Int] = []
-            for i in 0..<cacheScoutedTeamInfo.count {
-                let teamInfo = cacheScoutedTeamInfo[i]
-                cacheTeams.append(teamInfo["num"]!)
-            }
-            for i in 0..<self.scoutedTeamInfo.count {
-                let teamInfo = self.scoutedTeamInfo[i]
-                firebaseTeams.append(teamInfo["num"]!)
-            }
-            // If the teams in the cache are the same as the teams on Firebase, use the information inside the cache to update the table view
-            if Set(cacheTeams) == Set(firebaseTeams) {
-                self.scoutedTeamInfo = cacheScoutedTeamInfo
-            } else {
-                // Some or all teams have changed on Firebase, but if there are any identical teams, we want to keep the data on that team
-                let commonTeamSet = Set(cacheTeams).intersection(Set(firebaseTeams))
-                var commonTeams = Array(commonTeamSet)
-                firebaseTeams = firebaseTeams.filter { !commonTeams.contains($0) }
-                // Appending the cached information about the common teams
-                self.scoutedTeamInfo = self.scoutedTeamInfo.filter { !commonTeams.contains($0["num"]!) }
-                for i in 0..<commonTeams.count {
-                    // Add cached info to cacheScoutedTeamInfo
-                    let teamDictionary = cacheScoutedTeamInfo.filter { $0["num"] == commonTeams[i] }
-                    self.scoutedTeamInfo.append(teamDictionary[0])
-                }
-            }
-            // Sorts the scouted teams into numerical order
-            self.scoutedTeamInfo.sort {
-                $0["num"]! < $1["num"]!
-            }
-            self.tableView.reloadData()
-        })
+        updateTeams()
     }
     
     func updateTeams() {
-         print("Updating teams")
+         print("Updating teams and cache")
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             var cacheTeams: [Int] = []
@@ -196,7 +169,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         return 2 //One section is for checked cells, the other unchecked
     }
     
-    func showInputDialog() {
+    func addTeamDialogue() {
         //Creating UIAlertController and setting title and message for the alert dialog
         let newTeamCreator = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
         newTeamCreator.addTextField { (textField) in
@@ -222,8 +195,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
-            firebase?.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
-            firebase?.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
+            firebase!.child("TeamsList").observeSingleEvent(of: .value, with: { (teamsListSnapshot) in
+                let teamsList = teamsListSnapshot.value as! [Int]
+                self.firebase!.child("TeamsList").child(String(teamsList.count)).setValue(teamNum)
+            })
+            firebase!.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
+            firebase!.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }
     }
     

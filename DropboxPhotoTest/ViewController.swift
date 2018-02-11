@@ -146,7 +146,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setInitialText(textField: elementName, initialValue: initialValue!)
         })
         elementName.tag = dataKeyIndex
-        elementName.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
+        elementName.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: UIControlEvents.editingChanged)
     }
     
     func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int) {
@@ -279,7 +279,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         setUpPhotoBrowser()
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldValueChanged(_ textField: UITextField) {
         let dataKeyArray: [String: NeededType] = dataKeys[textField.tag]
         var dataKey: String!
         var neededType: NeededType!
@@ -315,7 +315,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         for (key, _) in dataKeyArray{
             dataKey = key
         }
-        print(self.ourTeam.value(forKey: "name") as? String)
         let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
         self.ourTeam.child(dataKey).setValue(userInput)
     }
@@ -493,11 +492,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func textFieldShouldReturn(_ textField: UITextField) -> Bool { // So that the scroll view can scroll so you can see the text field you are editing
         textField.resignFirstResponder()
         return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField)
-    {
-        activeField = textField
     }
     
     func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
