@@ -193,7 +193,7 @@ class PhotoManager : NSObject {
                         }).onFailure({ Void in
                             self.backgroundQueue.async {
                                 // Loops back through keysArray, removing any keys that do not fetch an image
-                                self.removeFromFirebase(dataToRemove: keysArray[self.keyIndex], teamNum: teamNum, keyToRemove: "imageKeys")
+                                self.removeFromFirebase(dataToRemove: keysArray[self.keyIndex], teamNum: teamNum, keyToRemove: "pitImageKeys")
                                 keysArray.remove(at: self.keyIndex)
                                 self.keyIndex += 1
                                 self.photoManagerSleep(time: 60)
@@ -238,7 +238,7 @@ class PhotoManager : NSObject {
     */
     func removeFromFirebase(dataToRemove: Any, teamNum: Int, keyToRemove: String) {
         teamsFirebase.child(String(teamNum)).observeSingleEvent(of: .value, with: { (snap) in
-            if keyToRemove == "imageKeys" || keyToRemove == "pitAllImageURLs"{
+            if keyToRemove == "pitImageKeys" || keyToRemove == "pitAllImageURLs"{
                 // This should only every be called when the app crashes, and the key cache and firebase store an image key, but no image has been stored in the image cache.
                 //dataToChange is a dictionary of arrays [[randomnKey: value], [randomnKey: value]]
                 var dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [[String: String]]
@@ -273,7 +273,7 @@ class PhotoManager : NSObject {
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
         })
-        let currentImageKeys = teamsFirebase.child("\(number)").child("imageKeys")
+        let currentImageKeys = teamsFirebase.child("\(number)").child("pitImageKeys")
         currentImageKeys.childByAutoId().setValue(key)
     }
     
