@@ -13,7 +13,7 @@ import FirebaseStorage
 import Haneke
 import MWPhotoBrowser
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, MWPhotoBrowserDelegate {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIScrollViewDelegate, MWPhotoBrowserDelegate, UITextViewDelegate {
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var addImageButton: UIButton!
@@ -102,12 +102,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
         })
         
-        self.getInitialValue(dataKey: "pitSEALsNotes", neededType: NeededType.String, done: { initialValue in
-            self.setTextView(textView: self.SEALsNotesTextView, initialValue: initialValue! as! String, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
-            print(initialValue!)
-        })
-        /*
+        SEALsNotesTextView.delegate = self
         
+        /*
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             // UI Elements
             for childViewController in self.childViewControllers {
@@ -146,6 +143,30 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case String
     }
     
+    // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
+    func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
+        var initialValue: Any?
+        self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
+            
+            switch neededType {
+                
+            case .Int:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
+            case .Float:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Float ?? "No current value"
+            case .Bool:
+                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
+            case .String:
+                if let a = snap.childSnapshot(forPath: dataKey).value as? String, snap.childSnapshot(forPath: dataKey).value as? String != "" {
+                    initialValue = a
+                } else {
+                    initialValue = "No current value"
+                }
+            }
+            done(initialValue)
+        })
+    }
+    
     func setUpTextField(elementName: UITextField, dataKey: String, dataKeyIndex: Int, neededType: NeededType) {
         self.getInitialValue(dataKey: dataKey, neededType: neededType, done: { initialValue in
             self.setInitialText(textField: elementName, initialValue: initialValue!)
@@ -172,33 +193,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         elementName.tag = dataKeyIndex
         elementName.addTarget(self, action: #selector(switchValueChanged(_:)), for: UIControlEvents.valueChanged)
-    }
-    
-    func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int) {
-    }
-    
-    // This function gets a UI element's current value in Firebase. It is a function that prevents initialValue from being returned, until the asynchronous Firebase observation is completed.
-    func getInitialValue(dataKey: String, neededType: NeededType, done: @escaping (_ initialValue : Any?) ->()) {
-        var initialValue: Any?
-        self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-            
-            switch neededType {
-                
-            case .Int:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
-            case .Float:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? Float ?? "No current value"
-            case .Bool:
-                initialValue = snap.childSnapshot(forPath: dataKey).value as? Bool ?? "No current value"
-            case .String:
-                if let a = snap.childSnapshot(forPath: dataKey).value as? String, snap.childSnapshot(forPath: dataKey).value as? String != "" {
-                    initialValue = a
-                } else {
-                    initialValue = "No current value"
-                }
-            }
-            done(initialValue)
-        })
     }
     
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
@@ -251,35 +245,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    /**
-     This function makes a new photo browser for viewing photos.
-     */
-    // Formatting a new photo browser for viewing photos
-    func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
-        var browser = MWPhotoBrowser()
-        browser = MWPhotoBrowser.init(delegate: self)
-        
-        // browser options
-        browser.displayActionButton = false; // Show action button to allow sharing, copying, etc (defaults to YES)
-        browser.displayNavArrows = true; // Whether to display left and right nav arrows on toolbar (defaults to NO)
-        browser.displaySelectionButtons = true; // Whether selection buttons are shown on each image (defaults to NO)
-        browser.enableGrid = false; // Whether to allow the viewing of all the photo thumbnails on a grid (defaults to YES)
-        browser.autoPlayOnAppear = false; // Auto-play first video
-        done(browser)
-    }
-    
-    //MARK: Photo Browser
-    
-    /** This function allows access to the camera if button is tapped once
-     */
-    // Normal single tap to access camera
-    @objc func didNormalTapAddImage(_ sender: UIGestureRecognizer) {
-        self.notActuallyLeavingViewController = true
-        let picker = UIImagePickerController()
-        picker.sourceType = .camera
-        picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
-    }
     
     // Setting up viewImageButton
     @objc func didNormalTapViewImage(_ sender: UIGestureRecognizer) {
@@ -289,7 +254,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //Setting up deleteImageButton
     @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
-         self.deleteImagePhotoBrowser = true
+        self.deleteImagePhotoBrowser = true
         setUpPhotoBrowser()
     }
     
@@ -348,8 +313,40 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.child(dataKey).setValue(userInput)
     }
     
-    @objc func textViewValueChanged(_ textView: UITextView) {
+    //THIS CODE NEEDS TO BE ABSTRACTED, make it so you can delete default text
+    
+    func textViewDidChange(_ textView: UITextView) {
+        self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
+    }
+    
+    //MARK: Photo Browser
+    
+    /**
+     This function makes a new photo browser for viewing photos.
+     */
+    // Formatting a new photo browser for viewing photos
+    func makeNewBrowser (done: @escaping(_ browser: MWPhotoBrowser) -> ()) {
+        var browser = MWPhotoBrowser()
+        browser = MWPhotoBrowser.init(delegate: self)
         
+        // browser options
+        browser.displayActionButton = false; // Show action button to allow sharing, copying, etc (defaults to YES)
+        browser.displayNavArrows = true; // Whether to display left and right nav arrows on toolbar (defaults to NO)
+        browser.displaySelectionButtons = true; // Whether selection buttons are shown on each image (defaults to NO)
+        browser.enableGrid = false; // Whether to allow the viewing of all the photo thumbnails on a grid (defaults to YES)
+        browser.autoPlayOnAppear = false; // Auto-play first video
+        done(browser)
+    }
+    
+    /** This function allows access to the camera if button is tapped once
+     */
+    // Normal single tap to access camera
+    @objc func didNormalTapAddImage(_ sender: UIGestureRecognizer) {
+        self.notActuallyLeavingViewController = true
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
     }
     
     //Setting up photo browser
