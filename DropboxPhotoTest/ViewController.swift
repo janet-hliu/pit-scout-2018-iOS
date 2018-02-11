@@ -98,10 +98,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
     
         self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
-        self.getInitialValue(dataKey: "pitCanCheesecake", neededType: NeededType.Bool, done: { initialValue in
-            self.setSwitch(toggleSwitch: self.canCheesecakeSwitch, initialValue: initialValue as Any)
-        })
         
+        self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self
         
         /*
@@ -175,6 +173,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         elementName.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: UIControlEvents.editingChanged)
     }
     
+    func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int, placeHolder: String) {
+        self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
+            if initialValue as! String != "No current value" {
+                elementName.text = String(describing: initialValue)
+            } else {
+                elementName.textColor = self.white
+                elementName.backgroundColor = self.red
+                elementName.text = String(describing: placeHolder)
+            }
+        })
+        
+    }
+    
     func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int) {
         self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
             self.setSelectedSegment(segControl: elementName, initialValue: initialValue as! String)
@@ -220,31 +231,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             segControl.layer.cornerRadius = 5
         }
     }
-    
-    func setSwitch(toggleSwitch: UISwitch, initialValue: Any) {
-        if initialValue as? String != "No current value" {
-            if initialValue as! Bool == true {
-                toggleSwitch.setOn(true, animated: true)
-            } else {
-                toggleSwitch.setOn(false, animated: true)
-            }
-        } else {
-            toggleSwitch.tintColor = red
-            toggleSwitch.onTintColor = red
-            toggleSwitch.isOn = true
-        }
-    }
-    
-    func setTextView(textView: UITextView, initialValue: Any, placeHolder: String) {
-        if initialValue as! String != "No current value" {
-            textView.text = String(describing: initialValue)
-        } else {
-            textView.textColor = white
-            textView.backgroundColor = red
-            textView.text = String(describing: placeHolder)
-        }
-    }
-    
     
     // Setting up viewImageButton
     @objc func didNormalTapViewImage(_ sender: UIGestureRecognizer) {
@@ -313,10 +299,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.child(dataKey).setValue(userInput)
     }
     
-    //THIS CODE NEEDS TO BE ABSTRACTED, make it so you can delete default text
+    //THIS CODE NEEDS TO BE ABSTRACTED
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Miscellaneous Notes: climber notes, possible autos, etc" {
+            textView.text = ""
+        }
+    }
     
     func textViewDidChange(_ textView: UITextView) {
-        self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
+        if textView == SEALsNotesTextView {
+            self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
+        }
     }
     
     //MARK: Photo Browser
