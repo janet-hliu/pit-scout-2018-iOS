@@ -23,6 +23,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = tableView.dequeueReusableCell(withIdentifier: "TimerCell", for: indexPath) as! TimerTableViewCell
         cell.value.text = "\(String(describing: self.TimerArray![indexPath.row])) sec"
         cell.dataPoint.text = "Data Point \(String(describing: indexPath.row + 1))"
+        cell.didSucceed.text = String(describing: didSucceed)
         return cell
     }
     
@@ -39,6 +40,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var firebaseStorageRef : StorageReference!
     var ourTeam : DatabaseReference!
     var TimerArray : [Float]?
+    var didSucceed: Bool? = nil
     
     @IBAction func StartButton(_ sender: AnyObject) {
         if timer.isValid {
@@ -89,7 +91,18 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    
+    func didSucceedAlert() {
+        let SuccessAlert = UIAlertController(title: "Was it Successful?", message: "", preferredStyle: .alert)
+        let Affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
+            self.didSucceed = true
+        }
+        let Negative = UIAlertAction(title: "No", style: .default) { (_) in
+            self.didSucceed = false
+        }
+        SuccessAlert.addAction(Affirmative)
+        SuccessAlert.addAction(Negative)
+        self.present(SuccessAlert, animated: true, completion: nil)
+    }
    @IBAction func SubmitButton(_ sender: AnyObject) {
         if StartStopButton.currentTitle as String! == "Start" && Float(count) != 0 {
             let AutoRunTime = Float(count) / 100
@@ -98,6 +111,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             ourTeam.child("pitDriveTimes").setValue(TimerArray)
             clearTimer()
             self.viewDidLoad()
+            didSucceedAlert()
         }else{
             print("Don't do that.")
     }

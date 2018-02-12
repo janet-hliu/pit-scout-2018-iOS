@@ -12,6 +12,7 @@ class TimerTableViewCell: UITableViewCell {
 
     @IBOutlet weak var dataPoint: UILabel!
     @IBOutlet weak var value: UILabel!
+    @IBOutlet weak var didSucceed: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
