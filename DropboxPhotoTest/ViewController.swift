@@ -19,14 +19,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var viewImageButton: UIButton!
     @IBOutlet weak var deleteImageButton: UIButton!
-    @IBOutlet weak var availableWeightTextField: UITextField!
-    @IBOutlet weak var selectedImageTextField: UITextField!
-    @IBOutlet weak var maxHeightTextField: UITextField!
+    @IBOutlet weak var availableWeightTextField: UITextField! { didSet { availableWeightTextField.delegate = self } }
+    @IBOutlet weak var selectedImageTextField: UITextField! { didSet { selectedImageTextField.delegate = self } }
+    @IBOutlet weak var maxHeightTextField: UITextField! { didSet { maxHeightTextField.delegate = self } }
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
-    @IBOutlet weak var SEALsNotesTextView: UITextView!
+    @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
     
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
@@ -44,6 +44,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
     let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]]
+    var didEnterTextView : Bool?
+    var didLeaveTextView : Bool?
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -55,6 +57,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
+    
+    var activeView : UITextView? {
+        didSet {
+            scrollPositionBeforeScrollingToTextView = scrollView.contentOffset.y
+            print(scrollPositionBeforeScrollingToTextView)
+            self.scrollView.scrollRectToVisible((activeView?.frame)!, animated: true)
+            }
+        }
+    var scrollPositionBeforeScrollingToTextView : CGFloat = 0
     
     
     //MARK: Setup
@@ -102,6 +113,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         /*
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             // UI Elements
@@ -517,20 +530,41 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
-        guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = value.cgRectValue
-        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
-        scrollView.contentInset.bottom += adjustmentHeight
-        scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
+    func textViewShouldReturn(_ textView: UITextView) -> Bool { // So that the scroll view can scroll so you can see the text view you are editing
+        textView.resignFirstResponder()
+        return true
     }
     
-    func keyboardWillShow(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+    func textViewShouldBeginEditing(_ textView: UITextView) {
+        activeView = textView
+        didEnterTextView = true
     }
-    func keyboardWillHide(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
+    
+    func textViewShouldEndEditing(_ textView: UITextView) {
+        didLeaveTextView = true
     }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if didEnterTextView == true {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                if self.view.frame.origin.y == 0{
+                    self.view.frame.origin.y -= (keyboardSize.height * 1.1)
+                        didEnterTextView = false
+                    }
+                }
+            }
+        }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if didLeaveTextView == true {
+            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                if self.view.frame.origin.y != 0 {
+                    self.view.frame.origin.y = 0
+                        didLeaveTextView = false
+                    }
+                }
+            }
+        }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
