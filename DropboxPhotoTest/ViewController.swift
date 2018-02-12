@@ -209,8 +209,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
         self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
-            if initialValue as! Bool == true {
+            if initialValue as? Bool == true {
                 elementName.setOn(true, animated: false)
+            } else if initialValue as? String == "No current value" {
+                elementName.setOn(true, animated: false)
+                elementName.tintColor = self.red
+                elementName.onTintColor = self.red
             } else {
                 elementName.setOn(false, animated: false)
             }
