@@ -95,7 +95,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let AutoRunTime = Float(count) / 100
             print("number of total seconds is \(AutoRunTime)")
             TimerArray?.append(AutoRunTime)
-            ourTeam.child("pitAutoRunTimes").setValue(TimerArray)
+            ourTeam.child("pitDriveTimes").setValue(TimerArray)
             clearTimer()
             self.viewDidLoad()
         }else{
