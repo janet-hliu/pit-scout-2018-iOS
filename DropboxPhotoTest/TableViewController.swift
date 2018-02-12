@@ -240,6 +240,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     scoutedTeamNums.add(team["num"]!)
                 }
             }
+            
             // Finding the team name
             for (_, team) in teams {
                 let teamInfo = team 
@@ -287,6 +288,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     } else {
                         teamName = "Offseason Bot"
                     }
+                    text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
+                    cell.textLabel?.text = "\(text)"
                     let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
                     let pitImageKeys = teamInfo["pitImageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
                     if imageURLs.count != pitImageKeys.count {
@@ -305,6 +308,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 }
             }
             text = "\(notScoutedTeamNums[(indexPath as NSIndexPath).row]) - \(teamName)"
+            cell.textLabel?.text = "\(text)"
         }
 
         cell.textLabel?.text = "\(text)"
@@ -376,6 +380,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         } else {
                             teamName = "Offseason Bot"
                         }
+                        
                     }
                 }
             } else if (indexPath! as NSIndexPath).section == 0 {
@@ -389,8 +394,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
                 for (_, team) in self.teams {
-                    let teamInfo = team 
-                    name = ""
+                    let teamInfo = team
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
                             name = teamInfo["name"] as! String
