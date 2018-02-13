@@ -14,7 +14,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
-        cells = (self.TimerArray?.count)!
+        cells = (self.TimerArray?.count) ?? 0
         //CODE TO FIND HOW MANY CELLS YOU NEED
         return cells
     }
@@ -107,8 +107,12 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if StartStopButton.currentTitle as String! == "Start" && Float(count) != 0 {
             let AutoRunTime = Float(count) / 100
             print("number of total seconds is \(AutoRunTime)")
+            if TimerArray == nil {
+                TimerArray = []
+            }
             TimerArray?.append(AutoRunTime)
-            ourTeam.child("pitDriveTimes").setValue(TimerArray)
+            
+            writeToFirebase(dataKey: "pitDriveTimes", AutoTime: AutoRunTime)
             clearTimer()
             self.viewDidLoad()
             didSucceedAlert()

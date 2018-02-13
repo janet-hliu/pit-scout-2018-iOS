@@ -366,6 +366,10 @@
                                                 <state key="normal">
                                                     <color key="titleColor" red="0.99963909390000005" green="1" blue="0.99975615740000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="AutoTimerSegue:" destination="GaD-O8-v2V" eventType="touchUpInside" id="z0Y-5G-jwy"/>
+                                                    <segue destination="kBM-vh-smt" kind="show" identifier="AutoTimerSegue" id="vur-fB-Z4X"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iEd-ux-vEe">
                                                 <rect key="frame" x="280" y="8" width="78" height="142"/>
