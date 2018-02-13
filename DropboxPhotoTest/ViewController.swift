@@ -25,6 +25,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
+    @IBOutlet weak var driveTimerButton: UIButton!
+    @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
     
@@ -94,6 +96,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
         deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
         deleteImageButton.layer.cornerRadius = 5
+        driveTimerButton.layer.cornerRadius = 5
+        rampTimerButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
         self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
@@ -189,10 +193,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int, placeHolder: String) {
         self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
             if initialValue as! String != "No current value" {
-                elementName.text = String(describing: initialValue)
+                elementName.text = String(describing: initialValue!)
             } else {
                 elementName.textColor = self.white
-                elementName.backgroundColor = self.red
+                elementName.backgroundColor = self.red         
                 elementName.text = String(describing: placeHolder)
             }
         })
