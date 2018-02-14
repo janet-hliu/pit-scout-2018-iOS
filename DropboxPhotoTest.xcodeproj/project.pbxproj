@@ -163,11 +163,11 @@
 			children = (
 				192BEAC51C3463B900992A8A /* Main.storyboard */,
 				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
-				192BEAC31C3463B900992A8A /* ViewController.swift */,
+				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				98991CAB20262E460095A64C /* TimerViewController.swift */,
+				192BEAC31C3463B900992A8A /* ViewController.swift */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
 				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
-				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				19EEDCCF1CE583470057AA96 /* PSUIElements.swift */,
 				5BE05C012019838A007539F8 /* GoogleService-Info.plist */,
 				197788C11CFA661F00D632AD /* PSUIXibFiles */,
