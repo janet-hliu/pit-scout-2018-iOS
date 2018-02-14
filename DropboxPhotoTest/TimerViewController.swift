@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -22,14 +23,13 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var red = UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1.0)
     var driveTime = 00.00
     var firebase = Database.database().reference()
-    var firebaseStorageRef : StorageReference!
     var ourTeam : DatabaseReference!
     var timerArray : [Float]?
     var didSucceed: Bool? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.table.register(UINib(nibName: "TimerTableViewCell", bundle: nil), forCellReuseIdentifier: "TimerCell")
+        self.table.register(UINib(nibName: "CellTimerTableViewCell", bundle: nil), forCellReuseIdentifier: "timerCell")
         self.table.delegate = self
         self.table.dataSource = self
         self.table.reloadData()
@@ -42,17 +42,18 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
         cells = (self.timerArray?.count) ?? 0
-        //CODE TO FIND HOW MANY CELLS YOU NEED
+        //FIX THIS: CODE TO FIND HOW MANY CELLS YOU NEED
         return cells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TimerCell", for: indexPath) as! TimerTableViewCell
-        cell.value.text = "\(String(describing: self.timerArray![indexPath.row])) sec"
-        cell.dataPoint.text = "Data Point \(String(describing: indexPath.row + 1))"
+        let cell = tableView.dequeueReusableCell(withIdentifier: "timerCell", for: indexPath) as! CellTimerTableViewCell
+        cell.timerValue.text = "\(String(describing: self.timerArray![indexPath.row])) sec"
+        cell.trialNumber.text = "Data Point \(String(describing: indexPath.row + 1))"
         cell.didSucceed.text = String(describing: didSucceed)
         return cell
     }
+    
     @IBAction func startButton(_ sender: AnyObject) {
         if timer.isValid {
             timer.invalidate()

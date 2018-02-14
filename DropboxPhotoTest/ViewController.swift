@@ -29,7 +29,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
-    
+    var timerArray: [Float] = []
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
     
@@ -119,29 +119,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        /*
-        self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
-            // UI Elements
-            for childViewController in self.childViewControllers {
-                self.scrollView.addSubview(childViewController.view)
-                childViewController.view.frame.origin.y = verticalPlacement
-                
-                let width = NSLayoutConstraint(item: childViewController.view, attribute: NSLayoutAttribute.width, relatedBy: .equal, toItem: self.scrollView, attribute: .width, multiplier: 1.0, constant: 0)
-                let center = NSLayoutConstraint(item: childViewController.view, attribute: NSLayoutAttribute.centerX, relatedBy: .equal, toItem: self.scrollView, attribute: .centerX, multiplier: 1.0, constant: 0)
-                
-                self.scrollView.addConstraints([width, center])
-                print(verticalPlacement)
-                verticalPlacement = childViewController.view.frame.origin.y + childViewController.view.frame.height
-            }
-        })
-        
-        scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: scrollPositionBeforeScrollingToTextField), animated: true)
-        
-        self.ourTeam.child("pitAllImageURLs").observe(.value, with: { (snap) -> Void in
-            self.numberOfImagesOnFirebase = Int(snap.childrenCount)
-            self.updateMyPhotos({})
-        })
-        */
+
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -149,6 +127,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.teamsList.set(value: [String]().asData(), key: "teams")
             }
         })
+        
+        ourTeam.observeSingleEvent(of: .value) { (snapshot) in
+            for i in snapshot.childSnapshot(forPath: "pitDriveTimes").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Float {
+                    self.timerArray.append(unwrapped)
+                }
+            }
+        }
     }
     
     enum NeededType {
@@ -631,6 +617,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
         })
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "timerSegue" {
+            if let dest = segue.destination as? TimerViewController {
+                dest.ourTeam = self.ourTeam
+                dest.timerArray = self.timerArray
+            }
+        }
     }
     
     @objc func dismissKeyboard() {
