@@ -25,6 +25,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
+    @IBOutlet weak var driveTestSegControl: UISegmentedControl!
     @IBOutlet weak var driveTimerButton: UIButton!
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
@@ -45,7 +46,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]/*, ["pitMoveAbility": .String]*/]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float], ["pitDriveTest": .String]]
     var didEnterTextView : Bool?
     var didLeaveTextView : Bool?
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
@@ -110,7 +111,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
         
-      //  self.setUpSegmentedControl(elementName: moveAbilitySegControl, dataKey: "pitMoveAbility", dataKeyIndex: 9)
+        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
         
         self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
     
@@ -308,7 +309,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.child(dataKey).setValue(userInput)
     }
     
-    //THIS CODE NEEDS TO BE ABSTRACTED
+    //FIX THIS: THIS CODE NEEDS TO BE ABSTRACTED
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Miscellaneous Notes: climber notes, possible autos, etc" {
             textView.text = ""
@@ -447,7 +448,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 ourTeam.child("pitImageKeys").observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
-                        //MAY FIX
+                        //FIX THIS
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
                                 self.selectedImageName.set(key as! String)
@@ -531,12 +532,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    func textViewShouldBeginEditing(_ textView: UITextView) {
+    private func textViewShouldBeginEditing(_ textView: UITextView) {
         activeView = textView
         didEnterTextView = true
     }
     
-    func textViewShouldEndEditing(_ textView: UITextView) {
+    private func textViewShouldEndEditing(_ textView: UITextView) {
         didLeaveTextView = true
     }
 
@@ -553,7 +554,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if didLeaveTextView == true {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y != 0 {
                     self.view.frame.origin.y = 0
                         didLeaveTextView = false
@@ -588,7 +589,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        /*
         //If you are leaving the view controller, and only have one image, make that the selected one.
         super.viewWillDisappear(animated)
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
@@ -604,7 +604,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                 })
             }
-        } */
+        }
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             // If cheescake not selected, automatically make it false
@@ -654,7 +654,6 @@ extension Dictionary {
         return k
     }
     var FIRJSONString : String {
-        //if self.keys[0] as? String != nil && self.vals[0] as? String != nil {
         var JSONString = "{\n"
         for i in 0..<self.keys.count {
             JSONString.append(keys[i] as! String)
@@ -664,9 +663,6 @@ extension Dictionary {
         }
         JSONString.append("}")
         return JSONString
-        /*} else {
-         return "Not of Type [String: String], so cannot use FIRJSONString."
-         }*/
     }
 }
 

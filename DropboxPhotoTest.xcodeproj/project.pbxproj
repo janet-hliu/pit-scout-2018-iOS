@@ -167,6 +167,7 @@
 			children = (
 				192BEAC51C3463B900992A8A /* Main.storyboard */,
 				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
+				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
 				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				98991CAB20262E460095A64C /* TimerViewController.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
@@ -178,7 +179,6 @@
 				5BE05C012019838A007539F8 /* GoogleService-Info.plist */,
 				197788C11CFA661F00D632AD /* PSUIXibFiles */,
 				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
-				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
