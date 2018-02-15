@@ -390,7 +390,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 // Finding the team name
                 for (_, team) in self.teams {
                     let teamInfo = team 
-                    name = ""
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
                             name = teamInfo["name"] as! String
