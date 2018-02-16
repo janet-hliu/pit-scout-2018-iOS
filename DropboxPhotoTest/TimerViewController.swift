@@ -104,9 +104,11 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let successAlert = UIAlertController(title: "Was it Successful?", message: "", preferredStyle: .alert)
         let affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
             self.didSucceed = true
+            self.writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Bool, value: self.didSucceed!)
         }
         let negative = UIAlertAction(title: "No", style: .default) { (_) in
             self.didSucceed = false
+            self.writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Bool, value: self.didSucceed!)
         }
         successAlert.addAction(affirmative)
         successAlert.addAction(negative)
@@ -122,18 +124,30 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 timerArray = []
             }
             timerArray?.append(driveTime)
-            writeToFirebase(dataKey: "pitDriveTimes", value: driveTime)
+            writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Float, value: driveTime)
             clearTimer()
             self.viewDidLoad()
             didSucceedAlert()
         } else {
-            //FIX THIS: Make it so an alert pops up here
+            //FIX THIS: Make it so an alert pops up here. The alert should a) stop the timer, b) add to the tableView and c) confirm that time with the user
         }
     }
     
-    //FIX THIS: abstract like we did in view controller, with an enum
-    func writeToFirebase(dataKey: String, value: Float) {
-        ourTeam.child(dataKey).setValue(value)
+    //FIX THIS: find a better management system on firebase
+    func writeToFirebase(dataKey: String, neededType: NeededType, value: Any) {
+        // Even indices are the time value, odd indices are the success value
+        let currentData = ourTeam.child(dataKey)
+        switch neededType {
+            case .Float:
+                currentData.childByAutoId().setValue(value)
+            case .Bool:
+                currentData.childByAutoId().setValue(value as! Bool)
+        }
+    }
+    
+    enum NeededType {
+        case Float
+        case Bool
     }
     
     override func didReceiveMemoryWarning() {
