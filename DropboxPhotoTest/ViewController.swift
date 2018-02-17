@@ -30,7 +30,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
-    var timerArray: [Float] = []
+    var driveTimeArray: [Any] = ["Drive Times"]
+    var rampTimeArray: [Any] = ["Ramp Times"]
+    var driveOutcomeArray: [Any] = ["Outcome"]
+    var rampOutcomeArray: [Any] = ["Outcome"]
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
     
@@ -132,9 +135,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         ourTeam.observeSingleEvent(of: .value) { (snapshot) in
-            for i in snapshot.childSnapshot(forPath: "pitDriveTimes").children {
+            for i in snapshot.childSnapshot(forPath: "pitDriveTime").children {
                 if let unwrapped = (i as! DataSnapshot).value as? Float {
-                    self.timerArray.append(unwrapped)
+                    self.driveTimeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitRampTime").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Float {
+                    self.rampTimeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitDriveTimeOutcome").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Bool {
+                    self.driveOutcomeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitRampTimeOutcome").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Bool {
+                    self.rampOutcomeArray.append(unwrapped)
                 }
             }
         }
@@ -153,7 +171,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             
             switch neededType {
-                
             case .Int:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
             case .Float:
@@ -622,10 +639,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "timerSegue" {
+        if segue.identifier == "driveTimeSegue" {
             if let dest = segue.destination as? TimerViewController {
                 dest.ourTeam = self.ourTeam
-                dest.timerArray = self.timerArray
+                dest.timeArray = self.driveTimeArray
+                dest.outcomeArray = self.driveOutcomeArray
+                dest.timeDataKey = "pitDriveTime"
+            }
+        } else if segue.identifier == "rampTimeSegue" {
+            if let dest = segue.destination as? TimerViewController {
+                dest.ourTeam = self.ourTeam
+                dest.timeArray = self.rampTimeArray
+                dest.outcomeArray = self.rampOutcomeArray
+                dest.timeDataKey = "pitRampTime"
             }
         }
     }

@@ -23,9 +23,12 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var red = UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1.0)
     var driveTime = 00.00
     var firebase = Database.database().reference()
-    var ourTeam : DatabaseReference!
-    var timerArray : [Float]?
+    var ourTeam: DatabaseReference!
+    var timeArray: [Any]?
+    var outcomeArray: [Any]?
     var didSucceed: Bool? = nil
+    var timeDataKey: String?
+    var outcomeDataKey: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,20 +40,27 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         startButton.layer.cornerRadius = 5
         startButton.backgroundColor = green
         timeLabel.text = timeToString(m: m, s: s, ds: ds)
+        outcomeDataKey = self.timeDataKey! + "Outcome"
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
-        cells = (self.timerArray?.count) ?? 0
+        cells = (self.timeArray?.count) ?? 0
         //FIX THIS: CODE TO FIND HOW MANY CELLS YOU NEED
         return cells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "timerCell", for: indexPath) as! CellTimerTableViewCell
-        cell.timerValue.text = "\(String(describing: self.timerArray![indexPath.row])) sec"
-        cell.trialNumber.text = "Data Point \(String(describing: indexPath.row + 1))"
-        cell.didSucceed.text = String(describing: didSucceed)
+        if indexPath.row == 0 {
+            cell.trialNumber.text = "Trial"
+            cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row]))"
+             cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
+        } else {
+            cell.trialNumber.text = "\(String(describing: indexPath.row))"
+             cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row])) sec"
+            cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
+        }
         return cell
     }
     
@@ -100,15 +110,19 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return "\(m):\(s):\(ds)"
     }
     
-    func didSucceedAlert() {
+    func didSucceedAlert(dataKey: String) {
         let successAlert = UIAlertController(title: "Was it Successful?", message: "", preferredStyle: .alert)
         let affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
             self.didSucceed = true
-            self.writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Bool, value: self.didSucceed!)
+            self.outcomeArray!.append(true)
+            self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
+            self.viewDidLoad()
         }
         let negative = UIAlertAction(title: "No", style: .default) { (_) in
             self.didSucceed = false
-            self.writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Bool, value: self.didSucceed!)
+            self.outcomeArray!.append(false)
+            self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
+            self.viewDidLoad()
         }
         successAlert.addAction(affirmative)
         successAlert.addAction(negative)
@@ -119,15 +133,14 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if startButton.currentTitle as String! == "Start" && Float(count) != 0 {
             let driveTime = Float(count) / 100
             print("number of total seconds is \(driveTime)")
-            //FIX THIS  timerArray should be initially called as []
-            if timerArray == nil {
-                timerArray = []
+            //FIX THIS  timeArray should be initially called as []
+            if timeArray == nil {
+                timeArray = []
             }
-            timerArray?.append(driveTime)
-            writeToFirebase(dataKey: "pitDriveTimes", neededType: NeededType.Float, value: driveTime)
+            timeArray?.append(driveTime)
+            writeToFirebase(dataKey: self.timeDataKey!, neededType: NeededType.Float, value: driveTime)
             clearTimer()
-            self.viewDidLoad()
-            didSucceedAlert()
+            didSucceedAlert(dataKey: self.outcomeDataKey!)
         } else {
             //FIX THIS: Make it so an alert pops up here. The alert should a) stop the timer, b) add to the tableView and c) confirm that time with the user
         }
@@ -139,7 +152,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let currentData = ourTeam.child(dataKey)
         switch neededType {
             case .Float:
-                currentData.childByAutoId().setValue(value)
+                currentData.childByAutoId().setValue(value as! Float)
             case .Bool:
                 currentData.childByAutoId().setValue(value as! Bool)
         }
