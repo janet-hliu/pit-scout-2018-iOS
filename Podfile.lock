@@ -1,5 +1,7 @@
 PODS:
   - DACircularProgress (2.3.1)
+  - Firebase (4.0.1):
+    - Firebase/Core (= 4.0.1)
   - Firebase/Auth (4.0.1):
     - Firebase/Core
     - FirebaseAuth (= 4.0.0)
@@ -43,6 +45,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.10)
   - HanekeSwift (0.10.1)
   - Instabug (7.2.7)
+  - IQKeyboardManager (5.0.7)
   - MBProgressHUD (0.9.2)
   - MWPhotoBrowser (2.1.2):
     - DACircularProgress (~> 2.3)
@@ -54,12 +57,14 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - Firebase
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
   - HanekeSwift (from `https://github.com/Haneke/HanekeSwift`, branch `feature/swift-3`)
   - Instabug
+  - IQKeyboardManager
   - MWPhotoBrowser
   - SwiftyJSON
 
@@ -86,11 +91,12 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 30d874b96d0d76028f61fbd122801e3f030d47db
   HanekeSwift: 4113367892828e7700d24a384027de6ebc79aad1
   Instabug: d2b1f0dc32893f55c13252b429483b174a3c2745
+  IQKeyboardManager: 0bfa4607d39924116b5c0c8b55b5d789288b5cba
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 67531a9fe360aa768bf46f6649bd64dccfb893a8
+PODFILE CHECKSUM: 23412041beca3f31d542f58dd74015347908d7ab
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0
