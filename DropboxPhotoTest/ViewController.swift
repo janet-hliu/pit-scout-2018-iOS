@@ -46,7 +46,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.
     var numberOfImagesOnFirebase = -1
     var notActuallyLeavingViewController = false
-    let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
     let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool]]
@@ -479,7 +478,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         //FIX THIS
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
-                                self.selectedImageName.set(key as! String)
+                                self.selectedImageTextField.text = key as! String
                                 self.ourTeam.child("pitSelectedImage").setValue(key as! String)
                             }
                         }
@@ -596,7 +595,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         var modifiedURL = urls![0] as! String
                         modifiedURL = modifiedURL.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
                         if modifiedURL.contains(value as! String) {
-                            self.selectedImageName.set(value as AnyObject)
+                            self.selectedImageTextField.text = value as!              String
                         }
                     }
                 })
