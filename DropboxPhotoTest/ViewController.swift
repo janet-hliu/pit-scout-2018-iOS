@@ -30,10 +30,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
-    var driveTimeArray: [Any] = ["Drive Times"]
-    var rampTimeArray: [Any] = ["Ramp Times"]
-    var driveOutcomeArray: [Any] = ["Outcome"]
-    var rampOutcomeArray: [Any] = ["Outcome"]
+    var driveTimeArray: [Float] = []
+    var rampTimeArray: [Float] = []
+    var driveOutcomeArray: [Bool] = []
+    var rampOutcomeArray: [Bool] = []
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
     
@@ -147,6 +147,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             for i in snapshot.childSnapshot(forPath: "pitRampTimeOutcome").children {
                 if let unwrapped = (i as! DataSnapshot).value as? Bool {
                     self.rampOutcomeArray.append(unwrapped)
+                }
+            }
+            while self.rampOutcomeArray.count != self.rampTimeArray.count {
+                if self.rampOutcomeArray.count > self.rampTimeArray.count {
+                    self.rampOutcomeArray.remove(at: self.rampOutcomeArray.count-1)
+                } else {
+                    self.rampTimeArray.remove(at: self.rampTimeArray.count-1)
                 }
             }
         }
@@ -608,6 +615,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.timeArray = self.driveTimeArray
                 dest.outcomeArray = self.driveOutcomeArray
                 dest.timeDataKey = "pitDriveTime"
+                dest.timeLabelText = "Drive Time"
             }
         } else if segue.identifier == "rampTimeSegue" {
             if let dest = segue.destination as? TimerViewController {
@@ -615,6 +623,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.timeArray = self.rampTimeArray
                 dest.outcomeArray = self.rampOutcomeArray
                 dest.timeDataKey = "pitRampTime"
+                dest.timeLabelText = "Ramp Time"
             }
         }
     }

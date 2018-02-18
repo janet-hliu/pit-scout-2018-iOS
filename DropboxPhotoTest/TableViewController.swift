@@ -15,19 +15,6 @@ let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImage"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
-    let cellReuseId = "teamCell"
-    @IBAction func addTeam(_ sender: UIButton) {
-        addTeamDialogue()
-    }
-    
-    func addATeam() {
-        if teamName != nil && teamName != "" && teamNum != nil {
-            self.teamAdder(self.teamNum!, self.teamName!)
-        } else {
-            print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
-        }
-    }
-    
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
@@ -76,6 +63,19 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     @objc func updateTitle(_ note : Notification) {
         DispatchQueue.main.async { () -> Void in
             self.title = note.object as? String
+        }
+    }
+
+    let cellReuseId = "teamCell"
+    @IBAction func addTeam(_ sender: UIButton) {
+        addTeamDialogue()
+    }
+    
+    func addATeam() {
+        if teamName != nil && teamName != "" && teamNum != nil {
+            self.teamAdder(self.teamNum!, self.teamName!)
+        } else {
+            print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
         }
     }
     

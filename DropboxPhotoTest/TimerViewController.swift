@@ -16,6 +16,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var timerValue: UILabel!
     
     var timer = Timer()
     var count = 00.00
@@ -29,9 +30,11 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var didSucceed: Bool? = nil
     var timeDataKey: String?
     var outcomeDataKey: String?
+    var timeLabelText: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.timerValue.text = self.timeLabelText
         self.table.register(UINib(nibName: "CellTimerTableViewCell", bundle: nil), forCellReuseIdentifier: "timerCell")
         self.table.delegate = self
         self.table.dataSource = self
@@ -52,15 +55,9 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "timerCell", for: indexPath) as! CellTimerTableViewCell
-        if indexPath.row == 0 {
-            cell.trialNumber.text = "Trial"
-            cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row]))"
-             cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
-        } else {
-            cell.trialNumber.text = "\(String(describing: indexPath.row))"
-             cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row])) sec"
-            cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
-        }
+        cell.trialNumber.text = "\(String(describing: indexPath.row + 1))"
+        cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row])) sec"
+        cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
         return cell
     }
     
@@ -72,6 +69,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         } else {
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(TimerViewController.result), userInfo: nil, repeats: true)
+            RunLoop.current.add(self.timer, forMode: RunLoopMode.commonModes)
             startButton.setTitle("Stop", for: UIControlState.normal)
             startButton.backgroundColor = red
         }
