@@ -165,20 +165,17 @@
 			isa = PBXGroup;
 			children = (
 				192BEAC51C3463B900992A8A /* Main.storyboard */,
+				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
 				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
 				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
 				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
-				98991CAB20262E460095A64C /* TimerViewController.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
-				42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */,
-				42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */,
+				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
-				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
+				4260EADE203A0A8500735530 /* Photo */,
 				5BE05C012019838A007539F8 /* GoogleService-Info.plist */,
-				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
-				192BEAC81C3463B900992A8A /* Assets.xcassets */,
-				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
+				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
 			);
 			path = DropboxPhotoTest;
@@ -223,6 +220,25 @@
 				876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4260EADD203A0A3500735530 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */,
+				42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */,
+				98991CAB20262E460095A64C /* TimerViewController.swift */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		4260EADE203A0A8500735530 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
+				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
+			);
+			path = Photo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
