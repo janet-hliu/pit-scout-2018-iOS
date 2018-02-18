@@ -60,6 +60,21 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                let timeToDelete = self.timeArray[Int(indexPath.row)]
+                let index = Int(indexPath.row)
+                self.timeArray.remove(at: Int(indexPath.row))
+                self.removeArrayFromFirebase(dataToRemove: timeToDelete, keyToRemove: self.timeDataKey!, neededType: NeededType.Float, index: index, snap: snap)
+                let outcomeToDelete = self.outcomeArray[Int(indexPath.row)]
+                self.outcomeArray.remove(at: Int(indexPath.row))
+                self.removeArrayFromFirebase(dataToRemove: outcomeToDelete, keyToRemove: self.outcomeDataKey!, neededType: NeededType.Bool, index: index, snap: snap)
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            })
+        }
+    }
+    
     @IBAction func startButton(_ sender: AnyObject) {
         if timer.isValid {
             timer.invalidate()
@@ -111,13 +126,17 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
             self.didSucceed = true
             self.outcomeArray.append(true)
-            self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
+            })
             self.viewDidLoad()
         }
         let negative = UIAlertAction(title: "No", style: .default) { (_) in
             self.didSucceed = false
             self.outcomeArray.append(false)
-            self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
+            })
             self.viewDidLoad()
         }
         successAlert.addAction(affirmative)
@@ -130,7 +149,9 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let driveTime = Float(count) / 100
             print("number of total seconds is \(driveTime)")
             timeArray.append(driveTime)
-            writeToFirebase(dataKey: self.timeDataKey!, neededType: NeededType.Float, value: driveTime)
+            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                self.writeArrayToFirebase(dataKey: self.timeDataKey!, neededType: NeededType.Float, value: driveTime, snap: snap)
+            })
             clearTimer()
             didSucceedAlert(dataKey: self.outcomeDataKey!)
         } else if count == 00.00 {
@@ -150,13 +171,25 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func writeToFirebase(dataKey: String, neededType: NeededType, value: Any) {
-        let currentData = ourTeam.child(dataKey)
+    func writeArrayToFirebase(dataKey: String, neededType: NeededType, value: Any, snap: DataSnapshot) {
+        var currentData = snap.childSnapshot(forPath: dataKey).value as? [Any] ?? []
+        currentData.append(value)
         switch neededType {
             case .Float:
-                currentData.childByAutoId().setValue(value as! Float)
+                ourTeam.child(dataKey).setValue(currentData as! [Float])
             case .Bool:
-                currentData.childByAutoId().setValue(value as! Bool)
+                ourTeam.child(dataKey).setValue(currentData as! [Bool])
+        }
+    }
+    
+    func removeArrayFromFirebase(dataToRemove: Any, keyToRemove: String, neededType: NeededType, index: Int, snap: DataSnapshot)     {
+        var currentData = snap.childSnapshot(forPath: keyToRemove).value as! [Any]
+        currentData.remove(at: index)
+        switch neededType {
+            case .Float:
+                self.ourTeam.child(keyToRemove).setValue(currentData as? [Float] ?? [])
+            case .Bool:
+                self.ourTeam.child(keyToRemove).setValue(currentData as? [Bool] ?? [])
         }
     }
     
