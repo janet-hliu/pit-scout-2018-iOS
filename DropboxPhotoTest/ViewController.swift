@@ -19,14 +19,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var viewImageButton: UIButton!
     @IBOutlet weak var deleteImageButton: UIButton!
-    @IBOutlet weak var availableWeightTextField: UITextField!
-    @IBOutlet weak var selectedImageTextField: UITextField!
-    @IBOutlet weak var maxHeightTextField: UITextField!
+    @IBOutlet weak var availableWeightTextField: UITextField! { didSet { availableWeightTextField.delegate = self } }
+    @IBOutlet weak var selectedImageTextField: UITextField! { didSet { selectedImageTextField.delegate = self } }
+    @IBOutlet weak var maxHeightTextField: UITextField! { didSet { maxHeightTextField.delegate = self } }
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
-    @IBOutlet weak var SEALsNotesTextView: UITextView!
+    @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
     
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
@@ -55,6 +55,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     var scrollPositionBeforeScrollingToTextField : CGFloat = 0
+    
+    var activeView : UITextView? {
+        didSet {
+            scrollPositionBeforeScrollingToTextView = scrollView.contentOffset.y
+            print(scrollPositionBeforeScrollingToTextView)
+            self.scrollView.scrollRectToVisible((activeView?.frame)!, animated: true)
+            }
+        }
+    var scrollPositionBeforeScrollingToTextView : CGFloat = 0
     
     
     //MARK: Setup
@@ -102,6 +111,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self
         
+
         /*
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in //Updating UI
             // UI Elements
@@ -196,8 +206,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
         self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
-            if initialValue as! Bool == true {
+            if initialValue as? Bool == true {
                 elementName.setOn(true, animated: false)
+            } else if initialValue as? String == "No current value" {
+                elementName.setOn(true, animated: false)
+                elementName.tintColor = self.red
+                elementName.onTintColor = self.red
             } else {
                 elementName.setOn(false, animated: false)
             }
@@ -517,20 +531,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    func adjustInsetForKeyboardShow(_ show: Bool, notification: NSNotification) {
-        guard let value = notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue else { return }
-        let keyboardFrame = value.cgRectValue
-        let adjustmentHeight = (keyboardFrame.height + 20) * (show ? 1 : -1)
-        scrollView.contentInset.bottom += adjustmentHeight
-        scrollView.scrollIndicatorInsets.bottom += adjustmentHeight
+    func textViewShouldReturn(_ textView: UITextView) -> Bool { // So that the scroll view can scroll so you can see the text view you are editing
+        textView.resignFirstResponder()
+        return true
     }
     
-    func keyboardWillShow(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
-    }
-    func keyboardWillHide(_ notification: NSNotification) {
-        adjustInsetForKeyboardShow(true, notification: notification)
-    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
