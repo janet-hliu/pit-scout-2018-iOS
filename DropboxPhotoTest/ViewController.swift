@@ -36,7 +36,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var rampOutcomeArray: [Bool] = []
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
-    
+    var green = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
@@ -200,6 +200,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int, placeHolder: String) {
         self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
             if initialValue as! String != "No current value" {
+                elementName.backgroundColor = self.white
+                elementName.textColor = UIColor.black
                 elementName.text = String(describing: initialValue!)
             } else {
                 elementName.textColor = self.white
@@ -221,6 +223,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
         self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
             if initialValue as? Bool == true {
+                elementName.tintColor = self.green
+                elementName.onTintColor = self.green
                 elementName.setOn(true, animated: false)
             } else if initialValue as? String == "No current value" {
                 elementName.setOn(true, animated: false)
@@ -237,6 +241,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
     func setInitialText(textField: UITextField, initialValue: Any) {
         if initialValue as? String != "No current value"{
+            textField.textColor = UIColor.black
+            textField.backgroundColor = self.white
             textField.text = String(describing: initialValue)
         } else {
             textField.textColor = white
@@ -247,6 +253,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
         if initialValue != "No current value"{
+            segControl.tintColor = self.green
             for i in 0..<segControl.numberOfSegments {
                 let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
                 if rawSegmentTitle! == (initialValue) {
@@ -300,6 +307,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case .some(_):
             print("This should never happen. Switch has case .some")
         }
+        self.viewDidLoad()
     }
     
     @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
@@ -310,6 +318,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
         self.ourTeam.child(dataKey).setValue(userInput)
+        self.viewDidLoad()
     }
     
     @objc func switchValueChanged(_ switchElement: UISwitch) {
@@ -325,9 +334,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             userInput = false
         }
         self.ourTeam.child(dataKey).setValue(userInput)
+        self.viewDidLoad()
     }
     
-    //FIX THIS: THIS CODE NEEDS TO BE ABSTRACTED
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Miscellaneous Notes: climber notes, possible autos, etc" {
             textView.text = ""
@@ -338,6 +347,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if textView == SEALsNotesTextView {
             self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
         }
+        self.viewDidLoad()
     }
     
     //MARK: Photo Browser
