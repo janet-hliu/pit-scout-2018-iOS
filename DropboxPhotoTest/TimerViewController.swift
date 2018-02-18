@@ -25,8 +25,8 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var driveTime = 00.00
     var firebase = Database.database().reference()
     var ourTeam: DatabaseReference!
-    var timeArray: [Any]?
-    var outcomeArray: [Any]?
+    var timeArray: [Float] = []
+    var outcomeArray: [Bool] = []
     var didSucceed: Bool? = nil
     var timeDataKey: String?
     var outcomeDataKey: String?
@@ -48,16 +48,15 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
-        cells = (self.timeArray?.count) ?? 0
-        //FIX THIS: CODE TO FIND HOW MANY CELLS YOU NEED
+        cells = (self.timeArray.count) ?? 0
         return cells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "timerCell", for: indexPath) as! CellTimerTableViewCell
         cell.trialNumber.text = "\(String(describing: indexPath.row + 1))"
-        cell.timerValue.text = "\(String(describing: self.timeArray![indexPath.row])) sec"
-        cell.didSucceed.text = String(describing: self.outcomeArray![indexPath.row])
+        cell.timerValue.text = "\(String(describing: self.timeArray[indexPath.row])) sec"
+        cell.didSucceed.text = String(describing: self.outcomeArray[indexPath.row])
         return cell
     }
     
@@ -66,7 +65,6 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             timer.invalidate()
             startButton.setTitle("Start", for: UIControlState.normal)
             startButton.backgroundColor = green
-
         } else {
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(TimerViewController.result), userInfo: nil, repeats: true)
             RunLoop.current.add(self.timer, forMode: RunLoopMode.commonModes)
@@ -112,13 +110,13 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let successAlert = UIAlertController(title: "Was it Successful?", message: "", preferredStyle: .alert)
         let affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
             self.didSucceed = true
-            self.outcomeArray!.append(true)
+            self.outcomeArray.append(true)
             self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
             self.viewDidLoad()
         }
         let negative = UIAlertAction(title: "No", style: .default) { (_) in
             self.didSucceed = false
-            self.outcomeArray!.append(false)
+            self.outcomeArray.append(false)
             self.writeToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!)
             self.viewDidLoad()
         }
@@ -131,22 +129,28 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if startButton.currentTitle as String! == "Start" && Float(count) != 0 {
             let driveTime = Float(count) / 100
             print("number of total seconds is \(driveTime)")
-            //FIX THIS  timeArray should be initially called as []
-            if timeArray == nil {
-                timeArray = []
-            }
-            timeArray?.append(driveTime)
+            timeArray.append(driveTime)
             writeToFirebase(dataKey: self.timeDataKey!, neededType: NeededType.Float, value: driveTime)
             clearTimer()
             didSucceedAlert(dataKey: self.outcomeDataKey!)
+        } else if count == 00.00 {
+             let inputAlert = UIAlertController(title: "User Input?", message: "Please time something before submitting", preferredStyle: .alert)
+            inputAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            present(inputAlert, animated: true, completion: nil)
         } else {
-            //FIX THIS: Make it so an alert pops up here. The alert should a) stop the timer, b) add to the tableView and c) confirm that time with the user
+            self.startButton(self.startButton)
+            let inputConfirmationAlert = UIAlertController(title: "Confirmation", message: "Please confirm this time before submitting to Firebase", preferredStyle: .alert)
+            let affirmative = UIAlertAction(title: "Correct", style: .default) { (_) in
+                self.submitButton(self.submitButton)
+            }
+            let negative = UIAlertAction(title: "Back", style: .default)
+            inputConfirmationAlert.addAction(affirmative)
+            inputConfirmationAlert.addAction(negative)
+            present(inputConfirmationAlert, animated: true, completion: nil)
         }
     }
     
-    //FIX THIS: find a better management system on firebase
     func writeToFirebase(dataKey: String, neededType: NeededType, value: Any) {
-        // Even indices are the time value, odd indices are the success value
         let currentData = ourTeam.child(dataKey)
         switch neededType {
             case .Float:

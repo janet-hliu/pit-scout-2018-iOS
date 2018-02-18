@@ -377,7 +377,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                 if snap.childrenCount == 0 {
                     // If no photos in firebase for team
-                    let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                    let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: .alert)
                     noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(noImageAlert, animated: true, completion: nil)
                 } else {
@@ -581,7 +581,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
             if urls?.count == 1 {
                 self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    let imageKeys = snap.childSnapshot(forPath: "pitImageKeys").value as! NSDictionary
                     for value in imageKeys.allValues {
                         var modifiedURL = urls![0] as! String
                         modifiedURL = modifiedURL.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
@@ -599,7 +599,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.ourTeam.child("pitCanCheesecake").setValue(false)
             }
             // If selected image doesn't exist, make the first image taken the selected image
-            let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
+            let imageKeys = snap.childSnapshot(forPath: "pitImageKeys").value as? [String]
             if imageKeys != nil {
                 if imageKeys!.count == 1 {
                     self.ourTeam.child("pitSelectedImage").setValue(imageKeys![0])

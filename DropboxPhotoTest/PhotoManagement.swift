@@ -240,13 +240,11 @@ class PhotoManager : NSObject {
         teamsFirebase.child(String(teamNum)).observeSingleEvent(of: .value, with: { (snap) in
             if keyToRemove == "pitImageKeys" || keyToRemove == "pitAllImageURLs"{
                 // This should only every be called when the app crashes, and the key cache and firebase store an image key, but no image has been stored in the image cache.
-                //dataToChange is a dictionary of arrays [[randomnKey: value], [randomnKey: value]]
-                var dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [[String: String]]
-                for i in 0 ..< dataToChange!.count {
-                    for (key, value) in dataToChange![i]{
-                        if value == String(describing: dataToRemove) {
-                            self.teamsFirebase.child(String(teamNum)).child(keyToRemove).child(key)
-                        }
+                // dataToChange is a dictionary [randomnKey: value], [randomnKey: value]
+                let dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [String: String]
+                for (key, value) in dataToChange!{
+                    if value == String(describing: dataToRemove) {
+                        self.teamsFirebase.child(String(teamNum)).child(keyToRemove).child(key)
                     }
                 }
             } else {
