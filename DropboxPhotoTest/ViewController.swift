@@ -25,14 +25,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
+    @IBOutlet weak var driveTestSegControl: UISegmentedControl!
     @IBOutlet weak var driveTimerButton: UIButton!
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
-    var timerArray: [Float] = []
+    var driveTimeArray: [Float] = []
+    var rampTimeArray: [Float] = []
+    var driveOutcomeArray: [Bool] = []
+    var rampOutcomeArray: [Bool] = []
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
-    
+    var green = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
     var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
@@ -42,12 +46,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.
     var numberOfImagesOnFirebase = -1
     var notActuallyLeavingViewController = false
-    let selectedImageName = PSUITextInputViewController()
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitAutoRunTime": .Float]/*, ["pitMoveAbility": .String]*/]
-    var didEnterTextView : Bool?
-    var didLeaveTextView : Bool?
+
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool]]
+
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
@@ -110,7 +113,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
         
-      //  self.setUpSegmentedControl(elementName: moveAbilitySegControl, dataKey: "pitMoveAbility", dataKeyIndex: 9)
+        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
         
         self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
     
@@ -118,10 +121,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -131,9 +130,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         ourTeam.observeSingleEvent(of: .value) { (snapshot) in
-            for i in snapshot.childSnapshot(forPath: "pitDriveTimes").children {
+            for i in snapshot.childSnapshot(forPath: "pitDriveTime").children {
                 if let unwrapped = (i as! DataSnapshot).value as? Float {
-                    self.timerArray.append(unwrapped)
+                    self.driveTimeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitRampTime").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Float {
+                    self.rampTimeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitDriveTimeOutcome").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Bool {
+                    self.driveOutcomeArray.append(unwrapped)
+                }
+            }
+            for i in snapshot.childSnapshot(forPath: "pitRampTimeOutcome").children {
+                if let unwrapped = (i as! DataSnapshot).value as? Bool {
+                    self.rampOutcomeArray.append(unwrapped)
+                }
+            }
+            while self.rampOutcomeArray.count != self.rampTimeArray.count {
+                if self.rampOutcomeArray.count > self.rampTimeArray.count {
+                    self.rampOutcomeArray.remove(at: self.rampOutcomeArray.count-1)
+                } else {
+                    self.rampTimeArray.remove(at: self.rampTimeArray.count-1)
                 }
             }
         }
@@ -152,7 +173,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             
             switch neededType {
-                
             case .Int:
                 initialValue = snap.childSnapshot(forPath: dataKey).value as? Int ?? "No current value"
             case .Float:
@@ -181,6 +201,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int, placeHolder: String) {
         self.getInitialValue(dataKey: dataKey, neededType: .String, done: { initialValue in
             if initialValue as! String != "No current value" {
+                elementName.backgroundColor = self.white
+                elementName.textColor = UIColor.black
                 elementName.text = String(describing: initialValue!)
             } else {
                 elementName.textColor = self.white
@@ -202,6 +224,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setUpSwitch(elementName: UISwitch, dataKey: String, dataKeyIndex: Int) {
         self.getInitialValue(dataKey: dataKey, neededType: .Bool, done: { initialValue in
             if initialValue as? Bool == true {
+                elementName.tintColor = self.green
+                elementName.onTintColor = self.green
                 elementName.setOn(true, animated: false)
             } else if initialValue as? String == "No current value" {
                 elementName.setOn(true, animated: false)
@@ -218,6 +242,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // Abstracted code to set values of UI elements. Sets background to red if there is no current value.
     func setInitialText(textField: UITextField, initialValue: Any) {
         if initialValue as? String != "No current value"{
+            textField.textColor = UIColor.black
+            textField.backgroundColor = self.white
             textField.text = String(describing: initialValue)
         } else {
             textField.textColor = white
@@ -228,6 +254,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func setSelectedSegment(segControl: UISegmentedControl, initialValue: String) {
         if initialValue != "No current value"{
+            segControl.tintColor = self.green
             for i in 0..<segControl.numberOfSegments {
                 let rawSegmentTitle: String! = segControl.titleForSegment(at: i)
                 if rawSegmentTitle! == (initialValue) {
@@ -281,6 +308,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         case .some(_):
             print("This should never happen. Switch has case .some")
         }
+        self.viewDidLoad()
     }
     
     @objc func segmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
@@ -291,6 +319,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
         self.ourTeam.child(dataKey).setValue(userInput)
+        self.viewDidLoad()
     }
     
     @objc func switchValueChanged(_ switchElement: UISwitch) {
@@ -306,9 +335,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             userInput = false
         }
         self.ourTeam.child(dataKey).setValue(userInput)
+        self.viewDidLoad()
     }
     
-    //THIS CODE NEEDS TO BE ABSTRACTED
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Miscellaneous Notes: climber notes, possible autos, etc" {
             textView.text = ""
@@ -319,6 +348,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if textView == SEALsNotesTextView {
             self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
         }
+        self.viewDidLoad()
     }
     
     //MARK: Photo Browser
@@ -358,7 +388,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageURLs.observeSingleEvent(of: .value, with: { (snap) -> Void in
                 if snap.childrenCount == 0 {
                     // If no photos in firebase for team
-                    let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: UIAlertControllerStyle.alert)
+                    let noImageAlert = UIAlertController(title: "No Images", message: "No photos have been taken for this team.", preferredStyle: .alert)
                     noImageAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(noImageAlert, animated: true, completion: nil)
                 } else {
@@ -447,10 +477,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 ourTeam.child("pitImageKeys").observeSingleEvent(of: .value, with: { (snap) -> Void in
                     let imageKeysDict = snap.value as! NSDictionary
                     for key in imageKeysDict.allValues {
-                        //MAY FIX
+                        //FIX THIS
                         if photoBrowser.photo(at: index).caption?() != nil {
                             if key as! String == photoBrowser.photo(at: index).caption!() {
-                                self.selectedImageName.set(key as! String)
+                                self.selectedImageTextField.text = key as! String
                                 self.ourTeam.child("pitSelectedImage").setValue(key as! String)
                             }
                         }
@@ -531,37 +561,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return true
     }
     
-    func textViewShouldBeginEditing(_ textView: UITextView) {
-        activeView = textView
-        didEnterTextView = true
-    }
-    
-    func textViewShouldEndEditing(_ textView: UITextView) {
-        didLeaveTextView = true
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if didEnterTextView == true {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                if self.view.frame.origin.y == 0{
-                    self.view.frame.origin.y -= (keyboardSize.height * 1.1)
-                        didEnterTextView = false
-                    }
-                }
-            }
-        }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if didLeaveTextView == true {
-            if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                if self.view.frame.origin.y != 0 {
-                    self.view.frame.origin.y = 0
-                        didLeaveTextView = false
-                    }
-                }
-            }
-        }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -588,23 +587,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        /*
         //If you are leaving the view controller, and only have one image, make that the selected one.
         super.viewWillDisappear(animated)
         self.photoManager.getSharedURLsForTeam(self.number) { (urls) -> () in
             if urls?.count == 1 {
                 self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as! NSDictionary
+                    let imageKeys = snap.childSnapshot(forPath: "pitImageKeys").value as! NSDictionary
                     for value in imageKeys.allValues {
                         var modifiedURL = urls![0] as! String
                         modifiedURL = modifiedURL.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
                         if modifiedURL.contains(value as! String) {
-                            self.selectedImageName.set(value as AnyObject)
+                            self.selectedImageTextField.text = value as!              String
                         }
                     }
                 })
             }
-        } */
+        }
         
         self.ourTeam.observeSingleEvent(of: .value, with: { (snap) -> Void in
             // If cheescake not selected, automatically make it false
@@ -612,7 +610,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.ourTeam.child("pitCanCheesecake").setValue(false)
             }
             // If selected image doesn't exist, make the first image taken the selected image
-            let imageKeys = snap.childSnapshot(forPath: "imageKeys").value as? [String]
+            let imageKeys = snap.childSnapshot(forPath: "pitImageKeys").value as? [String]
             if imageKeys != nil {
                 if imageKeys!.count == 1 {
                     self.ourTeam.child("pitSelectedImage").setValue(imageKeys![0])
@@ -622,10 +620,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "timerSegue" {
+        if segue.identifier == "driveTimeSegue" {
             if let dest = segue.destination as? TimerViewController {
                 dest.ourTeam = self.ourTeam
-                dest.timerArray = self.timerArray
+                dest.timeArray = self.driveTimeArray
+                dest.outcomeArray = self.driveOutcomeArray
+                dest.timeDataKey = "pitDriveTime"
+                dest.timeLabelText = "Drive Time"
+            }
+        } else if segue.identifier == "rampTimeSegue" {
+            if let dest = segue.destination as? TimerViewController {
+                dest.ourTeam = self.ourTeam
+                dest.timeArray = self.rampTimeArray
+                dest.outcomeArray = self.rampOutcomeArray
+                dest.timeDataKey = "pitRampTime"
+                dest.timeLabelText = "Ramp Time"
             }
         }
     }
@@ -654,7 +663,6 @@ extension Dictionary {
         return k
     }
     var FIRJSONString : String {
-        //if self.keys[0] as? String != nil && self.vals[0] as? String != nil {
         var JSONString = "{\n"
         for i in 0..<self.keys.count {
             JSONString.append(keys[i] as! String)
@@ -664,9 +672,6 @@ extension Dictionary {
         }
         JSONString.append("}")
         return JSONString
-        /*} else {
-         return "Not of Type [String: String], so cannot use FIRJSONString."
-         }*/
     }
 }
 

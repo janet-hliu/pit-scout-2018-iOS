@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import IQKeyboardManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Database.database().isPersistenceEnabled = true
         //Dropbox.setupWithAppKey("dekmb3lm9fzcd32")
         Instabug.start(withToken: "98616ae556601b6b72101615cd3f7f9a", invocationEvent: IBGInvocationEvent.shake)
+        IQKeyboardManager.shared().isEnabled = true
+        IQKeyboardManager.shared().isEnableAutoToolbar = false
         return true
     }
 
