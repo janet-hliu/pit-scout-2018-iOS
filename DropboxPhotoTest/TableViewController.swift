@@ -47,13 +47,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         tableView.delegate = self
         tableView.dataSource = self
         
-        self.firebase = Database.database().reference()
+     //   takeSnapshot()
         
-        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
-            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
-                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
-            })
-        })
+        self.firebase = Database.database().reference()
         
         setupphotoManager()
         
@@ -78,6 +74,18 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
         }
     }
+    
+    func takeSnapshot() {
+        
+        self.firebase = Database.database().reference()
+        
+        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
+            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
+                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+            })
+        })
+    }
+    
     
     func setup(_ snap: DataSnapshot) {
         self.teams = NSMutableDictionary() as! [String : [String : AnyObject]]
@@ -240,6 +248,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     scoutedTeamNums.add(team["num"]!)
                 }
             }
+        
             // Finding the team name
             for (_, team) in teams {
                 let teamInfo = team 
@@ -428,6 +437,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         if self.photoManager != nil {
             self.photoManager?.currentlyNotifyingTeamNumber = 0
         }
+        takeSnapshot()
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
