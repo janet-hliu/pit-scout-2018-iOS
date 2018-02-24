@@ -47,7 +47,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         tableView.delegate = self
         tableView.dataSource = self
         
-        takeSnapshot()
+        self.firebase = Database.database().reference()
         
         setupphotoManager()
         
@@ -74,9 +74,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func takeSnapshot() {
-        
-        self.firebase = Database.database().reference()
-        
         self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
             self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
                 self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
