@@ -47,9 +47,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         tableView.delegate = self
         tableView.dataSource = self
         
-     //   takeSnapshot()
-        
-        self.firebase = Database.database().reference()
+        takeSnapshot()
         
         setupphotoManager()
         
