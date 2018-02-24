@@ -84,9 +84,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.scoutedTeamInfo = []
         self.teamNums = []
         var td : NSDictionary?
-        if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
+        /*if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
-        }
+        }*/
         
         let teamsDatabase: NSDictionary = td ?? snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
@@ -115,7 +115,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func updateTeams() {
-         print("Updating teams and cache")
+        print("Updating teams and cache")
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             var cacheTeams: [Int] = []
@@ -250,8 +250,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     } else {
                         teamName = "Offseason Bot"
                     }
-                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String] ?? [String]()
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String] ?? [String]()
                     if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
@@ -280,15 +280,15 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 let teamInfo = team as NSDictionary
                 let teamNum = teamInfo["number"] as! Int
                 if teamNum == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
-                    //Offseason bots don't have team names (8671, 9971)
+                    // Offseason bots don't have team names (8671, 9971)
                     teamName = ""
                     if teamInfo["name"] != nil{
                         teamName = String(describing: teamInfo["name"]!)
                     } else {
                         teamName = "Offseason Bot"
                     }
-                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String] ?? [String]()
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String] ?? [String]()
                     if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
@@ -428,6 +428,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         if self.photoManager != nil {
             self.photoManager?.currentlyNotifyingTeamNumber = 0
         }
+        self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
+            self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+        })
+
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {

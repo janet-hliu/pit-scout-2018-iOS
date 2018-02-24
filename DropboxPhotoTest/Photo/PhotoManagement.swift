@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import SwiftyDropbox
 import Firebase
 import FirebaseStorage
 import Haneke
@@ -64,8 +63,8 @@ class PhotoManager : NSObject {
     func getSharedURLsForTeam(_ num: Int, fetched: @escaping (NSMutableArray?)->()) {
         if self.mayKeepWorking {
             teamsFirebase.child("\(num)").child("pitAllImageURLs").observeSingleEvent(of: .value , with: { (updateURL) in
-                if let urlsDict = updateURL.value as? NSDictionary {
-                    fetched((urlsDict.allValues as NSArray).mutableCopy() as? NSMutableArray)
+                if let urlsArray = updateURL.value as? [String] {
+                    fetched(urlsArray as! NSMutableArray)
                 } else {
                     fetched(nil)
                 }
@@ -113,7 +112,6 @@ class PhotoManager : NSObject {
             let name = self.makeFilenameForTeamNumAndIndex(number, date: date)
             var e: Bool = false
             self.firebaseStorageRef.child(name).putData(UIImagePNGRepresentation(image)!, metadata: nil) { [done] metadata, error in
-                
                 if (error != nil) {
                     print("LOOK! 0_0 no wifi")
                     print("ERROR: \(error.debugDescription)")
@@ -134,8 +132,8 @@ class PhotoManager : NSObject {
      */
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
         let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
-        let currentURLs = teamFirebase.child("pitAllImageURLs")
-        currentURLs.childByAutoId().setValue(link)
+        let URLs = teamFirebase.child("pitAllImageURLs")
+        self.writeArrayToFirebase(value: link, database: URLs)
     }
     
     /**
@@ -144,13 +142,15 @@ class PhotoManager : NSObject {
     func removeFromCache(key: String, done: @escaping ()->()) {
         // Removes key from dataCache but leaves it in imageCache for image viewing
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [String]
             for var i in 0 ..< keysArray.count {
                 if String(keysArray[i]) != key {
                     i += 1
                 } else {
                     keysArray.remove(at: i)
-                    break
+                    let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                    self.teamsList.set(value: data, key: "teams")
+                    done()
                 }
             }
             print("NOW WRITING TO CACHE: \(keysArray)")
@@ -160,15 +160,6 @@ class PhotoManager : NSObject {
         })
     }
     
-    /*func pullFromCache() {
-        
-    }
-    
-    func removeFromCache(dataArray: []) {
-        let keysData = NSKeyedArchiver.archivedData(withRootObject: dataArray)
-        self.teamsList.set(value: keysData, key: "teams")
-    }
-    */
     /**
      This function fetches an image key and its corresponding photo from the cache. If there are no photos, the function will wait one minute before calling itself again.
      */
@@ -193,7 +184,7 @@ class PhotoManager : NSObject {
                         }).onFailure({ Void in
                             self.backgroundQueue.async {
                                 // Loops back through keysArray, removing any keys that do not fetch an image
-                                self.removeFromFirebase(dataToRemove: keysArray[self.keyIndex], teamNum: teamNum, keyToRemove: "pitImageKeys")
+                                self.removeArrayFromFirebase(dataToRemove: nextKey, teamNum: teamNum, keyToRemove: "pitImageKeys")
                                 keysArray.remove(at: self.keyIndex)
                                 self.keyIndex += 1
                                 self.photoManagerSleep(time: 60)
@@ -204,11 +195,13 @@ class PhotoManager : NSObject {
                         })
                         // Gives time for the cache fetch to occur
                         self.photoManagerSleep(time: 1)
+                        let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                        self.teamsList.set(value: keysData, key: "teams")
                         self.keyIndex += 1
                     } else {
                         // keyIndex is out of the range of the keysArray, need to restart keyIndex at 0
-                        let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-                        self.teamsList.set(value: keysData, key: "teams")
+                        //let keysData = NSKeyedArchiver.archivedData(withRootObject: keysArray)
+                        //self.teamsList.set(value: keysData, key: "teams")
                         self.keyIndex = 0
                         self.getNext(done: { (image, key, number, date) in
                             done(image, key, number, date)
@@ -234,22 +227,18 @@ class PhotoManager : NSObject {
     }
     
     /**
-        This function removes something from firebase.
+        This function removes an array value from firebase.
     */
-    func removeFromFirebase(dataToRemove: Any, teamNum: Int, keyToRemove: String) {
+    func removeArrayFromFirebase(dataToRemove: Any, teamNum: Int, keyToRemove: String) {
         teamsFirebase.child(String(teamNum)).observeSingleEvent(of: .value, with: { (snap) in
-            if keyToRemove == "pitImageKeys" || keyToRemove == "pitAllImageURLs"{
-                // This should only every be called when the app crashes, and the key cache and firebase store an image key, but no image has been stored in the image cache.
-                // dataToChange is a dictionary [randomnKey: value], [randomnKey: value]
-                let dataToChange = snap.childSnapshot(forPath: keyToRemove).value as? [String: String]
-                for (key, value) in dataToChange!{
-                    if value == String(describing: dataToRemove) {
-                        self.teamsFirebase.child(String(teamNum)).child(keyToRemove).child(key)
-                    }
+            var currentData = snap.childSnapshot(forPath: keyToRemove).value as! [String]
+            for i in 0..<currentData.count{
+                let value = currentData[i]
+                if value == String(describing: dataToRemove) {
+                    currentData.remove(at: i)
                 }
-            } else {
-                //dataToChange is an dictionary of [keyToRemove: value]
             }
+            self.teamsFirebase.child(String(teamNum)).child(keyToRemove).setValue(currentData)
         })
     }
     
@@ -261,7 +250,7 @@ class PhotoManager : NSObject {
     func addImageKey(key : String, number: Int) {
         // Adding to teamsList cache to upload photos
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
-            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! NSArray as! [String]
+            var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [String]
             keysArray.append(key)
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
@@ -271,8 +260,8 @@ class PhotoManager : NSObject {
             let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
             self.teamsList.set(value: data, key: "teams")
         })
-        let currentImageKeys = teamsFirebase.child("\(number)").child("pitImageKeys")
-        currentImageKeys.childByAutoId().setValue(key)
+        let imageKeys = teamsFirebase.child("\(number)").child("pitImageKeys")
+        self.writeArrayToFirebase(value: key, database: imageKeys)
     }
     
     /**
@@ -287,11 +276,17 @@ class PhotoManager : NSObject {
         let key = "\(number)_\(localTimeZoneStr)"
         addImageKey(key: key, number: number)
         imageCache.set(value: image, key: key)
-        // THIS LINE OF CODE WILL BE FOR CHAMPS
-        // teamsFirebase.child("\(number)").child("pitSelectedImage'").setValue(key)
     }
     
+    func writeArrayToFirebase(value: String, database: DatabaseReference) {
+        database.observeSingleEvent(of: .value, with: { (snap) in
+            var currentData = snap.value as? [String] ?? []
+            currentData.append(value)
+            database.setValue(currentData)
+        })
+    }
 }
+
 
 extension UIImage {
     public func imageRotatedByDegrees(_ degrees: CGFloat, flip: Bool) -> UIImage {
