@@ -83,12 +83,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         self.teams = NSMutableDictionary() as! [String : [String : AnyObject]]
         self.scoutedTeamInfo = []
         self.teamNums = []
-        var td : NSDictionary?
+        // var td : NSDictionary?
         /*if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
         }*/
         
-        let teamsDatabase: NSDictionary = td ?? snap.value as! NSDictionary
+        let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
