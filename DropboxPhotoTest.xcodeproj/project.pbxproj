@@ -225,9 +225,9 @@
 		4260EADD203A0A3500735530 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				98991CAB20262E460095A64C /* TimerViewController.swift */,
 				42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */,
 				42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */,
-				98991CAB20262E460095A64C /* TimerViewController.swift */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -235,8 +235,8 @@
 		4260EADE203A0A8500735530 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
-				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
 				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
+				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
