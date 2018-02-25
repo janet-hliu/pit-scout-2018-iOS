@@ -598,12 +598,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.ourTeam.child("pitCanCheesecake").observeSingleEvent(of: .value, with: { (snap) -> Void in
-            // If cheescake not selected, automatically make it false
-            if snap.value as? Bool == nil {
-                self.ourTeam.child("pitCanCheesecake").setValue(false)
-            }
-        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
