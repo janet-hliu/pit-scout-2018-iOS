@@ -143,20 +143,18 @@ class PhotoManager : NSObject {
         // Removes key from dataCache but leaves it in imageCache for image viewing
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             var keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as! [String]
-            for var i in 0 ..< keysArray.count {
+            nesetedFor: for var i in 0 ..< keysArray.count {
                 if String(keysArray[i]) != key {
                     i += 1
                 } else {
                     keysArray.remove(at: i)
+                    print("NOW WRITING TO CACHE: \(keysArray)")
                     let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
                     self.teamsList.set(value: data, key: "teams")
                     done()
+                    break
                 }
             }
-            print("NOW WRITING TO CACHE: \(keysArray)")
-            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            self.teamsList.set(value: data, key: "teams")
-            done()
         })
     }
     
