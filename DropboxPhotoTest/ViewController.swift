@@ -32,14 +32,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
+    @IBAction func AutoTimerSegue(_ sender: UIButton) {
+    }
+  
     var driveTimeArray: [Float] = []
     var rampTimeArray: [Float] = []
     var driveOutcomeArray: [Bool] = []
     var rampOutcomeArray: [Bool] = []
-    @IBAction func AutoTimerSegue(_ sender: UIButton) {
-    }
+   
     var green = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
-    var photoManager : PhotoManager!
+    var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
+    var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+    
+    
+  var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
     var firebaseStorageRef : StorageReference!
@@ -50,11 +56,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var notActuallyLeavingViewController = false
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-
     let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String]]
-
-    var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
-    var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
     var activeField : UITextField? {
         didSet {

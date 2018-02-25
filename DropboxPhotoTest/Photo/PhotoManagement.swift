@@ -148,15 +148,13 @@ class PhotoManager : NSObject {
                     i += 1
                 } else {
                     keysArray.remove(at: i)
+                    print("NOW WRITING TO CACHE: \(keysArray)")
                     let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
                     self.teamsList.set(value: data, key: "teams")
                     done()
+                    break
                 }
             }
-            print("NOW WRITING TO CACHE: \(keysArray)")
-            let data = NSKeyedArchiver.archivedData(withRootObject: keysArray)
-            self.teamsList.set(value: data, key: "teams")
-            done()
         })
     }
     
