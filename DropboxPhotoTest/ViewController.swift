@@ -444,22 +444,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         self.photos.append(captionedImage!)
                     }).onFailure({ Void in
                         // If photo doesn't exist in cache, pull from firebase
-                        let imageURLs = snap.childSnapshot(forPath: "pitAllImageURLs").value as? [String]
-                        if imageURLs != nil {
-                            // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
-                            for i in 0..<imageURLs!.count {
-                                let url = imageURLs![i]
-                                let urlArray = (url).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-temp.appspot.com/o/", with: "")
-                                let componentArray: [String] = urlArray.components(separatedBy: ".png?")
-                                let key = componentArray[0]
-                                // This is the image key extracted from the image url, which will be modified to follow the format of the actual image key
-                                let modifiedKey = key.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
-                                if modifiedKey == imageKey {
-                                    // Adding the firebase image to the local cache
-                                    let captionedImage = MWPhoto(url: URL(string: url))
-                                    captionedImage!.caption = "\(modifiedKey)"
-                                    self.photos.append(captionedImage!)
-                                }
+                        let imageURLs = snap.childSnapshot(forPath: "pitAllImageURLs").value as! [String]
+                        // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
+                        for i in 0..<imageURLs.count {
+                            let url = imageURLs[i]
+                            let urlArray = (url).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-temp.appspot.com/o/m%2F", with: "")
+                            let componentArray: [String] = urlArray.components(separatedBy: ".png?")
+                            let key = componentArray[0]
+                            // This is the image key extracted from the image url, which will be modified to follow the format of the actual image key
+                            let modifiedKey = key.replacingOccurrences(of: "%20", with: " ").replacingOccurrences(of: "%2B", with: "+")
+                            if modifiedKey == imageKey {
+                                // Adding the firebase image to the local cache
+                                let captionedImage = MWPhoto(url: URL(string: url))
+                                captionedImage!.caption = "\(modifiedKey)"
+                                self.photos.append(captionedImage!)
                             }
                         }
                     })
