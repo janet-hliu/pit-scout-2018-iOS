@@ -141,10 +141,14 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework"
   install_framework "${PODS_ROOT}/Instabug/Instabug.framework"
   install_dsym "${PODS_ROOT}/Instabug/Instabug.framework.dSYM"
+  install_framework "${PODS_ROOT}/Instabug/InstabugCore.framework"
+  install_dsym "${PODS_ROOT}/Instabug/InstabugCore.framework.dSYM"
   install_framework "${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MWPhotoBrowser/MWPhotoBrowser.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/DACircularProgress/DACircularProgress.framework"
@@ -154,10 +158,14 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework"
   install_framework "${PODS_ROOT}/Instabug/Instabug.framework"
   install_dsym "${PODS_ROOT}/Instabug/Instabug.framework.dSYM"
+  install_framework "${PODS_ROOT}/Instabug/InstabugCore.framework"
+  install_dsym "${PODS_ROOT}/Instabug/InstabugCore.framework.dSYM"
   install_framework "${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MWPhotoBrowser/MWPhotoBrowser.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
