@@ -548,6 +548,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         for i in 0..<currentData.count {
             if currentData[i] == dataToRemove {
                 currentData.remove(at: i)
+                break
             }
         }
         self.ourTeam.child(keyToRemove).setValue(currentData)

@@ -234,6 +234,7 @@ class PhotoManager : NSObject {
                 let value = currentData[i]
                 if value == String(describing: dataToRemove) {
                     currentData.remove(at: i)
+                    break
                 }
             }
             self.teamsFirebase.child(String(teamNum)).child(keyToRemove).setValue(currentData)
