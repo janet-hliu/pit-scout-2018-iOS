@@ -22,6 +22,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var availableWeightTextField: UITextField! { didSet { availableWeightTextField.delegate = self } }
     @IBOutlet weak var selectedImageTextField: UITextField! { didSet { selectedImageTextField.delegate = self } }
     @IBOutlet weak var maxHeightTextField: UITextField! { didSet { maxHeightTextField.delegate = self } }
+
+    @IBOutlet weak var wheelDiameterSegControl: UISegmentedControl!
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
     @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
@@ -49,7 +51,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
 
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool]]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String]]
 
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
@@ -108,6 +110,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
         self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
+
+        self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
         
         self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
         
