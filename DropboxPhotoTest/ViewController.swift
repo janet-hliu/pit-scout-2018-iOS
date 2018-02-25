@@ -48,7 +48,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var notActuallyLeavingViewController = false
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
+
     let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitMaxHeight": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool]]
+
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
