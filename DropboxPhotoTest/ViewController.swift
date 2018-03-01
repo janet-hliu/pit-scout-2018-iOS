@@ -106,27 +106,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         driveTimerButton.layer.cornerRadius = 5
         rampTimerButton.layer.cornerRadius = 5
         
-        // Setting up all the other UI elements
-        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
-        
-        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
-        
-        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
-
-        self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
-        
-        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
-        
-        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
-        
-        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
-        
-        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
-    
-        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
-        
-        self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
-        SEALsNotesTextView.delegate = self
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -355,7 +334,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if textView == SEALsNotesTextView {
             self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
         }
-        self.viewDidLoad()
+        textView.backgroundColor = self.white
+        textView.textColor = UIColor.black
     }
     
     //MARK: Photo Browser
@@ -594,6 +574,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Setting up all the other UI elements
+        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
+        
+        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
+        
+        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
+        
+        self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
+        
+        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
+        
+        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
+        
+        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
+        
+        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
+        
+        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
+        
+        self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
+        SEALsNotesTextView.delegate = self
         notActuallyLeavingViewController = false
     }
     
