@@ -126,21 +126,26 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         successAlert.addTextField { (textField) in
             textField.keyboardType = UIKeyboardType.decimalPad
-            textField.placeholder = "Enter distance"
+            textField.placeholder = "Enter treadmill distance (ft)"
+        }
+        
+        successAlert.addTextField { (textField) in
+            textField.keyboardType = UIKeyboardType.decimalPad
+            textField.placeholder = "Enter robot length (ft)"
         }
         
         let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
-            // The distance travelled by the robot on the treadmill needs to be multipled by 1.4 to get the accurate distance travelled on the carpet
-            let distanceTravelled = (successAlert.textFields![0].text! as NSString).doubleValue * 1.4
-            // the 1 needs to be changed once Christina slacks
-            if distanceTravelled > 1 {
+            let distanceTravelled = (successAlert.textFields![0].text! as NSString).doubleValue
+            let robotLength = (successAlert.textFields![1].text! as NSString).doubleValue
+            
+            if distanceTravelled > Double(7.4) - robotLength {
                 self.didSucceed = true
                 self.outcomeArray.append(true)
                 self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
                     self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
                 })
                 self.viewDidLoad()
-                self.outcomeResultAlert(carpetDistance: distanceTravelled)
+                self.outcomeResultAlert(carpetDistance: distanceTravelled * 1.40 - robotLength * 1.40)
             } else {
                 self.didSucceed = false
                 self.outcomeArray.append(false)
@@ -148,7 +153,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
                 })
                 self.viewDidLoad()
-                self.outcomeResultAlert(carpetDistance: distanceTravelled)
+                self.outcomeResultAlert(carpetDistance: distanceTravelled * 1.40 - robotLength * 1.40)
             }
         }
         
@@ -163,11 +168,11 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let confirmAction = UIAlertAction(title: "OK", style: .default) { (_) in
         }
         if self.didSucceed == true{
-            let outcomeResultAlert = UIAlertController(title: "The trial was successful.", message: "The robot travelled \(carpetDistance) m.", preferredStyle: .alert)
+            let outcomeResultAlert = UIAlertController(title: "The trial was successful.", message: "The robot travelled an equivalent of \(carpetDistance) ft on the carpet.", preferredStyle: .alert)
             outcomeResultAlert.addAction(confirmAction)
             self.present(outcomeResultAlert, animated: true, completion: nil)
         } else {
-            let outcomeResultAlert = UIAlertController(title: "The trial was not successful.", message: "The robot travelled \(carpetDistance) m.", preferredStyle: .alert)
+            let outcomeResultAlert = UIAlertController(title: "The trial was not successful.", message: "The robot travelled an equivalent of \(carpetDistance) ft on the carpet.", preferredStyle: .alert)
             outcomeResultAlert.addAction(confirmAction)
             self.present(outcomeResultAlert, animated: true, completion: nil)
         }

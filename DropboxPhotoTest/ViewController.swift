@@ -271,6 +271,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } else {
             segControl.tintColor = red
             segControl.layer.cornerRadius = 5
+            segControl.selectedSegmentIndex = UISegmentedControlNoSegment
         }
     }
     
@@ -606,6 +607,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.ourTeam = self.ourTeam
                 dest.timeArray = self.driveTimeArray
                 dest.outcomeArray = self.driveOutcomeArray
+                dest.title = "Drive Timer"
                 dest.timeDataKey = "pitDriveTime"
                 dest.timeLabelText = "Drive Time"
             }
@@ -614,6 +616,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.ourTeam = self.ourTeam
                 dest.timeArray = self.rampTimeArray
                 dest.outcomeArray = self.rampOutcomeArray
+                dest.title = "Ramp Timer"
                 dest.timeDataKey = "pitRampTime"
                 dest.timeLabelText = "Ramp Time"
             }
