@@ -87,25 +87,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
-        // To recognize different types of taps on addImageButton
-        let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
-        let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
-        addImageButton.addGestureRecognizer(normalTapGestureAddImage)
-        addImageButton.addGestureRecognizer(longGestureAddImage)
-        addImageButton.layer.cornerRadius = 5
-        
-        // To set up image browser on viewImageButton
-        let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
-        viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
-        viewImageButton.layer.cornerRadius = 5
-        
-        // To set up image browser on deleteImageButton
-        let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
-        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
-        deleteImageButton.layer.cornerRadius = 5
-        driveTimerButton.layer.cornerRadius = 5
-        rampTimerButton.layer.cornerRadius = 5
-        
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -574,6 +555,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // To recognize different types of taps on addImageButton
+        let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
+        let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
+        addImageButton.addGestureRecognizer(normalTapGestureAddImage)
+        addImageButton.addGestureRecognizer(longGestureAddImage)
+        addImageButton.layer.cornerRadius = 5
+        
+        // To set up image browser on viewImageButton
+        let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
+        viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
+        viewImageButton.layer.cornerRadius = 5
+        
+        // To set up image browser on deleteImageButton
+        let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
+        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
+        deleteImageButton.layer.cornerRadius = 5
+        driveTimerButton.layer.cornerRadius = 5
+        rampTimerButton.layer.cornerRadius = 5
+        
         // Setting up all the other UI elements
         self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
         
