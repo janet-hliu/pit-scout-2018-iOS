@@ -87,46 +87,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
-        // To recognize different types of taps on addImageButton
-        let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
-        let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
-        addImageButton.addGestureRecognizer(normalTapGestureAddImage)
-        addImageButton.addGestureRecognizer(longGestureAddImage)
-        addImageButton.layer.cornerRadius = 5
-        
-        // To set up image browser on viewImageButton
-        let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
-        viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
-        viewImageButton.layer.cornerRadius = 5
-        
-        // To set up image browser on deleteImageButton
-        let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
-        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
-        deleteImageButton.layer.cornerRadius = 5
-        driveTimerButton.layer.cornerRadius = 5
-        rampTimerButton.layer.cornerRadius = 5
-        
-        // Setting up all the other UI elements
-        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
-        
-        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
-        
-        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
-
-        self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
-        
-        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
-        
-        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
-        
-        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
-        
-        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
-    
-        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
-        
-        self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
-        SEALsNotesTextView.delegate = self
         teamsList.fetch(key: "teams").onSuccess({ (keysData) in
             let keysArray = NSKeyedUnarchiver.unarchiveObject(with: keysData) as? [String]
             if keysArray == nil {
@@ -271,6 +231,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         } else {
             segControl.tintColor = red
             segControl.layer.cornerRadius = 5
+            segControl.selectedSegmentIndex = UISegmentedControlNoSegment
         }
     }
     
@@ -354,7 +315,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if textView == SEALsNotesTextView {
             self.ourTeam.child("pitSEALsNotes").setValue(textView.text)
         }
-        self.viewDidLoad()
+        textView.backgroundColor = self.white
+        textView.textColor = UIColor.black
     }
     
     //MARK: Photo Browser
@@ -593,17 +555,52 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // To recognize different types of taps on addImageButton
+        let normalTapGestureAddImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapAddImage(_:)))
+        let longGestureAddImage = UILongPressGestureRecognizer(target: self, action: #selector(ViewController.didLongTap(_:)))
+        addImageButton.addGestureRecognizer(normalTapGestureAddImage)
+        addImageButton.addGestureRecognizer(longGestureAddImage)
+        addImageButton.layer.cornerRadius = 5
+        
+        // To set up image browser on viewImageButton
+        let normalTapGestureViewImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapViewImage(_:)))
+        viewImageButton.addGestureRecognizer(normalTapGestureViewImage)
+        viewImageButton.layer.cornerRadius = 5
+        
+        // To set up image browser on deleteImageButton
+        let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
+        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
+        deleteImageButton.layer.cornerRadius = 5
+        driveTimerButton.layer.cornerRadius = 5
+        rampTimerButton.layer.cornerRadius = 5
+        
+        // Setting up all the other UI elements
+        self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
+        
+        self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
+        
+        self.setUpTextField(elementName: maxHeightTextField, dataKey: "pitMaxHeight", dataKeyIndex: 7, neededType: NeededType.Float)
+        
+        self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
+        
+        self.setUpSegmentedControl(elementName: programmingLanguageSegControl, dataKey: "pitProgrammingLanguage", dataKeyIndex: 5)
+        
+        self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
+        
+        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
+        
+        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
+        
+        self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
+        
+        self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
+        SEALsNotesTextView.delegate = self
         notActuallyLeavingViewController = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.ourTeam.child("pitCanCheesecake").observeSingleEvent(of: .value, with: { (snap) -> Void in
-            // If cheescake not selected, automatically make it false
-            if snap.value as? Bool == nil {
-                self.ourTeam.child("pitCanCheesecake").setValue(false)
-            }
-        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -612,6 +609,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.ourTeam = self.ourTeam
                 dest.timeArray = self.driveTimeArray
                 dest.outcomeArray = self.driveOutcomeArray
+                dest.title = "Drive Timer"
                 dest.timeDataKey = "pitDriveTime"
                 dest.timeLabelText = "Drive Time"
             }
@@ -620,6 +618,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 dest.ourTeam = self.ourTeam
                 dest.timeArray = self.rampTimeArray
                 dest.outcomeArray = self.rampOutcomeArray
+                dest.title = "Ramp Timer"
                 dest.timeDataKey = "pitRampTime"
                 dest.timeLabelText = "Ramp Time"
             }

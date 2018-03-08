@@ -310,14 +310,14 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iba-fk-g5X">
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="iba-fk-g5X">
                                                 <rect key="frame" x="30" y="502" width="337" height="29"/>
                                                 <segments>
                                                     <segment title="Passive"/>
-                                                    <segment title="Assisted"/>
+                                                    <segment title="None"/>
                                                     <segment title="A: Lifter"/>
                                                     <segment title="A: Passive"/>
-                                                    <segment title="Indepedent"/>
+                                                    <segment title="Independent"/>
                                                 </segments>
                                             </segmentedControl>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Drive Test:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U6A-Cv-xrZ">

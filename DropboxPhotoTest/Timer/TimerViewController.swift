@@ -122,26 +122,60 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func didSucceedAlert(dataKey: String) {
-        let successAlert = UIAlertController(title: "Was it Successful?", message: "", preferredStyle: .alert)
-        let affirmative = UIAlertAction(title: "Yes", style: .default) { (_) in
-            self.didSucceed = true
-            self.outcomeArray.append(true)
-            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
-                self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
-            })
-            self.viewDidLoad()
+        let successAlert = UIAlertController(title: "What was the treadmill distance travelled?", message: "", preferredStyle: .alert)
+        
+        successAlert.addTextField { (textField) in
+            textField.keyboardType = UIKeyboardType.decimalPad
+            textField.placeholder = "Enter treadmill distance (ft)"
         }
-        let negative = UIAlertAction(title: "No", style: .default) { (_) in
-            self.didSucceed = false
-            self.outcomeArray.append(false)
-            self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
-                self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
-            })
-            self.viewDidLoad()
+        
+        successAlert.addTextField { (textField) in
+            textField.keyboardType = UIKeyboardType.decimalPad
+            textField.placeholder = "Enter robot length (ft)"
         }
-        successAlert.addAction(affirmative)
-        successAlert.addAction(negative)
+        
+        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+            let distanceTravelled = (successAlert.textFields![0].text! as NSString).doubleValue
+            let robotLength = (successAlert.textFields![1].text! as NSString).doubleValue
+            
+            if distanceTravelled > Double(7.4) - robotLength {
+                self.didSucceed = true
+                self.outcomeArray.append(true)
+                self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                    self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
+                })
+                self.viewDidLoad()
+                self.outcomeResultAlert(carpetDistance: distanceTravelled * 1.40 - robotLength * 1.40)
+            } else {
+                self.didSucceed = false
+                self.outcomeArray.append(false)
+                self.ourTeam.observeSingleEvent(of: .value, with: { (snap) in
+                    self.writeArrayToFirebase(dataKey: dataKey, neededType: NeededType.Bool, value: self.didSucceed!, snap: snap)
+                })
+                self.viewDidLoad()
+                self.outcomeResultAlert(carpetDistance: distanceTravelled * 1.40 - robotLength * 1.40)
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        
+        successAlert.addAction(confirmAction)
+        successAlert.addAction(cancelAction)
         self.present(successAlert, animated: true, completion: nil)
+    }
+    
+    func outcomeResultAlert(carpetDistance: Double) {
+        let confirmAction = UIAlertAction(title: "OK", style: .default) { (_) in
+        }
+        if self.didSucceed == true{
+            let outcomeResultAlert = UIAlertController(title: "The trial was successful.", message: "The robot travelled an equivalent of \(carpetDistance) ft on the carpet.", preferredStyle: .alert)
+            outcomeResultAlert.addAction(confirmAction)
+            self.present(outcomeResultAlert, animated: true, completion: nil)
+        } else {
+            let outcomeResultAlert = UIAlertController(title: "The trial was not successful.", message: "The robot travelled an equivalent of \(carpetDistance) ft on the carpet.", preferredStyle: .alert)
+            outcomeResultAlert.addAction(confirmAction)
+            self.present(outcomeResultAlert, animated: true, completion: nil)
+        }
     }
     
    @IBAction func submitButton(_ sender: AnyObject) {
