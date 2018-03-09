@@ -11,25 +11,10 @@ import Firebase
 import FirebaseStorage
 import Haneke
 
-let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImageName"]
+let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImage"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
-    let cellReuseId = "teamCell"
-    @IBAction func addTeam(_ sender: UIButton) {
-        showInputDialog()
-        //sleep(10)
-        addATeam()
-    }
-    
-    func addATeam() {
-        if teamName != nil && teamNum != nil {
-            self.teamAdder(self.teamNum!, self.teamName!)
-        } else {
-            print("AHHHHH WHY")
-            
-        }
-    }
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
@@ -49,11 +34,12 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.allowsSelection = false //You can select once we are done setting up the photo uploader object
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2017-5f51c.appspot.com")
+        //You can select once we are done setting up the photo uploader object
+        self.tableView.allowsSelection = false
         
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-temp.appspot.com/")
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(TableViewController.didLongPress(_:)))
         self.tableView.addGestureRecognizer(longPress)
@@ -63,35 +49,53 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         self.firebase = Database.database().reference()
         
-        self.firebase!.observe(.value, with: { (snapshot) in
-            self.setup(snapshot.childSnapshot(forPath: "Teams"))
-        })
-        
         setupphotoManager()
         
         NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.updateTitle(_:)), name: NSNotification.Name(rawValue: "titleUpdated"), object: nil)
     }
     
-    func updateTitle(_ note : Notification) {
+    @objc func updateTitle(_ note : Notification) {
         DispatchQueue.main.async { () -> Void in
             self.title = note.object as? String
         }
     }
+
+    let cellReuseId = "teamCell"
+    @IBAction func addTeam(_ sender: UIButton) {
+        addTeamDialogue()
+    }
+    
+    func addATeam() {
+        if teamName != nil && teamName != "" && teamNum != nil {
+            self.teamAdder(self.teamNum!, self.teamName!)
+        } else {
+            print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
+        }
+    }
+    
+    func takeSnapshot() {
+        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
+            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
+                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+            })
+        })
+    }
+    
     
     func setup(_ snap: DataSnapshot) {
         self.teams = NSMutableDictionary() as! [String : [String : AnyObject]]
         self.scoutedTeamInfo = []
         self.teamNums = []
-        var td : NSDictionary?
-        if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
+        // var td : NSDictionary?
+        /*if let arrayTeamsDatabase = snap.value as? [NSDictionary] { // If we restore from backup, then the teams will be an array
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
-        }
-        let teamsDatabase: NSDictionary = td ?? snap.value as! NSDictionary
+        }*/
+        
+        let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
             let teamNum = teamInfo["number"] as? Int
-            
             if teamNum != nil {
                 self.teams[String(describing: teamNum!)] = teamInfo
                 let scoutedTeamInfoDict = ["num": teamNum!, "hasBeenScouted": 0]
@@ -110,6 +114,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         }
         
         self.tableView.reloadData()
+        updateTeams()
+    }
+    
+    func updateTeams() {
+        print("Updating teams and cache")
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             var cacheTeams: [Int] = []
@@ -123,6 +132,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 firebaseTeams.append(teamInfo["num"]!)
             }
             // If the teams in the cache are the same as the teams on Firebase, use the information inside the cache to update the table view
+            
             if Set(cacheTeams) == Set(firebaseTeams) {
                 self.scoutedTeamInfo = cacheScoutedTeamInfo
             } else {
@@ -162,43 +172,38 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         return 2 //One section is for checked cells, the other unchecked
     }
     
-    func showInputDialog() {
+    func addTeamDialogue() {
         //Creating UIAlertController and setting title and message for the alert dialog
-        let alertController = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
-        
-        //the confirm action taking the inputs
-        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
-            
-            //getting input values
-            self.teamNum = Int((alertController.textFields?[0].text)!)
-            self.teamName = alertController.textFields?[1].text
-            self.addATeam()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
-        
-        //adding textfields to our dialog box
-        alertController.addTextField { (textField) in
+        let newTeamCreator = UIAlertController(title: "Enter New Team", message: "Enter the team number and name", preferredStyle: .alert)
+        newTeamCreator.addTextField { (textField) in
+            textField.keyboardType = UIKeyboardType.numberPad
             textField.placeholder = "Enter Team Number"
         }
-        alertController.addTextField { (textField) in
+        
+        newTeamCreator.addTextField { (textField) in
             textField.placeholder = "Enter Team Name"
-            
-        
-        //adding the action to dialogbox2
-        alertController.addAction(confirmAction)
-        alertController.addAction(cancelAction)
-        
-        //finally presenting the dialog box
-        
-        self.present(alertController, animated: true, completion: nil)
-        
         }
+            
+        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+            self.teamNum = Int((newTeamCreator.textFields?[0].text)!)
+            self.teamName = newTeamCreator.textFields?[1].text
+            self.addATeam()
+        }
+            
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        newTeamCreator.addAction(confirmAction)
+        newTeamCreator.addAction(cancelAction)
+        self.present(newTeamCreator, animated: true, completion: nil)
     }
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
-            firebase?.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
-            firebase?.child("Teams").child(String(teamNum)).child("number").setValue(String(teamNum))
+            firebase!.child("TeamsList").observeSingleEvent(of: .value, with: { (teamsListSnapshot) in
+                let teamsList = teamsListSnapshot.value as! [Int]
+                self.firebase!.child("TeamsList").child(String(teamsList.count)).setValue(teamNum)
+            })
+            firebase!.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
+            firebase!.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }
     }
     
@@ -224,11 +229,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        //updateTeams()
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath) as UITableViewCell
         cell.textLabel?.text = "Please Wait..."
         if self.scoutedTeamInfo.count == 0 { return cell }
-
         var text = "shouldntBeThis"
         var teamName : String = ""
         if (indexPath as NSIndexPath).section == 1 {
@@ -239,9 +243,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     scoutedTeamNums.add(team["num"]!)
                 }
             }
+        
             // Finding the team name
             for (_, team) in teams {
-                let teamInfo = team as! [String : AnyObject]
+                let teamInfo = team 
                 if teamInfo["number"] as! Int == scoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
                     teamName = ""
                     if teamInfo["name"] != nil{
@@ -249,9 +254,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                     } else {
                         teamName = "Offseason Bot"
                     }
-                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    if imageURLs.count != imageKeys.count {
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String] ?? [String]()
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String] ?? [String]()
+                    if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
@@ -260,7 +265,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
                     } else {
                         cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                        if imageURLs.count != 0 && imageURLs.count == imageKeys.count {
+                        if imageURLs.count != 0 && imageURLs.count == pitImageKeys.count {
                             cell.textLabel!.textColor = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
                         }
                     }
@@ -276,19 +281,19 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             // Finding the team name
             for (_, team) in teams {
-                let teamInfo = team as! NSDictionary
+                let teamInfo = team as NSDictionary
                 let teamNum = teamInfo["number"] as! Int
                 if teamNum == notScoutedTeamNums[(indexPath as NSIndexPath).row] as! Int {
-                    //Offseason bots don't have team names (8671, 9971)
+                    // Offseason bots don't have team names (8671, 9971)
                     teamName = ""
                     if teamInfo["name"] != nil{
                         teamName = String(describing: teamInfo["name"]!)
                     } else {
                         teamName = "Offseason Bot"
                     }
-                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    let imageKeys = teamInfo["imageKeys"] as? [String: AnyObject] ?? [String: AnyObject]()
-                    if imageURLs.count != imageKeys.count {
+                    let imageURLs = teamInfo["pitAllImageURLs"] as? [String] ?? [String]()
+                    let pitImageKeys = teamInfo["pitImageKeys"] as? [String] ?? [String]()
+                    if imageURLs.count != pitImageKeys.count {
                         // 255, 102, 102
                         cell.backgroundColor = UIColor(red: 255/255, green: 153/255, blue: 153/255, alpha: 1.0)
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
@@ -297,7 +302,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                         cell.textLabel!.textColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
                     } else {
                         cell.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
-                        if imageURLs.count != 0 && imageURLs.count == imageKeys.count {
+                        if imageURLs.count != 0 && imageURLs.count == pitImageKeys.count {
                             cell.textLabel!.textColor = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
                         }
                     }
@@ -316,7 +321,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         return cell
     }
     
-    func didLongPress(_ recognizer: UIGestureRecognizer) {
+    @objc func didLongPress(_ recognizer: UIGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.ended {
             let longPressLocation = recognizer.location(in: self.tableView)
             if let longPressedIndexPath = tableView.indexPathForRow(at: longPressLocation) {
@@ -367,8 +372,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
                 for (_, team) in self.teams {
-                    let teamInfo = team as! [String : AnyObject]
-                     var teamName = ""
+                    let teamInfo = team 
+                    var teamName = ""
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
                             teamName = String(describing: teamInfo["name"]!)
@@ -388,8 +393,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
                 // Finding the team name
                 for (_, team) in self.teams {
-                    let teamInfo = team as! [String : AnyObject]
-                    name = ""
+                    let teamInfo = team 
                     if teamInfo["number"] as! Int == number {
                         if teamInfo["name"] != nil{
                             name = teamInfo["name"] as! String
@@ -428,6 +432,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         if self.photoManager != nil {
             self.photoManager?.currentlyNotifyingTeamNumber = 0
         }
+        takeSnapshot()
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {

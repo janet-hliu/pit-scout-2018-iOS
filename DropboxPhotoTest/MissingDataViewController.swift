@@ -18,9 +18,10 @@ class MissingDataViewController : UIViewController {
         }
     }
     
-    let firebaseKeys = ["pitProgrammingLanguage", "pitAvailableWeight", "pitDriveTrain", "pitDidDemonstrateCheesecakePotential"]
+
+    let firebaseKeys = ["pitAvailableWeight", "pitDriveTrain", "pitWheelDiameter", "pitClimberType"]
     
-    let ignoreKeys = ["imageKeys", "pitAllImageURLs"]
+    let ignoreKeys = ["pitImageKeys", "pitAllImageURLs", "pitSEALsNotes", "pitDriveTest", "pitProgrammingLanguage", "pitAvailableWeight", "pitCanCheesecake", "pitSelectedImage", "pitMaxHeight", "pitSEALsNotes", "pitRampTime", "pitRampTimeOutcome", "pitDriveTime", "pitDriveTimeOutcome"]
     
     override func viewWillAppear(_ animated: Bool) {
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100
@@ -32,7 +33,7 @@ class MissingDataViewController : UIViewController {
             for team in snap.children.allObjects {
                 let t = (team as! DataSnapshot).value as! [String: AnyObject]
                 if t["number"] != nil {
-                    if t["pitSelectedImageName"] == nil {
+                    if t["pitSelectedImage"] == nil {
                         self.updateWithText("\nTeam \(t["number"]!) has no selected image name.", color: UIColor.blue)
                     }
                     var dataNils : [String] = []
@@ -51,7 +52,7 @@ class MissingDataViewController : UIViewController {
     
     func updateWithText(_ text : String, color: UIColor) {
         let currentText : NSMutableAttributedString = NSMutableAttributedString(attributedString: self.mdTextView.attributedText)
-        currentText.append(NSMutableAttributedString(string: text, attributes: [NSForegroundColorAttributeName: color]))
+        currentText.append(NSMutableAttributedString(string: text, attributes: [NSAttributedStringKey.foregroundColor: color]))
         self.mdTextView.attributedText = currentText
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100
         self.preferredContentSize.height = mdTextView.bounds.size.height
