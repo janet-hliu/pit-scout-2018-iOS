@@ -45,7 +45,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var white: UIColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     
     
-  var photoManager : PhotoManager!
+    var photoManager : PhotoManager!
     var number : Int!
     var firebase = Database.database().reference()
     var firebaseStorageRef : StorageReference!
