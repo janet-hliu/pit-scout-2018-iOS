@@ -29,8 +29,8 @@
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
-		5BE05C022019838A007539F8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BE05C012019838A007539F8 /* GoogleService-Info.plist */; };
 		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
+		989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -88,12 +88,12 @@
 		42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTimerTableViewCell.swift; sourceTree = "<group>"; };
 		42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellTimerTableViewCell.xib; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
-		5BE05C012019838A007539F8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
 		876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
+		989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -170,10 +170,10 @@
 				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
 				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
+				989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */,
 				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
 				4260EADE203A0A8500735530 /* Photo */,
-				5BE05C012019838A007539F8 /* GoogleService-Info.plist */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
@@ -356,11 +356,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				192BEACC1C3463B900992A8A /* LaunchScreen.storyboard in Resources */,
-				5BE05C022019838A007539F8 /* GoogleService-Info.plist in Resources */,
 				192BEAC91C3463B900992A8A /* Assets.xcassets in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
 				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
+				989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
