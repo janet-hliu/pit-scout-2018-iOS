@@ -410,7 +410,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
                         for i in 0..<imageURLs.count {
                             let url = imageURLs[i]
-                            let urlArray = (url).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-temp.appspot.com/o/m%2F", with: "")
+                            let urlArray = (url).replacingOccurrences(of: "https://https://firebasestorage.googleapis.com/v0/b/scouting-2018-9023a.appspot.com/o/", with: "")
                             let componentArray: [String] = urlArray.components(separatedBy: ".png?")
                             let key = componentArray[0]
                             // This is the image key extracted from the image url, which will be modified to follow the format of the actual image key
