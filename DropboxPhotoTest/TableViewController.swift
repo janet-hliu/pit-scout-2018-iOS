@@ -39,7 +39,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         // Get a reference to the storage service, using the default Firebase App
         // Create a storage reference from our storage service
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-temp.appspot.com/")
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(TableViewController.didLongPress(_:)))
         self.tableView.addGestureRecognizer(longPress)
