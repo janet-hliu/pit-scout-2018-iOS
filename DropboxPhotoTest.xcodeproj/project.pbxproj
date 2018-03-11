@@ -25,13 +25,15 @@
 		19A669821C51E9F80044D1F2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A669811C51E9F80044D1F2 /* SystemConfiguration.framework */; };
 		19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E2FB361C4DB3D900BA4075 /* TableViewController.swift */; };
 		4264FA5D2055903B00DDABF1 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4264FA5C2055903B00DDABF1 /* FilterViewController.swift */; };
+		42B36EBA2055DA41008AE93F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42B36EB92055DA41008AE93F /* GoogleService-Info.plist */; };
 		42C078C72034288B00809BDE /* CellTimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */; };
 		42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */; };
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
+		5BA28EDC2055B8700010FFD4 /* CC 2017 Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */; };
+		5BA28EE22055D2810010FFD4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BA28EE12055D2810010FFD4 /* GoogleService-Info.plist */; };
 		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
-		989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,15 +89,17 @@
 		19CD3CF01C557F8300BB31A6 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Pods/../build/Debug-iphoneos/Firebase.framework"; sourceTree = "<group>"; };
 		19E2FB361C4DB3D900BA4075 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		4264FA5C2055903B00DDABF1 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		42B36EB92055DA41008AE93F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTimerTableViewCell.swift; sourceTree = "<group>"; };
 		42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellTimerTableViewCell.xib; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
+		5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CC 2017 Logo.png"; sourceTree = "<group>"; };
+		5BA28EE12055D2810010FFD4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "DropboxPhotoTest/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
 		876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
-		989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -150,6 +154,7 @@
 				192BEABF1C3463B900992A8A /* Products */,
 				3BC125DF03FD1D3B53A9678F /* Frameworks */,
 				10F0850D9A159044CD0D4987 /* Pods */,
+				42B36EB82055DA02008AE93F /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,13 +178,14 @@
 				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
 				4264FA5C2055903B00DDABF1 /* FilterViewController.swift */,
-				989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */,
 				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
 				4260EADE203A0A8500735530 /* Photo */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
+				42B36EB92055DA41008AE93F /* GoogleService-Info.plist */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
+				5BA28ED72055B8210010FFD4 /* Photos */,
 			);
 			path = DropboxPhotoTest;
 			sourceTree = "<group>";
@@ -242,6 +248,22 @@
 				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
 			);
 			path = Photo;
+			sourceTree = "<group>";
+		};
+		42B36EB82055DA02008AE93F /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				5BA28EE12055D2810010FFD4 /* GoogleService-Info.plist */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		5BA28ED72055B8210010FFD4 /* Photos */ = {
+			isa = PBXGroup;
+			children = (
+				5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */,
+			);
+			path = Photos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,11 +381,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				192BEACC1C3463B900992A8A /* LaunchScreen.storyboard in Resources */,
+				42B36EBA2055DA41008AE93F /* GoogleService-Info.plist in Resources */,
 				192BEAC91C3463B900992A8A /* Assets.xcassets in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
+				5BA28EDC2055B8700010FFD4 /* CC 2017 Logo.png in Resources */,
 				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
-				989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */,
+				5BA28EE22055D2810010FFD4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
