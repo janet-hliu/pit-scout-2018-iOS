@@ -29,6 +29,7 @@
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
+		5BA28EDC2055B8700010FFD4 /* CC 2017 Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */; };
 		5BE4009720559A1900A2B2A3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5BE4009620559A1900A2B2A3 /* GoogleService-Info.plist */; };
 		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
@@ -88,6 +89,7 @@
 		42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTimerTableViewCell.swift; sourceTree = "<group>"; };
 		42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellTimerTableViewCell.xib; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
+		5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CC 2017 Logo.png"; sourceTree = "<group>"; };
 		5BE4009620559A1900A2B2A3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				192BEACD1C3463B900992A8A /* Info.plist */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
+				5BA28ED72055B8210010FFD4 /* Photos */,
 			);
 			path = DropboxPhotoTest;
 			sourceTree = "<group>";
@@ -239,6 +242,14 @@
 				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
 			);
 			path = Photo;
+			sourceTree = "<group>";
+		};
+		5BA28ED72055B8210010FFD4 /* Photos */ = {
+			isa = PBXGroup;
+			children = (
+				5BA28EDB2055B8700010FFD4 /* CC 2017 Logo.png */,
+			);
+			path = Photos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,6 +369,7 @@
 				192BEACC1C3463B900992A8A /* LaunchScreen.storyboard in Resources */,
 				192BEAC91C3463B900992A8A /* Assets.xcassets in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
+				5BA28EDC2055B8700010FFD4 /* CC 2017 Logo.png in Resources */,
 				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 				5BE4009720559A1900A2B2A3 /* GoogleService-Info.plist in Resources */,
