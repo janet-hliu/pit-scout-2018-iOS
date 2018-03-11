@@ -84,7 +84,7 @@
         <!--Filter-->
         <scene sceneID="PD9-pM-dgg">
             <objects>
-                <viewController id="nh2-oX-tjh" sceneMemberID="viewController">
+                <viewController title="Filter" id="nh2-oX-tjh" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iIz-ud-AoU"/>
                         <viewControllerLayoutGuide type="bottom" id="PfJ-uQ-dao"/>
