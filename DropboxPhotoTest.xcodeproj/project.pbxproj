@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		156672B5C9FB5D3721B1DCB6 /* Pods_DropboxPhotoTestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */; };
 		1909B1A11C9B9693004F5E7E /* MissingDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */; };
 		192BEAC21C3463B900992A8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192BEAC11C3463B900992A8A /* AppDelegate.swift */; };
 		192BEAC41C3463B900992A8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192BEAC31C3463B900992A8A /* ViewController.swift */; };
@@ -16,7 +17,6 @@
 		192BEAD71C3463BA00992A8A /* DropboxPhotoTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192BEAD61C3463BA00992A8A /* DropboxPhotoTestTests.swift */; };
 		192BEAE21C3463BA00992A8A /* DropboxPhotoTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192BEAE11C3463BA00992A8A /* DropboxPhotoTestUITests.swift */; };
 		194587941C7D326D00507019 /* PhotoLibrarySaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194587931C7D326D00507019 /* PhotoLibrarySaver.swift */; };
-		197788C31CFA6ED700D632AD /* PSUISegmentedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 197788C21CFA6ED700D632AD /* PSUISegmentedViewController.xib */; };
 		19855CB51E130D83009E97B5 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19855CB41E130D83009E97B5 /* Reachability.swift */; };
 		19A286201C6916160039C0A4 /* PhotoManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A2861F1C6916160039C0A4 /* PhotoManagement.swift */; };
 		19A6697C1C51E9D60044D1F2 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A6697B1C51E9D60044D1F2 /* libc++.tbd */; };
@@ -24,13 +24,13 @@
 		19A669801C51E9F00044D1F2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A6697F1C51E9F00044D1F2 /* Security.framework */; };
 		19A669821C51E9F80044D1F2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A669811C51E9F80044D1F2 /* SystemConfiguration.framework */; };
 		19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E2FB361C4DB3D900BA4075 /* TableViewController.swift */; };
-		19EEDCD01CE583470057AA96 /* PSUIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19EEDCCF1CE583470057AA96 /* PSUIElements.swift */; };
-		19F317621DC9A400008EBFAD /* PSUISwitchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */; };
-		19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19F317611DC9A400008EBFAD /* PSUITextInputView.xib */; };
-		42E767941E8A135700FB8F66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42E767931E8A135700FB8F66 /* GoogleService-Info.plist */; };
+		42C078C72034288B00809BDE /* CellTimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */; };
+		42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */; };
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09161E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
+		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
+		989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04FACA4E617C85FC2F19391D /* Pods-DropboxPhotoTestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTestTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTestTests/Pods-DropboxPhotoTestTests.debug.xcconfig"; sourceTree = "<group>"; };
+		08F1A33DA12CF848D148D923 /* Pods-DropboxPhotoTestTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTestTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTestTests/Pods-DropboxPhotoTestTests.release.xcconfig"; sourceTree = "<group>"; };
 		1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingDataViewController.swift; sourceTree = "<group>"; };
 		190DBEC01C55988900C4D1C2 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
 		190DBEC71C5598FC00C4D1C2 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
@@ -72,7 +74,6 @@
 		192BEAE31C3463BA00992A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		194587931C7D326D00507019 /* PhotoLibrarySaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoLibrarySaver.swift; sourceTree = "<group>"; };
 		19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DropboxPhotoTest-Bridging-Header.h"; sourceTree = "<group>"; };
-		197788C21CFA6ED700D632AD /* PSUISegmentedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUISegmentedViewController.xib; sourceTree = "<group>"; };
 		19855CB41E130D83009E97B5 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		19A2861F1C6916160039C0A4 /* PhotoManagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoManagement.swift; sourceTree = "<group>"; };
 		19A6697B1C51E9D60044D1F2 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -84,14 +85,15 @@
 		19CD3CEF1C557F8300BB31A6 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
 		19CD3CF01C557F8300BB31A6 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Pods/../build/Debug-iphoneos/Firebase.framework"; sourceTree = "<group>"; };
 		19E2FB361C4DB3D900BA4075 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
-		19EEDCCF1CE583470057AA96 /* PSUIElements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSUIElements.swift; sourceTree = "<group>"; };
-		19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUISwitchViewController.xib; sourceTree = "<group>"; };
-		19F317611DC9A400008EBFAD /* PSUITextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PSUITextInputView.xib; sourceTree = "<group>"; };
-		42E767931E8A135700FB8F66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTimerTableViewCell.swift; sourceTree = "<group>"; };
+		42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellTimerTableViewCell.xib; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
 		60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.release.xcconfig"; sourceTree = "<group>"; };
+		876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
+		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
+		989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -112,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				156672B5C9FB5D3721B1DCB6 /* Pods_DropboxPhotoTestTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +133,8 @@
 			children = (
 				8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */,
 				669D545539BD4ED5B74166BB /* Pods-DropboxPhotoTest.release.xcconfig */,
+				04FACA4E617C85FC2F19391D /* Pods-DropboxPhotoTestTests.debug.xcconfig */,
+				08F1A33DA12CF848D148D923 /* Pods-DropboxPhotoTestTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -160,19 +165,17 @@
 			isa = PBXGroup;
 			children = (
 				192BEAC51C3463B900992A8A /* Main.storyboard */,
-				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
-				192BEAC31C3463B900992A8A /* ViewController.swift */,
-				19855CB41E130D83009E97B5 /* Reachability.swift */,
-				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
-				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
-				19EEDCCF1CE583470057AA96 /* PSUIElements.swift */,
-				197788C11CFA661F00D632AD /* PSUIXibFiles */,
-				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
-				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
-				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
-				42E767931E8A135700FB8F66 /* GoogleService-Info.plist */,
+				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
+				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
+				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
+				192BEAC31C3463B900992A8A /* ViewController.swift */,
+				989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */,
+				4260EADD203A0A3500735530 /* Timer */,
+				19855CB41E130D83009E97B5 /* Reachability.swift */,
+				4260EADE203A0A8500735530 /* Photo */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
+				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
 			);
 			path = DropboxPhotoTest;
@@ -197,16 +200,6 @@
 			path = DropboxPhotoTestUITests;
 			sourceTree = "<group>";
 		};
-		197788C11CFA661F00D632AD /* PSUIXibFiles */ = {
-			isa = PBXGroup;
-			children = (
-				19F317601DC9A400008EBFAD /* PSUISwitchViewController.xib */,
-				19F317611DC9A400008EBFAD /* PSUITextInputView.xib */,
-				197788C21CFA6ED700D632AD /* PSUISegmentedViewController.xib */,
-			);
-			name = PSUIXibFiles;
-			sourceTree = "<group>";
-		};
 		3BC125DF03FD1D3B53A9678F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,8 +217,28 @@
 				19A6697B1C51E9D60044D1F2 /* libc++.tbd */,
 				60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */,
 				C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */,
+				876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4260EADD203A0A3500735530 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				98991CAB20262E460095A64C /* TimerViewController.swift */,
+				42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */,
+				42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */,
+			);
+			path = Timer;
+			sourceTree = "<group>";
+		};
+		4260EADE203A0A8500735530 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				19A2861F1C6916160039C0A4 /* PhotoManagement.swift */,
+				194587931C7D326D00507019 /* PhotoLibrarySaver.swift */,
+			);
+			path = Photo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,9 +268,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 192BEAE91C3463BA00992A8A /* Build configuration list for PBXNativeTarget "DropboxPhotoTestTests" */;
 			buildPhases = (
+				F7C3B60D6FD4B2313F86F050 /* [CP] Check Pods Manifest.lock */,
 				192BEACE1C3463BA00992A8A /* Sources */,
 				192BEACF1C3463BA00992A8A /* Frameworks */,
 				192BEAD01C3463BA00992A8A /* Resources */,
+				0BAB7668DD3487E49EFE1BF5 /* [CP] Embed Pods Frameworks */,
+				05CA1166E52E991FAF67B0D7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -294,22 +310,22 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = citruscircuits;
 				TargetAttributes = {
 					192BEABD1C3463B900992A8A = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 4QL94Y49Z9;
-						LastSwiftMigration = 0800;
+						DevelopmentTeam = S2C8988WQX;
+						LastSwiftMigration = 0910;
 					};
 					192BEAD11C3463BA00992A8A = {
 						CreatedOnToolsVersion = 7.0;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0910;
 						TestTargetID = 192BEABD1C3463B900992A8A;
 					};
 					192BEADC1C3463BA00992A8A = {
 						CreatedOnToolsVersion = 7.0;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0910;
 						TestTargetID = 192BEABD1C3463B900992A8A;
 					};
 				};
@@ -340,13 +356,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				192BEACC1C3463B900992A8A /* LaunchScreen.storyboard in Resources */,
-				197788C31CFA6ED700D632AD /* PSUISegmentedViewController.xib in Resources */,
-				42E767941E8A135700FB8F66 /* GoogleService-Info.plist in Resources */,
 				192BEAC91C3463B900992A8A /* Assets.xcassets in Resources */,
-				19F317621DC9A400008EBFAD /* PSUISwitchViewController.xib in Resources */,
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
-				19F317631DC9A400008EBFAD /* PSUITextInputView.xib in Resources */,
+				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
+				989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +383,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7085384404DB387688F8DB28 /* [CP] Copy Pods Resources */ = {
+		05CA1166E52E991FAF67B0D7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,6 +392,44 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTestTests/Pods-DropboxPhotoTestTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0BAB7668DD3487E49EFE1BF5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTestTests/Pods-DropboxPhotoTestTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac-Defines-NSData+zlib/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTestTests/Pods-DropboxPhotoTestTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7085384404DB387688F8DB28 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-resources.sh",
+				"${PODS_ROOT}/Instabug/Instabug.framework/Instabug.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Instabug.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -390,13 +442,62 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DACircularProgress/DACircularProgress.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac-f0850809/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/HanekeSwift/Haneke.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
+				"${PODS_ROOT}/Instabug/Instabug.framework",
+				"${PODS_ROOT}/Instabug/Instabug.framework.dSYM",
+				"${PODS_ROOT}/Instabug/InstabugCore.framework",
+				"${PODS_ROOT}/Instabug/InstabugCore.framework.dSYM",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/MWPhotoBrowser/MWPhotoBrowser.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DACircularProgress.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Haneke.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Instabug.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/Instabug.framework.dSYM",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstabugCore.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/InstabugCore.framework.dSYM",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MWPhotoBrowser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7C3B60D6FD4B2313F86F050 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DropboxPhotoTestTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD714B0B8FA6903A8EDA9E4D /* [CP] Check Pods Manifest.lock */ = {
@@ -405,13 +506,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DropboxPhotoTest-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -422,13 +526,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				192BEAC41C3463B900992A8A /* ViewController.swift in Sources */,
+				98991CAC20262E460095A64C /* TimerViewController.swift in Sources */,
 				1909B1A11C9B9693004F5E7E /* MissingDataViewController.swift in Sources */,
 				19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */,
 				194587941C7D326D00507019 /* PhotoLibrarySaver.swift in Sources */,
 				19A286201C6916160039C0A4 /* PhotoManagement.swift in Sources */,
+				42C078C72034288B00809BDE /* CellTimerTableViewCell.swift in Sources */,
 				192BEAC21C3463B900992A8A /* AppDelegate.swift in Sources */,
 				19855CB51E130D83009E97B5 /* Reachability.swift in Sources */,
-				19EEDCD01CE583470057AA96 /* PSUIElements.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,14 +597,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -541,14 +652,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -586,7 +703,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4QL94Y49Z9;
+				DEVELOPMENT_TEAM = S2C8988WQX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -594,12 +711,13 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios2345678";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.1-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -614,7 +732,7 @@
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4QL94Y49Z9;
+				DEVELOPMENT_TEAM = S2C8988WQX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Debug-iphoneos",
@@ -622,37 +740,42 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2017.ios2345678";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.1-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
 		192BEAEA1C3463BA00992A8A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 04FACA4E617C85FC2F19391D /* Pods-DropboxPhotoTestTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = DropboxPhotoTestTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Debug;
 		};
 		192BEAEB1C3463BA00992A8A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 08F1A33DA12CF848D148D923 /* Pods-DropboxPhotoTestTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = DropboxPhotoTestTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DropboxPhotoTest.app/DropboxPhotoTest";
 			};
 			name = Release;
@@ -664,7 +787,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = DropboxPhotoTest;
 				USES_XCTRUNNER = YES;
 			};
@@ -677,7 +801,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.citruscircuits.DropboxPhotoTestUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = DropboxPhotoTest;
 				USES_XCTRUNNER = YES;
 			};
