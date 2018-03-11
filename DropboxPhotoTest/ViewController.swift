@@ -252,6 +252,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let dataKeyArray: [String: NeededType] = dataKeys[textField.tag]
         var dataKey: String!
         var neededType: NeededType!
+        textField.textColor = UIColor.black
+        textField.backgroundColor = white
         for (key, value) in dataKeyArray{
             dataKey = key
             neededType = value
@@ -288,6 +290,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let userInput: String = segmentedControl.titleForSegment(at: segmentedControl.selectedSegmentIndex)!
         self.ourTeam.child(dataKey).setValue(userInput)
         self.viewDidLoad()
+        segmentedControl.tintColor = green
     }
     
     @objc func switchValueChanged(_ switchElement: UISwitch) {
@@ -297,6 +300,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             dataKey = key
         }
         var userInput: Bool
+        switchElement.tintColor = self.green
+        switchElement.onTintColor = self.green
         if switchElement.isOn{
             userInput = true
         } else {
