@@ -3,12 +3,13 @@
 //  DropboxPhotoTest
 //
 //  Created by Bryton Moeller on 12/30/15.
-//  Copyright © 2015 citruscircuits. All rights reserved.
+//  Copyright © 2018 citruscircuits. All rights reserved.
 //
 
 import UIKit
 import Firebase
 import IQKeyboardManager
+import DropDown
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Instabug.start(withToken: "98616ae556601b6b72101615cd3f7f9a", invocationEvent: IBGInvocationEvent.shake)
         IQKeyboardManager.shared().isEnabled = true
         IQKeyboardManager.shared().isEnableAutoToolbar = false
+        DropDown.startListeningToKeyboard()
         return true
     }
 

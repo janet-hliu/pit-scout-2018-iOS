@@ -3,7 +3,7 @@
 //  DropboxPhotoTest
 //
 //  Created by Bryton Moeller on 2/8/16.
-//  Copyright © 2016 citruscircuits. All rights reserved.
+//  Copyright © 2018 citruscircuits. All rights reserved.
 //
 
 import Foundation

@@ -6,11 +6,11 @@ use_frameworks!
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'DropboxPhotoTest' do
-    #platform :ios, '9.1'
+    #platform :ios
     post_install do |installer|
         installer.pods_project.targets.each do |target|
             target.build_configurations.each do |config|
-                config.build_settings['SWIFT_VERSION'] = '3.0'
+                config.build_settings['SWIFT_VERSION'] = '4.0'
                 config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.10'
             end
         end
@@ -26,11 +26,8 @@ target 'DropboxPhotoTest' do
     pod 'Firebase/Database'
     pod 'Firebase/Auth'
     pod 'SwiftyJSON'
-    #pod 'JSONHelper'
-    #pod 'SwiftyDropbox'
     pod 'HanekeSwift', :git => 'https://github.com/Haneke/HanekeSwift', :branch => 'feature/swift-3'
-    #pod 'SwiftPhotoGallery'
-
+    pod 'DropDown'
     pod 'Instabug'
     pod 'MWPhotoBrowser'
     pod 'IQKeyboardManager'

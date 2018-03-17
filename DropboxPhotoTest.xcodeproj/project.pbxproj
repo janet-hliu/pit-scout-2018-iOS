@@ -24,6 +24,7 @@
 		19A669801C51E9F00044D1F2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A6697F1C51E9F00044D1F2 /* Security.framework */; };
 		19A669821C51E9F80044D1F2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A669811C51E9F80044D1F2 /* SystemConfiguration.framework */; };
 		19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E2FB361C4DB3D900BA4075 /* TableViewController.swift */; };
+		4264FA5D2055903B00DDABF1 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4264FA5C2055903B00DDABF1 /* FilterViewController.swift */; };
 		42C078C72034288B00809BDE /* CellTimerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */; };
 		42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */; };
 		5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
@@ -31,9 +32,11 @@
 		5B8F09171E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */; };
 		98991CAC20262E460095A64C /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98991CAB20262E460095A64C /* TimerViewController.swift */; };
 		989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */; };
-		989A5E1C205468E6002C3DAD /* NewMissingDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989A5E1B205468E6002C3DAD /* NewMissingDataViewController.swift */; };
-		989A5E2320548B81002C3DAD /* CellMissingDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989A5E2120548B81002C3DAD /* CellMissingDataTableViewCell.swift */; };
-		989A5E2420548B81002C3DAD /* CellMissingDataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E2220548B81002C3DAD /* CellMissingDataTableViewCell.xib */; };
+		989A5E1C205468E6002C3DAD /* (null) in Sources */ = {isa = PBXBuildFile; };
+		989A5E2320548B81002C3DAD /* (null) in Sources */ = {isa = PBXBuildFile; };
+		989A5E2420548B81002C3DAD /* (null) in Resources */ = {isa = PBXBuildFile; };
+		989A5E302055EDB7002C3DAD /* CellFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989A5E2E2055EDB7002C3DAD /* CellFilterTableViewCell.swift */; };
+		989A5E312055EDB7002C3DAD /* CellFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E2F2055EDB7002C3DAD /* CellFilterTableViewCell.xib */; };
 		D73B9A9BEA2434292D3AAAFA /* Pods_DropboxPhotoTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F4DBA9586BBEB9548F737D /* Pods_DropboxPhotoTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +91,7 @@
 		19CD3CEF1C557F8300BB31A6 /* firebase_schema_2016_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = firebase_schema_2016_ios.framework; path = "Pods/../build/Debug-iphoneos/firebase_schema_2016_ios.framework"; sourceTree = "<group>"; };
 		19CD3CF01C557F8300BB31A6 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = "Pods/../build/Debug-iphoneos/Firebase.framework"; sourceTree = "<group>"; };
 		19E2FB361C4DB3D900BA4075 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		4264FA5C2055903B00DDABF1 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTimerTableViewCell.swift; sourceTree = "<group>"; };
 		42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellTimerTableViewCell.xib; sourceTree = "<group>"; };
 		5B8F09141E3D424B00F4348E /* GoogleService-Info (1).plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info (1).plist"; sourceTree = "<group>"; };
@@ -96,10 +100,9 @@
 		876601A21DB313C3E228220D /* Pods_DropboxPhotoTestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E886E65A7510F5F2D6D483C /* Pods-DropboxPhotoTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DropboxPhotoTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest.debug.xcconfig"; sourceTree = "<group>"; };
 		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
-		989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		989A5E1B205468E6002C3DAD /* NewMissingDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMissingDataViewController.swift; sourceTree = "<group>"; };
-		989A5E2120548B81002C3DAD /* CellMissingDataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellMissingDataTableViewCell.swift; sourceTree = "<group>"; };
-		989A5E2220548B81002C3DAD /* CellMissingDataTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellMissingDataTableViewCell.xib; sourceTree = "<group>"; };
+		989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		989A5E2E2055EDB7002C3DAD /* CellFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellFilterTableViewCell.swift; sourceTree = "<group>"; };
+		989A5E2F2055EDB7002C3DAD /* CellFilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellFilterTableViewCell.xib; sourceTree = "<group>"; };
 		C33BC778FD1F162FA3A4694C /* Pods_DropboxPhotoTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DropboxPhotoTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -174,11 +177,11 @@
 				192BEACA1C3463B900992A8A /* LaunchScreen.storyboard */,
 				192BEAC11C3463B900992A8A /* AppDelegate.swift */,
 				1909B1A01C9B9693004F5E7E /* MissingDataViewController.swift */,
-				989A5E1B205468E6002C3DAD /* NewMissingDataViewController.swift */,
-				989A5E2120548B81002C3DAD /* CellMissingDataTableViewCell.swift */,
-				989A5E2220548B81002C3DAD /* CellMissingDataTableViewCell.xib */,
 				19E2FB361C4DB3D900BA4075 /* TableViewController.swift */,
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
+				4264FA5C2055903B00DDABF1 /* FilterViewController.swift */,
+				989A5E2E2055EDB7002C3DAD /* CellFilterTableViewCell.swift */,
+				989A5E2F2055EDB7002C3DAD /* CellFilterTableViewCell.xib */,
 				989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */,
 				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
@@ -369,8 +372,9 @@
 				192BEAC71C3463B900992A8A /* Main.storyboard in Resources */,
 				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
+				989A5E312055EDB7002C3DAD /* CellFilterTableViewCell.xib in Resources */,
 				989A5E1820545BBB002C3DAD /* GoogleService-Info.plist in Resources */,
-				989A5E2420548B81002C3DAD /* CellMissingDataTableViewCell.xib in Resources */,
+				989A5E2420548B81002C3DAD /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +458,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-DropboxPhotoTest/Pods-DropboxPhotoTest-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/DACircularProgress/DACircularProgress.framework",
+				"${BUILT_PRODUCTS_DIR}/DropDown/DropDown.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac-f0850809/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/HanekeSwift/Haneke.framework",
@@ -472,6 +477,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DACircularProgress.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DropDown.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Haneke.framework",
@@ -537,11 +543,13 @@
 			files = (
 				192BEAC41C3463B900992A8A /* ViewController.swift in Sources */,
 				98991CAC20262E460095A64C /* TimerViewController.swift in Sources */,
-				989A5E1C205468E6002C3DAD /* NewMissingDataViewController.swift in Sources */,
-				989A5E2320548B81002C3DAD /* CellMissingDataTableViewCell.swift in Sources */,
+				989A5E1C205468E6002C3DAD /* (null) in Sources */,
+				989A5E2320548B81002C3DAD /* (null) in Sources */,
 				1909B1A11C9B9693004F5E7E /* MissingDataViewController.swift in Sources */,
 				19E2FB371C4DB3D900BA4075 /* TableViewController.swift in Sources */,
+				4264FA5D2055903B00DDABF1 /* FilterViewController.swift in Sources */,
 				194587941C7D326D00507019 /* PhotoLibrarySaver.swift in Sources */,
+				989A5E302055EDB7002C3DAD /* CellFilterTableViewCell.swift in Sources */,
 				19A286201C6916160039C0A4 /* PhotoManagement.swift in Sources */,
 				42C078C72034288B00809BDE /* CellTimerTableViewCell.swift in Sources */,
 				192BEAC21C3463B900992A8A /* AppDelegate.swift in Sources */,
@@ -723,7 +731,7 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.1-";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.ios-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";
@@ -752,7 +760,7 @@
 				INFOPLIST_FILE = DropboxPhotoTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.1-";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pit-scout-2018.ios-1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "DropboxPhotoTest/DropboxPhotoTest-Bridging-Header.h";

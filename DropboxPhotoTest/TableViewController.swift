@@ -3,15 +3,13 @@
 //  DropboxPhotoTest
 //
 //  Created by Bryton Moeller on 1/18/16.
-//  Copyright © 2016 citruscircuits. All rights reserved.
+//  Copyright © 2018 citruscircuits. All rights reserved.
 //
 import UIKit
 import Foundation
 import Firebase
 import FirebaseStorage
 import Haneke
-
-let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImage"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
@@ -25,7 +23,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var timer = Timer()
     var photoManager : PhotoManager?
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
-    var dontNeedNotification = true
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
     var firebaseStorageRef : StorageReference?

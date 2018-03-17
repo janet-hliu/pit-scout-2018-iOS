@@ -2,7 +2,7 @@
 //  TimerViewController.swift
 //  DropboxPhotoTest
 //
-//  Created by Rebecca Hirsch on 2/3/18.
+//  Created by Janet Liu on 2/3/18.
 //  Copyright © 2018 citruscircuits. All rights reserved.
 //
 

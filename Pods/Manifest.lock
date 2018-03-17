@@ -1,5 +1,6 @@
 PODS:
   - DACircularProgress (2.3.1)
+  - DropDown (2.3.1)
   - Firebase (4.9.0):
     - Firebase/Core (= 4.9.0)
   - Firebase/Auth (4.9.0):
@@ -71,6 +72,7 @@ PODS:
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
+  - DropDown
   - Firebase
   - Firebase/Auth
   - Firebase/Core
@@ -94,6 +96,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  DropDown: 20499c7b2731b0d21609af924e47c7677a2be50d
   Firebase: 632216af3ed7f31e3be34776947fdc7546cfb572
   FirebaseAnalytics: 388b630c15713f5dbf364071f5f3d6077fb52f4e
   FirebaseAuth: aaaf68d5064a6c8fec435758f83a43b8db26ccaa
@@ -113,6 +116,6 @@ SPEC CHECKSUMS:
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 23412041beca3f31d542f58dd74015347908d7ab
+PODFILE CHECKSUM: 9c0caaf32c43aa12aa77d8becf4ad50f59b1022c
 
 COCOAPODS: 1.4.0.rc.1
