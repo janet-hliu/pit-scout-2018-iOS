@@ -189,8 +189,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="nh2-oX-tjh" kind="relationship" relationship="viewControllers" id="D2H-Sk-yT1"/>
                         <segue destination="khh-Np-8mf" kind="relationship" relationship="viewControllers" id="kVG-x7-j8K"/>
+                        <segue destination="nh2-oX-tjh" kind="relationship" relationship="viewControllers" id="D2H-Sk-yT1"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AKK-vu-pOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -268,17 +268,17 @@
                                                     <action selector="deleteImagePressed:" destination="GaD-O8-v2V" eventType="touchUpInside" id="deR-kQ-7yw"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Max Height:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oT-SL-mmu">
-                                                <rect key="frame" x="8" y="239" width="98" height="22"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dimensions:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oT-SL-mmu">
+                                                <rect key="frame" x="8" y="239" width="110" height="22"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="98" id="NRl-H4-Ug0"/>
+                                                    <constraint firstAttribute="width" constant="110" id="NRl-H4-Ug0"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Selected Image Key" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-Cz-N0g">
-                                                <rect key="frame" x="152" y="197" width="214" height="30"/>
+                                                <rect key="frame" x="153" y="197" width="213" height="30"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -292,11 +292,11 @@
                                                     <segment title="Other"/>
                                                 </segments>
                                             </segmentedControl>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Maximum Scoring Height (Ft, In)" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tbg-O8-iHv">
-                                                <rect key="frame" x="136" y="235" width="230" height="30"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="width x length (inches)" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Tbg-O8-iHv">
+                                                <rect key="frame" x="153" y="235" width="213" height="30"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="namePhonePad"/>
                                             </textField>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Programming Language:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ru-N6-SkL">
                                                 <rect key="frame" x="8" y="340" width="199" height="22"/>
@@ -629,12 +629,12 @@
                                             <constraint firstItem="q35-Lg-uby" firstAttribute="leading" secondItem="6WK-0C-Zdz" secondAttribute="leading" constant="8" id="kCU-av-Lf2"/>
                                             <constraint firstItem="tQ6-hx-Xci" firstAttribute="top" secondItem="IXY-QS-9WT" secondAttribute="bottom" constant="8" id="kGb-vt-x0F"/>
                                             <constraint firstItem="RbV-Qn-CRU" firstAttribute="leading" secondItem="6WK-0C-Zdz" secondAttribute="leading" constant="16" id="kN3-ZN-IgH"/>
-                                            <constraint firstItem="Teg-Cz-N0g" firstAttribute="leading" secondItem="E8Q-GI-MW4" secondAttribute="trailing" constant="8" id="kkg-Mw-yRA"/>
+                                            <constraint firstItem="Teg-Cz-N0g" firstAttribute="leading" secondItem="E8Q-GI-MW4" secondAttribute="trailing" constant="9" id="kkg-Mw-yRA"/>
                                             <constraint firstItem="IXY-QS-9WT" firstAttribute="top" secondItem="6WK-0C-Zdz" secondAttribute="top" constant="8" id="mZl-cw-7zW"/>
                                             <constraint firstItem="Cdh-6U-Lev" firstAttribute="leading" secondItem="6WK-0C-Zdz" secondAttribute="leading" constant="30" id="nc6-Ok-Pqf"/>
                                             <constraint firstItem="GJT-TB-C2y" firstAttribute="top" secondItem="6WK-0C-Zdz" secondAttribute="top" constant="12" id="ndL-OR-KPj"/>
                                             <constraint firstItem="IXY-QS-9WT" firstAttribute="leading" secondItem="mas-Xa-wCH" secondAttribute="trailing" constant="8" id="oJv-VE-xsc"/>
-                                            <constraint firstItem="Tbg-O8-iHv" firstAttribute="leading" secondItem="3oT-SL-mmu" secondAttribute="trailing" constant="30" id="pKV-GA-aiS"/>
+                                            <constraint firstItem="Tbg-O8-iHv" firstAttribute="leading" secondItem="3oT-SL-mmu" secondAttribute="trailing" constant="35" id="pKV-GA-aiS"/>
                                             <constraint firstItem="2ru-N6-SkL" firstAttribute="leading" secondItem="6WK-0C-Zdz" secondAttribute="leading" constant="8" id="pOH-5Q-aya"/>
                                             <constraint firstAttribute="trailing" secondItem="Tbg-O8-iHv" secondAttribute="trailing" constant="9" id="q6l-z9-NIf"/>
                                             <constraint firstItem="iEd-ux-vEe" firstAttribute="leading" secondItem="4UH-nJ-vrD" secondAttribute="trailing" constant="8" id="q8a-tA-XIs"/>
@@ -712,9 +712,9 @@
                         <outlet property="driveTimerButton" destination="Ns7-Oa-fLl" id="zmM-g7-56M"/>
                         <outlet property="driveTrainSegControl" destination="861-cM-XpH" id="yxB-1l-5TB"/>
                         <outlet property="hasCameraSwitch" destination="k80-Cc-Nj6" id="tO5-Sz-jqn"/>
-                        <outlet property="maxHeightTextField" destination="Tbg-O8-iHv" id="1yy-JX-izL"/>
                         <outlet property="programmingLanguageSegControl" destination="1Yg-nw-DjO" id="Znb-Al-erM"/>
                         <outlet property="rampTimerButton" destination="iEd-ux-vEe" id="J5N-xz-iYV"/>
+                        <outlet property="robotDimensions" destination="Tbg-O8-iHv" id="xH9-LD-KOT"/>
                         <outlet property="scrollView" destination="qah-pQ-L5G" id="H2y-Wr-Rjb"/>
                         <outlet property="selectedImageTextField" destination="Teg-Cz-N0g" id="C7y-gZ-pZM"/>
                         <outlet property="viewImageButton" destination="tQ6-hx-Xci" id="7ew-HQ-tKw"/>
