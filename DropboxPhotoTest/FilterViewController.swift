@@ -139,28 +139,24 @@ class FilterViewController: UIViewController, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "filterCell", for: indexPath) as! CellFilterTableViewCell
-        if self.filterByPoint != "" && self.filterByValue = "" {
+        if self.filterByPoint != "" && self.filterByValue == "" {
             filterForData(dataPoint: filterByPoint)
             for (key, value) in teamsForDataValue {
                 for i in 0...value.count {
                     cell.teamNum.text = "\(value[i])"
                     cell.dataPoint.text = "\(filterByPoint)"
                     cell.dataValue.text = "\(key)"
-                    return cell
                 }
             }
         }else if self.filterByPoint != "" && self.filterByValue != "" {
             filterForData(dataPoint: filterByPoint)
-            for value in teamsForDataValue[filterByValue] {
-                for i in 0...value.count {
-                    cell.teamNum.text = "\(value[i])"
+            for value in teamsForDataValue[filterByValue]! {
+                    cell.teamNum.text = "\(value)"
                     cell.dataPoint.text = "\(filterByPoint)"
                     cell.dataValue.text = "\(filterByValue)"
-                    return cell
-                }
             }
-        }else if self.filterbyPoint = "" && self.filterByValue = "" {
-            for (key, value) in teamsForDataNil {
+        }else if self.filterByPoint == "" && self.filterByValue == "" {
+            for (key, value) in self.teamsForDataNil {
                 for i in 0...value.count {
                     cell.teamNum.text = "\(key)"
                     cell.dataPoint.text = "\(i)"
@@ -168,6 +164,7 @@ class FilterViewController: UIViewController, UITableViewDelegate {
                 }
             }
         }
+        return cell
     }
 }
 

@@ -71,11 +71,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func takeSnapshot() {
-        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
-            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
-                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+        self.firebase!.child("Teams").observe(.value, with: { (teamSnapshot) in
+            self.setup(teamSnapshot)
             })
-        })
     }
     
     
@@ -195,10 +193,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
-            firebase!.child("TeamsList").observeSingleEvent(of: .value, with: { (teamsListSnapshot) in
-                let teamsList = teamsListSnapshot.value as! [Int]
-                self.firebase!.child("TeamsList").child(String(teamsList.count)).setValue(teamNum)
-            })
             firebase!.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
             firebase!.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }
