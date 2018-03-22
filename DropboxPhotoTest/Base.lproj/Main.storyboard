@@ -172,6 +172,7 @@
                         <outlet property="dataPointLabel" destination="CrL-mz-1AU" id="lM6-vh-NYP"/>
                         <outlet property="dataPointValueButton" destination="YOR-Y2-Top" id="wM3-r5-nwz"/>
                         <outlet property="dataPointValueLabel" destination="5ED-WE-KI3" id="eb7-Nd-v3m"/>
+                        <outlet property="dataTable" destination="Vc5-mp-Sph" id="DuP-uJ-jE6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFc-r9-o9I" userLabel="First Responder" sceneMemberID="firstResponder"/>

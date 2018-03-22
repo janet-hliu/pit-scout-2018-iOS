@@ -12,6 +12,9 @@ import UIKit
 import DropDown
 
 class FilterViewController: UIViewController, UITableViewDelegate {
+    
+    
+    @IBOutlet weak var dataTable: UITableView!
     @IBOutlet weak var dataPointButton: UIButton!
     @IBOutlet weak var dataPointValueButton: UIButton!
     @IBOutlet weak var dataPointLabel: UILabel!
@@ -25,7 +28,12 @@ class FilterViewController: UIViewController, UITableViewDelegate {
     var pitDataPointValues: [String] = ["nil"]
     var dataPointIndex: Int = 0
     var firebase : DatabaseReference?
-
+    var teamsForDataValue: [String:[Int]] = [String:[Int]]()
+    var teamsForDataNil: [Int:[String]] = [Int:[String]]()
+    var filterByPoint : String = ""
+    var filterByValue : String = ""
+    var numOfCells : Int = 0
+    
     override func viewDidLoad() {
         self.firebase = Database.database().reference()
         setUpDataPointDropDown(anchorButton: dataPointButton, dataArray: pitDataPoints)
@@ -56,6 +64,7 @@ class FilterViewController: UIViewController, UITableViewDelegate {
                 }
                 self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
             })
+            self!.filterByPoint = item
         }
     }
     
@@ -65,6 +74,7 @@ class FilterViewController: UIViewController, UITableViewDelegate {
         dataPointValueDropDown.dataSource = dataArray
         dataPointValueDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointValueLabel.text = item
+            self!.filterByValue = item
         }
     }
     
@@ -74,6 +84,87 @@ class FilterViewController: UIViewController, UITableViewDelegate {
     
     @IBAction func dataPointValueButtonpressed(_ sender: Any) {
         dataPointValueDropDown.show()
+    }
+    
+    func filterForNils() {
+        self.teamsForDataNil = [:]
+        numOfCells = 0
+        self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
+            let teamsDictionary = snap.value as! NSDictionary
+            for (_, teamData) in teamsDictionary {
+                let dataDictionary = teamData as! NSDictionary
+                let num = dataDictionary.object(forKey: "number") as! Int
+                for key in self.pitDataPoints {
+                    let value = dataDictionary.object(forKey: key)
+                    if value == nil {
+                        var teamArrayForNilArray = self.teamsForDataNil[num] ?? []
+                        teamArrayForNilArray.append(key)
+                        self.teamsForDataNil[num] = teamArrayForNilArray
+                        self.numOfCells += 1
+                    }
+                }
+            }
+        })
+    }
+    
+    func filterForData(dataPoint: String) {
+        self.teamsForDataValue = [:]
+        numOfCells = 0
+        self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
+            let teamsDictionary = snap.value as! NSDictionary
+            for (_, teamData) in teamsDictionary {
+                let dataDictionary = teamData as! NSDictionary
+                let value = dataDictionary.object(forKey: dataPoint)
+                let num = dataDictionary.object(forKey: "number") as! Int
+                if value != nil {
+                    let valueAsString = String(describing: value!)
+                    var teamArrayForDataArray = self.teamsForDataValue[valueAsString] ?? []
+                    teamArrayForDataArray.append(num)
+                    self.teamsForDataValue[valueAsString] = teamArrayForDataArray
+                    self.numOfCells += 1
+                } else {
+                    var teamArrayForDataNilArray = self.teamsForDataValue["nil"] ?? []
+                    teamArrayForDataNilArray.append(num)
+                    self.teamsForDataValue["nil"] = teamArrayForDataNilArray
+                }
+            }
+        })
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var cells = 0
+        cells = numOfCells
+        return cells
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "filterCell", for: indexPath) as! CellFilterTableViewCell
+        if self.filterByPoint != "" && self.filterByValue == "" {
+            filterForData(dataPoint: filterByPoint)
+            for (key, value) in teamsForDataValue {
+                for i in 0...value.count {
+                    cell.teamNum.text = "\(value[i])"
+                    cell.dataPoint.text = "\(filterByPoint)"
+                    cell.dataValue.text = "\(key)"
+                }
+            }
+        }else if self.filterByPoint != "" && self.filterByValue != "" {
+            filterForData(dataPoint: filterByPoint)
+            for value in teamsForDataValue[filterByValue]! {
+                    cell.teamNum.text = "\(value)"
+                    cell.dataPoint.text = "\(filterByPoint)"
+                    cell.dataValue.text = "\(filterByValue)"
+            }
+        }else if self.filterByPoint == "" && self.filterByValue == "" {
+            for (key, value) in self.teamsForDataNil {
+                for i in 0...value.count {
+                    cell.teamNum.text = "\(key)"
+                    cell.dataPoint.text = "\(i)"
+                    cell.dataValue.text = "nil"
+                }
+            }
+        }
+        return cell
     }
 }
 
