@@ -121,8 +121,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return "\(m):\(s):\(ds)"
     }
     
-    func didSucceedAlert(dataKey: String) {
-
+    func completedTrialAlert(dataKey: String) {
         if dataKey == "pitDriveTimeOutcome" {
             let driveTimerAlert = UIAlertController(title: "What was the treadmill distance travelled?", message: "", preferredStyle: .alert)
             
@@ -169,9 +168,9 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let rampTimerAlert = UIAlertController(title: "Did the robot succeed?", message: "", preferredStyle: .alert)
             
             let didSucceedAction = UIAlertAction(title: "True", style: .default, handler: nil)
-            rampTimerAlert.addAction(didSucceedAction)
-            
             let didFailAction = UIAlertAction(title: "False", style: .default, handler: nil)
+            
+            rampTimerAlert.addAction(didSucceedAction)
             rampTimerAlert.addAction(didFailAction)
             
             let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
@@ -214,7 +213,7 @@ class TimerViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.writeArrayToFirebase(dataKey: self.timeDataKey!, neededType: NeededType.Float, value: driveTime, snap: snap)
             })
             clearTimer()
-            didSucceedAlert(dataKey: self.outcomeDataKey!)
+            completedTrialAlert(dataKey: self.outcomeDataKey!)
         } else if count == 00.00 {
              let inputAlert = UIAlertController(title: "User Input?", message: "Please time something before submitting", preferredStyle: .alert)
             inputAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))

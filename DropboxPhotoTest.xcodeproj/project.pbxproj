@@ -176,13 +176,13 @@
 				192BEAC31C3463B900992A8A /* ViewController.swift */,
 				4264FA5C2055903B00DDABF1 /* FilterViewController.swift */,
 				989A5E1720545BBB002C3DAD /* GoogleService-Info.plist */,
-				5B51D299205DD74600E26A9E /* Photos for launch Screen */,
 				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
 				4260EADE203A0A8500735530 /* Photo */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
+				5B51D299205DD74600E26A9E /* Photos for launch Screen */,
 			);
 			path = DropboxPhotoTest;
 			sourceTree = "<group>";
