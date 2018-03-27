@@ -25,7 +25,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     // Array of all the data points in pit scout, not including ramp time/outcome, drive time/outcome, SEALs notes
     var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
-    var pitDataPointValues: [String] = ["nil", "All"]
+    var pitDataPointValues: [String] = ["All"]
     var dataPointIndex: Int = 0
     var firebase: DatabaseReference?
     var teamDataPoints: [(Int,String)] = [(Int,String)]()
