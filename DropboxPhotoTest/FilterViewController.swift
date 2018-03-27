@@ -29,7 +29,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     var dataPointIndex: Int = 0
     var firebase: DatabaseReference?
     var teamDataPoints: [(Int,String)] = [(Int,String)]()
-    // tuples with the team number and then data point value. ex. [(1678,15),(118,24),(100,42)]
+    // tuples with the team number and then data point value. ex. [(1678,"15"),(118,"24"),(100,"42")]
     var teamsForDataValue: [Int] = [Int]()
     // teams that have a certain value for a certain DataPoint. ex. [1323,1671,5458]
     var filterDatapoint: String = ""
@@ -111,7 +111,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             if value != nil && num != nil {
                 let valueAsString = String(describing: value!)
                 teamDataPoints.append((num!, valueAsString))
-                // ex. (1678, C++)
+                // ex. (1678, "C++")
             } else if num != nil{
                 teamDataPoints.append((num!, "nil"))
             } else if num == nil{
