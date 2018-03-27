@@ -27,12 +27,17 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
     var pitDataPointValues: [String] = ["nil", "All"]
     var dataPointIndex: Int = 0
-    var firebase : DatabaseReference?
+    var firebase: DatabaseReference?
     var teamDataPoints: [(Int,String)] = [(Int,String)]()
-    var teamsForDataValue : [Int] = [Int]()
-    var filterDatapoint : String = ""
-    var filterByValue : String = ""
-    var teamsDictionary : NSDictionary = [:]
+    // tuples with the team number and then data point value. ex. [(1678,15),(118,24),(100,42)]
+    var teamsForDataValue: [Int] = [Int]()
+    // teams that have a certain value for a certain DataPoint. ex. [1323,1671,5458]
+    var filterDatapoint: String = ""
+    // DataPoint user wishes to sort by. ex. "pitDriveTrain"
+    var filterByValue: String = "All"
+    // Value user wishes to sort by. ex. "Swerve"
+    var teamsDictionary: NSDictionary = [:]
+    // Holds firebase data from "Teams"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +75,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
             self!.filterDatapoint = item
             self!.dataPointValueLabel.text = "All"
-            self!.filterByValue = ""
+            self!.filterByValue = "All"
             self!.filterForData(dataPoint: (self!.filterDatapoint))
         }
     }
@@ -82,9 +87,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         dataPointValueDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointValueLabel.text = item
             self!.filterByValue = item
-            if self!.filterByValue == "All" {
-                self!.filterByValue = ""
-            }
             self!.filterForData(dataPoint: self!.filterDatapoint)
         }
     }
@@ -100,25 +102,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     func filterForData(dataPoint: String) {
         teamsForDataValue = []
         teamDataPoints = []
-        self.teamDataPoints = [(Int, String)]()
         for (_, teamData) in self.teamsDictionary {
             let dataDictionary = teamData as! NSDictionary
             let value = dataDictionary.object(forKey: dataPoint)
-            var num : Int?
-            num = dataDictionary.object(forKey: "number") as? Int
+            // get value for the selected dataPoint
+            var num: Int? = dataDictionary.object(forKey: "number") as? Int
+            // get teamNum
             if value != nil && num != nil {
                 let valueAsString = String(describing: value!)
                 teamDataPoints.append((num!, valueAsString))
+                // ex. (1678, C++)
             } else if num != nil{
                 teamDataPoints.append((num!, "nil"))
             } else if num == nil{
-                print("there is a team without a number?!?")
+                print("This should never happen. There is a team without a number?!?")
             }
         }
-        if filterByValue != "" {
+        if filterByValue != "All" {
             for (teamNum, value) in self.teamDataPoints {
                 if value == filterByValue {
                     teamsForDataValue.append(teamNum)
+                    // if pitProgrammingLanguage & C++ ex. [1678,383,...]
                 }
             }
         }
@@ -131,9 +135,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
-        if filterByValue != "" {
+        if filterByValue != "All" {
             cells = teamsForDataValue.count
-        }else{
+        } else {
             cells = teamDataPoints.count
         }
         return cells
@@ -141,11 +145,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "filterCell", for: indexPath) as! CellFilterTableViewCell
-        if filterByValue != "" {
+        if filterByValue != "All" {
             cell.teamNum.text = "\(teamsForDataValue[indexPath.row])"
             cell.dataPoint.text = "\(filterDatapoint)"
             cell.dataValue.text = "\(filterByValue)"
-        }else {
+        } else {
             cell.teamNum.text = "\(teamDataPoints[indexPath.row].0)"
             cell.dataPoint.text = "\(filterDatapoint)"
             cell.dataValue.text = "\(teamDataPoints[indexPath.row].1)"
