@@ -11,7 +11,7 @@ import Firebase
 import UIKit
 import DropDown
 
-class FilterViewController: UIViewController, UITableViewDelegate {
+class FilterViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     @IBOutlet weak var dataTable: UITableView!
@@ -23,21 +23,33 @@ class FilterViewController: UIViewController, UITableViewDelegate {
     let dataPointDropDown = DropDown()
     let dataPointValueDropDown = DropDown()
     // Array of all the data points in pit scout, not including ramp time/outcome, drive time/outcome, SEALs notes
-    var pitDataPoints: [String] = ["All", "pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
-    var pitDataPointValues: [String] = ["nil"]
+    var pitDataPointValues: [String] = ["All"]
     var dataPointIndex: Int = 0
-    var firebase : DatabaseReference?
-    var teamsForDataValue: [String:[Int]] = [String:[Int]]()
-    var teamsForDataNil: [Int:[String]] = [Int:[String]]()
-    var filterByPoint : String = ""
-    var filterByValue : String = ""
-    var numOfCells : Int = 0
+    var firebase: DatabaseReference?
+    var teamDataPoints: [(Int,String)] = [(Int,String)]()
+    // tuples with the team number and then data point value. ex. [(1678,"15"),(118,"24"),(100,"42")]
+    var teamsForDataValue: [Int] = [Int]()
+    // teams that have a certain value for a certain DataPoint. ex. [1323,1671,5458]
+    var filterDatapoint: String = ""
+    // DataPoint user wishes to sort by. ex. "pitDriveTrain"
+    var filterByValue: String = "All"
+    // Value user wishes to sort by. ex. "Swerve"
+    var teamsDictionary: NSDictionary = [:]
+    // Holds firebase data from "Teams"
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        self.dataTable.register(UINib(nibName: "CellFilterTableViewCell", bundle: nil), forCellReuseIdentifier: "filterCell")
         self.firebase = Database.database().reference()
         setUpDataPointDropDown(anchorButton: dataPointButton, dataArray: pitDataPoints)
         setUpDataPointValueDropDown(anchorButton: dataPointValueButton, dataArray: pitDataPointValues)
+        self.dataTable.delegate = self
+        self.dataTable.dataSource = self
+        self.firebase!.child("Teams").observe(.value) { (snap) in
+            self.teamsDictionary = snap.value as! NSDictionary
+        }
     }
     
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
@@ -47,24 +59,24 @@ class FilterViewController: UIViewController, UITableViewDelegate {
         dataPointDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointIndex = index
             self!.dataPointLabel.text = item
-            self!.pitDataPointValues = ["nil"]
-            self!.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
-                let teamsDictionary = snap.value as! NSDictionary
-                let dataPoint = self!.pitDataPoints[index]
-                // Iterating through the data of all the teams to find all the different values for a given data point
-                for (_, data) in teamsDictionary {
-                    let dataDictionary = data as! NSDictionary
-                    let value = dataDictionary.object(forKey: dataPoint)
-                    if value != nil {
-                        let valueAsString = String(describing: value!)
-                        if !self!.pitDataPointValues.contains(valueAsString) {
-                            self!.pitDataPointValues.append(valueAsString)
-                        }
+            self!.pitDataPointValues = ["All"]
+            let dataPoint = self!.pitDataPoints[index]
+            // Iterating through the data of all the teams to find all the different values for a given data point
+            for (_, data) in (self!.teamsDictionary) {
+                let dataDictionary = data as! NSDictionary
+                let value = dataDictionary.object(forKey: dataPoint)
+                if value != nil {
+                    let valueAsString = String(describing: value!)
+                    if !self!.pitDataPointValues.contains(valueAsString) {
+                        self!.pitDataPointValues.append(valueAsString)
                     }
                 }
-                self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
-            })
-            self!.filterByPoint = item
+            }
+            self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
+            self!.filterDatapoint = item
+            self!.dataPointValueLabel.text = "All"
+            self!.filterByValue = "All"
+            self!.filterForData(dataPoint: (self!.filterDatapoint))
         }
     }
     
@@ -75,6 +87,7 @@ class FilterViewController: UIViewController, UITableViewDelegate {
         dataPointValueDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointValueLabel.text = item
             self!.filterByValue = item
+            self!.filterForData(dataPoint: self!.filterDatapoint)
         }
     }
     
@@ -86,86 +99,66 @@ class FilterViewController: UIViewController, UITableViewDelegate {
         dataPointValueDropDown.show()
     }
     
-    func filterForNils() {
-        self.teamsForDataNil = [:]
-        numOfCells = 0
-        self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
-            let teamsDictionary = snap.value as! NSDictionary
-            for (_, teamData) in teamsDictionary {
-                let dataDictionary = teamData as! NSDictionary
-                let num = dataDictionary.object(forKey: "number") as! Int
-                for key in self.pitDataPoints {
-                    let value = dataDictionary.object(forKey: key)
-                    if value == nil {
-                        var teamArrayForNilArray = self.teamsForDataNil[num] ?? []
-                        teamArrayForNilArray.append(key)
-                        self.teamsForDataNil[num] = teamArrayForNilArray
-                        self.numOfCells += 1
-                    }
-                }
-            }
-        })
-    }
-    
     func filterForData(dataPoint: String) {
-        self.teamsForDataValue = [:]
-        numOfCells = 0
-        self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
-            let teamsDictionary = snap.value as! NSDictionary
-            for (_, teamData) in teamsDictionary {
-                let dataDictionary = teamData as! NSDictionary
-                let value = dataDictionary.object(forKey: dataPoint)
-                let num = dataDictionary.object(forKey: "number") as! Int
-                if value != nil {
-                    let valueAsString = String(describing: value!)
-                    var teamArrayForDataArray = self.teamsForDataValue[valueAsString] ?? []
-                    teamArrayForDataArray.append(num)
-                    self.teamsForDataValue[valueAsString] = teamArrayForDataArray
-                    self.numOfCells += 1
-                } else {
-                    var teamArrayForDataNilArray = self.teamsForDataValue["nil"] ?? []
-                    teamArrayForDataNilArray.append(num)
-                    self.teamsForDataValue["nil"] = teamArrayForDataNilArray
+        teamsForDataValue = []
+        teamDataPoints = []
+        for (_, teamData) in self.teamsDictionary {
+            let dataDictionary = teamData as! NSDictionary
+            let value = dataDictionary.object(forKey: dataPoint)
+            // get value for the selected dataPoint
+            var num: Int? = dataDictionary.object(forKey: "number") as? Int
+            // get teamNum
+            if value != nil && num != nil {
+                let valueAsString = String(describing: value!)
+                teamDataPoints.append((num!, valueAsString))
+                // ex. (1678, "C++")
+            } else if num != nil{
+                teamDataPoints.append((num!, "nil"))
+            } else if num == nil{
+                print("This should never happen. There is a team without a number?!?")
+            }
+        }
+        if filterByValue != "All" {
+            for (teamNum, value) in self.teamDataPoints {
+                if value == filterByValue {
+                    teamsForDataValue.append(teamNum)
+                    // if pitProgrammingLanguage & C++ ex. [1678,383,...]
                 }
             }
-        })
+        }
+        teamDataPoints.sort {$0.0 < $1.0}
+        teamsForDataValue.sort {$0 < $1}
+        print(teamDataPoints)
+        print(teamsForDataValue)
+        dataTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var cells = 0
-        cells = numOfCells
+        if filterByValue != "All" {
+            cells = teamsForDataValue.count
+        } else {
+            cells = teamDataPoints.count
+        }
         return cells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "filterCell", for: indexPath) as! CellFilterTableViewCell
-        if self.filterByPoint != "" && self.filterByValue == "" {
-            filterForData(dataPoint: filterByPoint)
-            for (key, value) in teamsForDataValue {
-                for i in 0...value.count {
-                    cell.teamNum.text = "\(value[i])"
-                    cell.dataPoint.text = "\(filterByPoint)"
-                    cell.dataValue.text = "\(key)"
-                }
-            }
-        }else if self.filterByPoint != "" && self.filterByValue != "" {
-            filterForData(dataPoint: filterByPoint)
-            for value in teamsForDataValue[filterByValue]! {
-                    cell.teamNum.text = "\(value)"
-                    cell.dataPoint.text = "\(filterByPoint)"
-                    cell.dataValue.text = "\(filterByValue)"
-            }
-        }else if self.filterByPoint == "" && self.filterByValue == "" {
-            for (key, value) in self.teamsForDataNil {
-                for i in 0...value.count {
-                    cell.teamNum.text = "\(key)"
-                    cell.dataPoint.text = "\(i)"
-                    cell.dataValue.text = "nil"
-                }
-            }
+        if filterByValue != "All" {
+            cell.teamNum.text = "\(teamsForDataValue[indexPath.row])"
+            cell.dataPoint.text = "\(filterDatapoint)"
+            cell.dataValue.text = "\(filterByValue)"
+        } else {
+            cell.teamNum.text = "\(teamDataPoints[indexPath.row].0)"
+            cell.dataPoint.text = "\(filterDatapoint)"
+            cell.dataValue.text = "\(teamDataPoints[indexPath.row].1)"
         }
         return cell
     }
 }
+
+
+
 
 
