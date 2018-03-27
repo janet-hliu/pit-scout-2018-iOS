@@ -59,7 +59,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         dataPointDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointIndex = index
             self!.dataPointLabel.text = item
-            self!.pitDataPointValues = ["nil", "All"]
+            self!.pitDataPointValues = ["All"]
             let dataPoint = self!.pitDataPoints[index]
             // Iterating through the data of all the teams to find all the different values for a given data point
             for (_, data) in (self!.teamsDictionary) {
