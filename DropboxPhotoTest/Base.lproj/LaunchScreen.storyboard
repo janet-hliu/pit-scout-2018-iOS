@@ -24,9 +24,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CC 2017 Logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZFi-Yw-HFA">
-                                <rect key="frame" x="49" y="256" width="276" height="155"/>
+                                <rect key="frame" x="49" y="250.5" width="277" height="166"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="ZFi-Yw-HFA" secondAttribute="height" multiplier="276:155" id="5vR-SO-byd"/>
+                                    <constraint firstAttribute="width" secondItem="ZFi-Yw-HFA" secondAttribute="height" multiplier="278:167" id="gme-4U-QL5"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Citrus Circuits" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZm-ZS-KOI">
