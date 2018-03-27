@@ -10,6 +10,7 @@ import UIKit
 
 class CellFilterTableViewCell: UITableViewCell {
 
+
     @IBOutlet weak var teamNum: UILabel!
     @IBOutlet weak var dataPoint: UILabel!
     @IBOutlet weak var dataValue: UILabel!

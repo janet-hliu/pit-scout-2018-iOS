@@ -45,11 +45,8 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="dataPoint" destination="6Xu-yI-8AY" id="SUq-oR-5sj"/>
-                <outlet property="dataType" destination="6Xu-yI-8AY" id="U1V-eX-sHG"/>
                 <outlet property="dataValue" destination="Xkr-z6-elJ" id="NgB-fg-CTa"/>
                 <outlet property="teamNum" destination="OQ6-3K-4Ko" id="ECx-pg-r1y"/>
-                <outlet property="teamNumber" destination="OQ6-3K-4Ko" id="kwz-qH-jmY"/>
-                <outlet property="value" destination="Xkr-z6-elJ" id="VAx-1y-4Fc"/>
             </connections>
         </tableViewCell>
     </objects>
