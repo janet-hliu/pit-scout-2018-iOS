@@ -3,7 +3,7 @@
 //  DropboxPhotoTest
 //
 //  Created by Bryton Moeller on 3/17/16.
-//  Copyright © 2016 citruscircuits. All rights reserved.
+//  Copyright © 2018 citruscircuits. All rights reserved.
 //
 
 import UIKit
@@ -21,7 +21,7 @@ class MissingDataViewController : UIViewController {
 
     let firebaseKeys = ["pitAvailableWeight", "pitDriveTrain", "pitWheelDiameter", "pitClimberType"]
     
-    let ignoreKeys = ["pitImageKeys", "pitAllImageURLs", "pitSEALsNotes", "pitDriveTest", "pitProgrammingLanguage", "pitAvailableWeight", "pitCanCheesecake", "pitSelectedImage", "pitMaxHeight", "pitSEALsNotes", "pitRampTime", "pitRampTimeOutcome", "pitDriveTime", "pitDriveTimeOutcome"]
+    let ignoreKeys = ["pitImageKeys", "pitAllImageURLs", "pitSEALsNotes", "pitDriveTest", "pitProgrammingLanguage", "pitAvailableWeight", "pitCanCheesecake", "pitSelectedImage", "pitSEALsNotes", "pitRampTime", "pitRampTimeOutcome", "pitDriveTime", "pitDriveTimeOutcome"]
     
     override func viewWillAppear(_ animated: Bool) {
         mdTextView.bounds.size.height = mdTextView.contentSize.height + 100

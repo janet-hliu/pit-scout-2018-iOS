@@ -3,15 +3,13 @@
 //  DropboxPhotoTest
 //
 //  Created by Bryton Moeller on 1/18/16.
-//  Copyright © 2016 citruscircuits. All rights reserved.
+//  Copyright © 2018 citruscircuits. All rights reserved.
 //
 import UIKit
 import Foundation
 import Firebase
 import FirebaseStorage
 import Haneke
-
-let firebaseKeys = ["pitNumberOfWheels",  "pitSelectedImage"]
 
 class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
     
@@ -25,7 +23,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var timer = Timer()
     var photoManager : PhotoManager?
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
-    var dontNeedNotification = true
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
     var firebaseStorageRef : StorageReference?
@@ -74,11 +71,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func takeSnapshot() {
-        self.firebase!.child("TeamsList").observe(.value, with: { (teamsListSnapshot) in
-            self.firebase!.observeSingleEvent(of: .value, with: { (teamSnapshot) in
-                self.setup(teamSnapshot.childSnapshot(forPath: "Teams"))
+        self.firebase!.child("Teams").observe(.value, with: { (teamSnapshot) in
+            self.setup(teamSnapshot)
             })
-        })
     }
     
     
@@ -198,10 +193,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     func teamAdder(_ teamNum: Int, _ teamName: String) {
         if !self.teamNums.contains(self.teamNum!) {
-            firebase!.child("TeamsList").observeSingleEvent(of: .value, with: { (teamsListSnapshot) in
-                let teamsList = teamsListSnapshot.value as! [Int]
-                self.firebase!.child("TeamsList").child(String(teamsList.count)).setValue(teamNum)
-            })
             firebase!.child("Teams").child(String(teamNum)).child("name").setValue(teamName)
             firebase!.child("Teams").child(String(teamNum)).child("number").setValue(Int(teamNum))
         }

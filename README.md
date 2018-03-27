@@ -45,10 +45,10 @@ Here's how to get your code into the main project repository:
 1. Fork the repo
   	+ Login to github and navigate to the repo.
   	+ Click the "Fork" button in the upper right corner of the screen.
-2. Clone the main repo.
- 	+ `git clone https://github.com/frc1678/<repo_name>.git`, where `<repo_name>` is the project repository name (eg. scout-2017, server-2017).
-3. Add your fork as a remote.
-        + `git remote add <what_you_want_to_refer_to_it_as> https://github.com/<your_github_username>/<repo_name>`
+2. Clone your fork:.
+ 	+ `git clone https://github.com/<user_name>/<repo_name>.git`, where `<repo_name>` is the project repository name (eg. scout-2017, server-2017).
+3. Add the main repo as a remote.
+        + `git remote add upstream https://github.com/frc1678/<repo_name>`
 
 ### Anytime you want to make a change:
 
@@ -61,7 +61,8 @@ Here's how to get your code into the main project repository:
  	 + If your change is anything more than a few lines or small fixes, don't skip the extended description. If you are always using git commit with the -m option, stop doing that.
 See this [stackoverflow question](https://stackoverflow.com/questions/9562304/github-commit-with-extended-message) for instructions on how to write an extended commit description.
 4. Push to your forked repo.
- 	 + `git push <your_remote> <your_branch_name>`.
+         + The first time you push, run `git push -u origin <branch name>`
+         + Then you can just run `git push` and `git pull` with that branch and it will use your remote
 5. Submit a pull request.
  	 1. Log into github.
  	 2. Go to the page for your forked repo.
@@ -77,6 +78,8 @@ See this [stackoverflow question](https://stackoverflow.com/questions/9562304/gi
 7. Merge your changes into master
 	  + If there are no conflicts, push the "Squash and merge" button, write a good commit message, and merge the changes.
  	 + If there are conflicts, fix them locally on your branch, push them, and then squash and merge.
+         + ***Don't use the web editor to resolve conflicts***
+         + If there are unresolvable conflicts, then merge and replace the conflicted files and force push to your remote.
 
 
 ## Helpful Tips
