@@ -42,9 +42,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         setUpDataPointValueDropDown(anchorButton: dataPointValueButton, dataArray: pitDataPointValues)
         self.dataTable.delegate = self
         self.dataTable.dataSource = self
-        self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
+        self.firebase!.child("Teams").observe(.value) { (snap) in
             self.teamsDictionary = snap.value as! NSDictionary
-        })
+        }
     }
     
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
@@ -57,19 +57,16 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             self!.pitDataPointValues = ["nil", "All"]
             let dataPoint = self!.pitDataPoints[index]
             // Iterating through the data of all the teams to find all the different values for a given data point
- //           self!.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
- //               self!.teamsDictionary = snap.value as! NSDictionary
-                for (_, data) in (self!.teamsDictionary) {
-                    let dataDictionary = data as! NSDictionary
-                    let value = dataDictionary.object(forKey: dataPoint)
-                    if value != nil {
-                        let valueAsString = String(describing: value!)
-                        if !self!.pitDataPointValues.contains(valueAsString) {
-                            self!.pitDataPointValues.append(valueAsString)
-                        }
+            for (_, data) in (self!.teamsDictionary) {
+                let dataDictionary = data as! NSDictionary
+                let value = dataDictionary.object(forKey: dataPoint)
+                if value != nil {
+                    let valueAsString = String(describing: value!)
+                    if !self!.pitDataPointValues.contains(valueAsString) {
+                        self!.pitDataPointValues.append(valueAsString)
                     }
                 }
- //           })
+            }
             self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
             self!.filterDatapoint = item
             self!.dataPointValueLabel.text = "All"
