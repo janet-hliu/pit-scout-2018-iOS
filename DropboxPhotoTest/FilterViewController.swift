@@ -70,6 +70,10 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     if !self!.pitDataPointValues.contains(valueAsString) {
                         self!.pitDataPointValues.append(valueAsString)
                     }
+                } else {
+                    if !self!.pitDataPointValues.contains("nil") {
+                        self!.pitDataPointValues.append("nil")
+                    }
                 }
             }
             self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
@@ -106,7 +110,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             let dataDictionary = teamData as! NSDictionary
             let value = dataDictionary.object(forKey: dataPoint)
             // get value for the selected dataPoint
-            var num: Int? = dataDictionary.object(forKey: "number") as? Int
+            let num: Int? = dataDictionary.object(forKey: "number") as? Int
             // get teamNum
             if value != nil && num != nil {
                 let valueAsString = String(describing: value!)
