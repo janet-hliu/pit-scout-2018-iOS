@@ -27,6 +27,24 @@
             </objects>
             <point key="canvasLocation" x="-1153" y="-93"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="iEF-gH-9Lr">
+            <objects>
+                <viewController id="Ql8-TL-o31" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Na1-2e-3CR"/>
+                        <viewControllerLayoutGuide type="bottom" id="lU7-j2-7hl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QVG-cG-GXG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bRy-BE-WhE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="23" y="-901"/>
+        </scene>
         <!--Teams-->
         <scene sceneID="LZ6-dV-uSh">
             <objects>
@@ -82,6 +100,24 @@
             <point key="canvasLocation" x="274" y="-59"/>
         </scene>
         <!--Filter-->
+        <scene sceneID="yxz-2R-qxT">
+            <objects>
+                <navigationController id="wC2-ah-Exw" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Filter" selectedImage="Image" id="Rsm-W3-9Qx"/>
+                    <navigationItem key="navigationItem" id="fit-C8-n8g"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3rZ-bO-BGw">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="nh2-oX-tjh" kind="relationship" relationship="rootViewController" id="CZ8-cF-Jm4"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VMA-Js-WQK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2555" y="642"/>
+        </scene>
+        <!--Filter-->
         <scene sceneID="PD9-pM-dgg">
             <objects>
                 <viewController title="Filter" id="nh2-oX-tjh" customClass="FilterViewController" customModule="DropboxPhotoTest" customModuleProvider="target" sceneMemberID="viewController">
@@ -94,49 +130,60 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vc5-mp-Sph">
-                                <rect key="frame" x="16" y="116" width="343" height="482"/>
+                                <rect key="frame" x="16" y="160" width="343" height="438"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jzh-zz-Nu9">
-                                <rect key="frame" x="8" y="28" width="359" height="36"/>
+                                <rect key="frame" x="8" y="72" width="359" height="36"/>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="20"/>
                                 <connections>
                                     <action selector="dataPointButtonPressed:" destination="nh2-oX-tjh" eventType="touchUpInside" id="zuR-yA-eC5"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a data point:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CrL-mz-1AU">
-                                <rect key="frame" x="8" y="28" width="318" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a data point value:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ED-WE-KI3">
                                 <rect key="frame" x="8" y="72" width="318" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a data point value:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ED-WE-KI3">
+                                <rect key="frame" x="8" y="116" width="318" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image-2" translatesAutoresizingMaskIntoConstraints="NO" id="JP7-SK-nKf">
-                                <rect key="frame" x="334" y="72" width="33" height="36"/>
+                                <rect key="frame" x="334" y="116" width="33" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="33" id="Qhn-gN-ffj"/>
                                     <constraint firstAttribute="height" constant="36" id="iMr-DG-h9f"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image-2" translatesAutoresizingMaskIntoConstraints="NO" id="7af-v1-cQz">
-                                <rect key="frame" x="334" y="28" width="33" height="36"/>
+                                <rect key="frame" x="334" y="72" width="33" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="33" id="jnb-W0-b77"/>
                                     <constraint firstAttribute="height" constant="36" id="mub-qp-t72"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YOR-Y2-Top">
-                                <rect key="frame" x="8" y="72" width="359" height="36"/>
+                                <rect key="frame" x="8" y="116" width="359" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <connections>
                                     <action selector="dataPointValueButtonpressed:" destination="nh2-oX-tjh" eventType="touchUpInside" id="0MT-EM-Hu1"/>
                                 </connections>
                             </button>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" translatesAutoresizingMaskIntoConstraints="NO" id="YCy-LD-a6G">
+                                <rect key="frame" x="8" y="145" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YCy-LD-a6G" id="mQQ-Zo-zHE">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="GaD-O8-v2V" kind="show" identifier="TeamViewController" id="ARU-NE-gge"/>
+                                </connections>
+                            </tableViewCell>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -167,6 +214,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Filter" image="Image" id="RFa-JR-sqS"/>
+                    <navigationItem key="navigationItem" id="wgd-i4-gPf"/>
                     <connections>
                         <outlet property="dataPointButton" destination="Jzh-zz-Nu9" id="4h2-9H-Uam"/>
                         <outlet property="dataPointLabel" destination="CrL-mz-1AU" id="lM6-vh-NYP"/>
@@ -177,7 +225,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFc-r9-o9I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="566" y="788"/>
+            <point key="canvasLocation" x="-964" y="716"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="51Q-vJ-jiY">
@@ -190,7 +238,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="khh-Np-8mf" kind="relationship" relationship="viewControllers" id="kVG-x7-j8K"/>
-                        <segue destination="nh2-oX-tjh" kind="relationship" relationship="viewControllers" id="D2H-Sk-yT1"/>
+                        <segue destination="wC2-ah-Exw" kind="relationship" relationship="viewControllers" id="6I3-c1-ZSA"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AKK-vu-pOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -889,6 +937,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cVu-da-bzq"/>
+        <segue reference="ARU-NE-gge"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

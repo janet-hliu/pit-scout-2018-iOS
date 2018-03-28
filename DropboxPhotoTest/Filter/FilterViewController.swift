@@ -29,15 +29,15 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     var dataPointIndex: Int = 0
     var firebase: DatabaseReference?
     var teamDataPoints: [(Int,String)] = [(Int,String)]()
-    // tuples with the team number and then data point value. ex. [(1678,"15"),(118,"24"),(100,"42")]
+    // Array of tuples with the team number and data point value: [(1678,"15"),(118,"24"),(100,"42")]
     var teamsForDataValue: [Int] = [Int]()
-    // teams that have a certain value for a certain DataPoint. ex. [1323,1671,5458]
+    // Teams that have a certain value for a certain DataPoint. ex. [1323,1671,5458]
     var filterDatapoint: String = ""
-    // DataPoint user wishes to sort by. ex. "pitDriveTrain"
     var filterByValue: String = "All"
-    // Value user wishes to sort by. ex. "Swerve"
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
+    var firebaseStorageRef : StorageReference?
+    var photoManager : PhotoManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +49,13 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         self.dataTable.dataSource = self
         self.firebase!.child("Teams").observe(.value) { (snap) in
             self.teamsDictionary = snap.value as! NSDictionary
+        }
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
+        if self.photoManager == nil {
+            self.photoManager = PhotoManager(teamsFirebase: (self.firebase!.child("Teams")))
+            photoManager!.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
+                self.photoManager!.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
+            })
         }
     }
     
@@ -155,6 +162,26 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             cell.dataValue.text = "\(teamDataPoints[indexPath.row].1)"
         }
         return cell
+    }
+    
+    // When the cell gets pressed
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.performSegue(withIdentifier: "TeamViewController", sender: tableView.cellForRow(at: indexPath))
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dest = segue.destination as? ViewController {
+            let selectedCell = sender as! CellFilterTableViewCell
+            let teamNum = Int(selectedCell.teamNum.text!)
+            let teamDictionary = teamsDictionary.object(forKey: String(describing: teamNum!)) as! NSDictionary
+            let teamName = teamDictionary.object(forKey: "name")
+            dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
+            dest.number = teamNum
+            dest.firebaseStorageRef = self.firebaseStorageRef
+            dest.photoManager = self.photoManager
+            dest.title = "\(teamNum!) - \(teamName!)"
+        }
     }
 }
 

@@ -49,7 +49,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var photoManager : PhotoManager!
     var number : Int!
-    var firebase = Database.database().reference()
+    //var firebase = Database.database().reference()
     var firebaseStorageRef : StorageReference!
     var ourTeam : DatabaseReference!
     var photos = [MWPhoto]()

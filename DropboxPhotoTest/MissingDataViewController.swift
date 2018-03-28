@@ -18,7 +18,6 @@ class MissingDataViewController : UIViewController {
         }
     }
     
-
     let firebaseKeys = ["pitAvailableWeight", "pitDriveTrain", "pitWheelDiameter", "pitClimberType"]
     
     let ignoreKeys = ["pitImageKeys", "pitAllImageURLs", "pitSEALsNotes", "pitDriveTest", "pitProgrammingLanguage", "pitAvailableWeight", "pitCanCheesecake", "pitSelectedImage", "pitSEALsNotes", "pitRampTime", "pitRampTimeOutcome", "pitDriveTime", "pitDriveTimeOutcome"]
