@@ -27,7 +27,7 @@
             </objects>
             <point key="canvasLocation" x="-1153" y="-93"/>
         </scene>
-        <!--Missing Data-->
+        <!--Nils-->
         <scene sceneID="6s0-Pc-fb7">
             <objects>
                 <tableViewController id="FSf-i0-Emv" customClass="MissingDataTableViewController" customModule="DropboxPhotoTest" customModuleProvider="target" sceneMemberID="viewController">
@@ -50,17 +50,19 @@
                             <outlet property="delegate" destination="FSf-i0-Emv" id="qYW-rc-Oq6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Missing Data" id="k3M-vv-htS"/>
+                    <tabBarItem key="tabBarItem" title="Nils" id="UCO-1O-tkr"/>
+                    <navigationItem key="navigationItem" title="Nils" id="k3M-vv-htS"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2UE-ml-KwL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-257" y="-974"/>
         </scene>
-        <!--Item-->
+        <!--Nils-->
         <scene sceneID="0LO-qc-K7x">
             <objects>
                 <navigationController id="06X-Wx-SDw" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="0Db-qN-eTs"/>
+                    <tabBarItem key="tabBarItem" title="Nils" id="0Db-qN-eTs"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9tL-xH-qR9">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -242,7 +244,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Filter" image="Image" id="RFa-JR-sqS"/>
-                    <navigationItem key="navigationItem" id="wgd-i4-gPf"/>
+                    <navigationItem key="navigationItem" title="Filter" id="wgd-i4-gPf"/>
                     <connections>
                         <outlet property="dataPointButton" destination="Jzh-zz-Nu9" id="4h2-9H-Uam"/>
                         <outlet property="dataPointLabel" destination="CrL-mz-1AU" id="lM6-vh-NYP"/>
@@ -966,7 +968,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cVu-da-bzq"/>
-        <segue reference="bwm-aU-9Ra"/>
+        <segue reference="ARU-NE-gge"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

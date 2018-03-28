@@ -53,6 +53,7 @@ class MissingDataTableViewController: UITableViewController {
                 print("This should never happen. There is a team without a number?!?")
             }
         }
+        missingData.sort {$0.0 < $1.0}
         print("\(missingData)")
         tableView.reloadData()
     }

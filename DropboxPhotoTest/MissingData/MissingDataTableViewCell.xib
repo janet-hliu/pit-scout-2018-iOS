@@ -31,12 +31,13 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Team" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NdE-Wd-MaU">
                         <rect key="frame" x="16" y="42" width="52" height="24"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="K0w-QY-QxM" firstAttribute="leading" secondItem="NdE-Wd-MaU" secondAttribute="trailing" constant="8" id="2SY-bq-Inc"/>
                     <constraint firstItem="NdE-Wd-MaU" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8Gl-ke-uQH"/>
                     <constraint firstItem="K0w-QY-QxM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="e3i-sH-KmS"/>
                     <constraint firstItem="NdE-Wd-MaU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="j0S-1F-Dqz"/>
