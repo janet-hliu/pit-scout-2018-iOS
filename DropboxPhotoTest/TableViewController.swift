@@ -152,9 +152,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func setupphotoManager() {
-        
         if self.photoManager == nil {
-            self.photoManager = PhotoManager(teamsFirebase: (self.firebase?.child("Teams"))!, teamNumbers: self.teamNums)
+            self.photoManager = PhotoManager(teamsFirebase: (self.firebase?.child("Teams"))!)
             photoManager?.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
                 self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
             })
@@ -349,70 +348,58 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Team View Segue" {
-            var number = -1
-            var name = ""
-            let indexPath = self.tableView.indexPath(for: sender as! UITableViewCell)
-            if (indexPath! as NSIndexPath).section == 1 {
-                let scoutedTeamNums = NSMutableArray()
-                for team in self.scoutedTeamInfo {
-                    if team["hasBeenScouted"] == 1 {
-                        scoutedTeamNums.add(team["num"]!)
-                    }
+        var number = -1
+        var name = ""
+        let indexPath = self.tableView.indexPath(for: sender as! UITableViewCell)
+        if (indexPath! as NSIndexPath).section == 1 {
+            let scoutedTeamNums = NSMutableArray()
+            for team in self.scoutedTeamInfo {
+                if team["hasBeenScouted"] == 1 {
+                    scoutedTeamNums.add(team["num"]!)
                 }
-                number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
-                // Finding the team name
-                for (_, team) in self.teams {
-                    let teamInfo = team 
-                    var teamName = ""
-                    if teamInfo["number"] as! Int == number {
-                        if teamInfo["name"] != nil{
-                            teamName = String(describing: teamInfo["name"]!)
-                        } else {
-                            teamName = "Offseason Bot"
-                        }
-                    }
-                }
-            } else if (indexPath! as NSIndexPath).section == 0 {
-                
-                let notScoutedTeamNums = NSMutableArray()
-                for team in self.scoutedTeamInfo {
-                    if team["hasBeenScouted"] == 0 {
-                        notScoutedTeamNums.add(team["num"]!)
-                    }
-                }
-                number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
-                // Finding the team name
-                for (_, team) in self.teams {
-                    let teamInfo = team 
-                    if teamInfo["number"] as! Int == number {
-                        if teamInfo["name"] != nil{
-                            name = teamInfo["name"] as! String
-                        } else {
-                            name = "Offseason Bot"
-                        }
+            }
+            number = scoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
+            // Finding the team name
+            for (_, team) in self.teams {
+                let teamInfo = team
+                var teamName = ""
+                if teamInfo["number"] as! Int == number {
+                    if teamInfo["name"] != nil{
+                        teamName = String(describing: teamInfo["name"]!)
+                    } else {
+                        teamName = "Offseason Bot"
                     }
                 }
             }
-            let teamViewController = segue.destination as! ViewController
+        } else if (indexPath! as NSIndexPath).section == 0 {
             
-            let teamFB = self.firebase!.child("Teams").child("\(number)")
-            teamViewController.ourTeam = teamFB
-            teamViewController.firebase = self.firebase!
-            teamViewController.number = number
-            teamViewController.title = "\(number) - \(name)"
-            teamViewController.photoManager = self.photoManager
-            teamViewController.firebaseStorageRef = self.firebaseStorageRef
-        } else if segue.identifier == "popoverSegue" {
-            let popoverViewController = segue.destination
-            popoverViewController.modalPresentationStyle = UIModalPresentationStyle.popover
-            popoverViewController.popoverPresentationController!.delegate = self
-            if let missingDataViewController = segue.destination as? MissingDataViewController {
-                self.firebase!.child("Teams").observeSingleEvent(of: .value, with: { (snap) -> Void in
-                    missingDataViewController.snap = snap
-                })
+            let notScoutedTeamNums = NSMutableArray()
+            for team in self.scoutedTeamInfo {
+                if team["hasBeenScouted"] == 0 {
+                    notScoutedTeamNums.add(team["num"]!)
+                }
+            }
+            number = notScoutedTeamNums[((indexPath as NSIndexPath?)?.row)!] as! Int
+            // Finding the team name
+            for (_, team) in self.teams {
+                let teamInfo = team
+                if teamInfo["number"] as! Int == number {
+                    if teamInfo["name"] != nil{
+                        name = teamInfo["name"] as! String
+                    } else {
+                        name = "Offseason Bot"
+                    }
+                }
             }
         }
+        let teamViewController = segue.destination as! ViewController
+        
+        let teamFB = self.firebase!.child("Teams").child("\(number)")
+        teamViewController.ourTeam = teamFB
+        teamViewController.number = number
+        teamViewController.title = "\(number) - \(name)"
+        teamViewController.photoManager = self.photoManager
+        teamViewController.firebaseStorageRef = self.firebaseStorageRef
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

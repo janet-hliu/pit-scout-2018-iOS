@@ -14,7 +14,6 @@ import Haneke
 class PhotoManager : NSObject {
     // cache of urls used to set up images to view or delete
     let cache = Shared.dataCache
-    var teamNumbers : [Int]
     var mayKeepWorking = true {
         didSet {
             print("mayKeepWorking: \(mayKeepWorking)")
@@ -36,12 +35,8 @@ class PhotoManager : NSObject {
     var keyIndex : Int = 0
     var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
     
-    init(teamsFirebase : DatabaseReference, teamNumbers : [Int]) {
-        self.teamNumbers = teamNumbers
+    init(teamsFirebase : DatabaseReference) {
         self.teamsFirebase = teamsFirebase
-        for number in teamNumbers {
-            self.numberOfPhotosForTeam[number] = 0
-        }
         super.init()
     }
     

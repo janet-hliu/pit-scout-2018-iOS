@@ -31,7 +31,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var canCheesecakeSwitch: UISwitch!
     @IBOutlet weak var hasCameraSwitch: UISwitch!
-    @IBOutlet weak var robotDimensions: UITextField!
+    @IBOutlet weak var robotWidth: UITextField!
+    @IBOutlet weak var robotLength: UITextField!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
@@ -48,7 +49,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var photoManager : PhotoManager!
     var number : Int!
-    var firebase = Database.database().reference()
+    //var firebase = Database.database().reference()
     var firebaseStorageRef : StorageReference!
     var ourTeam : DatabaseReference!
     var photos = [MWPhoto]()
@@ -57,7 +58,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var notActuallyLeavingViewController = false
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotDimensions": .String], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool]]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotWidth": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool], ["pitRobotLength": .Float]]
     
     var activeField : UITextField? {
         didSet {
@@ -163,6 +164,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         elementName.tag = dataKeyIndex
         elementName.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: UIControlEvents.editingChanged)
+        elementName.addTarget(self, action: #selector(textFieldDidBeginEditing(_:)), for: UIControlEvents.editingDidBegin)
     }
     
     func setUpTextView(elementName: UITextView, dataKey: String, dataKeyIndex: Int, placeHolder: String) {
@@ -177,7 +179,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 elementName.text = String(describing: placeHolder)
             }
         })
-        
     }
     
     func setUpSegmentedControl(elementName: UISegmentedControl, dataKey: String, dataKeyIndex: Int) {
@@ -246,6 +247,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @objc func didNormalTapDeleteImage(_ sender: UIGestureRecognizer) {
         self.deleteImagePhotoBrowser = true
         setUpPhotoBrowser()
+    }
+    
+    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text == "No current value" {
+            textField.text = ""
+        }
     }
     
     @objc func textFieldValueChanged(_ textField: UITextField) {
@@ -586,7 +593,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
-        self.setUpTextField(elementName: robotDimensions, dataKey: "pitRobotDimensions", dataKeyIndex: 7, neededType: NeededType.String)
+        self.setUpTextField(elementName: robotWidth, dataKey: "pitRobotWidth", dataKeyIndex: 7, neededType: NeededType.String)
+        
+        self.setUpTextField(elementName: robotLength, dataKey: "pitRobotLength", dataKeyIndex: 15, neededType: NeededType.String)
         
         self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
         
@@ -600,7 +609,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpSwitch(elementName: canCheesecakeSwitch, dataKey: "pitCanCheesecake", dataKeyIndex: 3)
         
-        self.setUpSwitch(elementName: hasCameraSwitch, dataKey: "pitHasCamera", dataKeyIndex: 13)
+        self.setUpSwitch(elementName: hasCameraSwitch, dataKey: "pitHasCamera", dataKeyIndex: 14)
         
         self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self
