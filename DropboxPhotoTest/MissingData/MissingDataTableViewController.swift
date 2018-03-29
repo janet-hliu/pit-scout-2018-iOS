@@ -12,7 +12,7 @@ import Firebase
 
 class MissingDataTableViewController: UITableViewController {
     
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth"]
     var firebase: DatabaseReference?
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
