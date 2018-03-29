@@ -36,21 +36,19 @@ class MissingDataTableViewController: UITableViewController {
     }
     
     func getNils() {
-        var missingDataForTeam: [String] = []
         for (_, teamData) in self.teamsDictionary {
-            missingDataForTeam = []
+            var missingDataForTeam = ""
             let dataDictionary = teamData as! NSDictionary
-            var num: Int? = dataDictionary.object(forKey: "number") as? Int
+            let num: Int? = dataDictionary.object(forKey: "number") as? Int
             // get teamNum
             if num != nil {
                 for i in pitDataPoints {
                     let value = dataDictionary.object(forKey: i)
                     if value == nil {
-                        missingDataForTeam.append(i)
+                        missingDataForTeam += " \(i)"
                     }
                 }
-                let dataPointsAsString = missingDataForTeam.joined(separator: ", ")
-                missingData.append((num!, dataPointsAsString))
+                missingData.append((num!, missingDataForTeam))
             } else {
                 print("This should never happen. There is a team without a number?!?")
             }
