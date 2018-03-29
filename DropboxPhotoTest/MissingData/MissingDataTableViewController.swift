@@ -18,6 +18,8 @@ class MissingDataTableViewController: UITableViewController {
     // Holds firebase data from "Teams"
     var missingData: [(Int,String)] = [(Int,String)]()
     // Holds team and missing dataPoints ex. [(118, pitClimberType), (100, pitHasCamera)]
+    var firebaseStorageRef : StorageReference!
+    var photoManager : PhotoManager?
     
     
     
@@ -68,5 +70,25 @@ class MissingDataTableViewController: UITableViewController {
         cell.missingDataPoints.text = "\(missingData[indexPath.row].1)"
         cell.teamNum.text = "\(missingData[indexPath.row].0)"
         return cell
+    }
+    
+    // When the cell gets pressed
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.performSegue(withIdentifier: "TeamViewSegue", sender: tableView.cellForRow(at: indexPath))
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dest = segue.destination as? ViewController {
+            let selectedCell = sender as! MissingDataTableViewCell
+            let teamNum = Int(selectedCell.teamNum.text!)
+            let teamDictionary = teamsDictionary.object(forKey: String(describing: teamNum!)) as! NSDictionary
+            let teamName = teamDictionary.object(forKey: "name")
+            dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
+            dest.number = teamNum
+            dest.firebaseStorageRef = self.firebaseStorageRef
+            dest.photoManager = self.photoManager
+            dest.title = "\(teamNum!) - \(teamName!)"
+        }
     }
 }

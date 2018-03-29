@@ -43,6 +43,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="GaD-O8-v2V" kind="show" identifier="TeamViewSegue" id="s1g-AL-hJ4"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -968,7 +971,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cVu-da-bzq"/>
-        <segue reference="ARU-NE-gge"/>
+        <segue reference="s1g-AL-hJ4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
