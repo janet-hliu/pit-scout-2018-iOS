@@ -17,7 +17,7 @@ class MissingDataTableViewController: UITableViewController {
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
     var missingData: [(Int,String)] = [(Int,String)]()
-    // Holds team and missing dataPoints ex. [(118, pitClimberType), (100, pitHasCamera)]
+    // Holds team and missing dataPoints ex. [(118, "pitClimberType"), (100, "pitHasCamera")]
     var firebaseStorageRef : StorageReference!
     var photoManager : PhotoManager?
     
@@ -40,12 +40,12 @@ class MissingDataTableViewController: UITableViewController {
             var missingDataForTeam = ""
             let dataDictionary = teamData as! NSDictionary
             let num: Int? = dataDictionary.object(forKey: "number") as? Int
-            // get teamNum
+            // Get teamNum
             if num != nil {
                 for i in pitDataPoints {
                     let value = dataDictionary.object(forKey: i)
                     if value == nil {
-                        missingDataForTeam += " \(i)"
+                        missingDataForTeam += "\(i) "
                     }
                 }
                 missingData.append((num!, missingDataForTeam))

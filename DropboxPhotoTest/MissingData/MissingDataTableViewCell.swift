@@ -11,8 +11,8 @@ import UIKit
 class MissingDataTableViewCell: UITableViewCell {
    
     @IBOutlet weak var teamNum: UILabel!
-    
     @IBOutlet weak var missingDataPoints: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
