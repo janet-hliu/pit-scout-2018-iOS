@@ -113,7 +113,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             let dataDictionary = teamData as! NSDictionary
             let value = dataDictionary.object(forKey: dataPoint)
             // get value for the selected dataPoint
-            var num: Int? = dataDictionary.object(forKey: "number") as? Int
+            let num: Int? = dataDictionary.object(forKey: "number") as? Int
             // get teamNum
             if value != nil && num != nil {
                 let valueAsString = String(describing: value!)

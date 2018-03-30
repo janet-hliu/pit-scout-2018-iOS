@@ -21,8 +21,6 @@ class MissingDataTableViewController: UITableViewController {
     var firebaseStorageRef : StorageReference!
     var photoManager : PhotoManager?
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "MissingDataTableViewCell", bundle: nil), forCellReuseIdentifier: "missingDataCell")
@@ -32,6 +30,13 @@ class MissingDataTableViewController: UITableViewController {
         self.firebase!.child("Teams").observe(.value) { (snap) in
             self.teamsDictionary = snap.value as! NSDictionary
             self.getNils()
+        }
+        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
+        if self.photoManager == nil {
+            self.photoManager = PhotoManager(teamsFirebase: (self.firebase!.child("Teams")))
+            photoManager!.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
+                self.photoManager!.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
+            })
         }
     }
     
