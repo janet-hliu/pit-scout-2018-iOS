@@ -68,6 +68,10 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
                     if !self!.pitDataPointValues.contains(valueAsString) {
                         self!.pitDataPointValues.append(valueAsString)
                     }
+                } else {
+                    if !self!.pitDataPointValues.contains("nil") {
+                        self!.pitDataPointValues.append("nil")
+                    }
                 }
             }
             self!.setUpDataPointValueDropDown(anchorButton: self!.dataPointValueButton, dataArray: self!.pitDataPointValues)
