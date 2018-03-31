@@ -47,7 +47,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     var number : Int!
     //var firebase = Database.database().reference()
-    var firebaseStorageRef : StorageReference!
+    var firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
     var ourTeam : DatabaseReference!
     var photos = [MWPhoto]()
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.

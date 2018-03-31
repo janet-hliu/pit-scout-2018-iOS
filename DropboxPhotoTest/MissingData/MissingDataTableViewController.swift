@@ -18,7 +18,6 @@ class MissingDataTableViewController: UITableViewController {
     // Holds firebase data from "Teams"
     var missingData: [(Int,String)] = [(Int,String)]()
     // Holds team and missing dataPoints ex. [(118, "pitClimberType \n pitProgrammingLanguage"), (100, "pitHasCamera")]
-    var firebaseStorageRef : StorageReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +29,6 @@ class MissingDataTableViewController: UITableViewController {
             self.teamsDictionary = snap.value as! NSDictionary
             self.getNils()
         }
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
     }
     
     func getNils() {
@@ -81,7 +79,6 @@ class MissingDataTableViewController: UITableViewController {
             let teamName = teamDictionary.object(forKey: "name")
             dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
             dest.number = teamNum
-            dest.firebaseStorageRef = self.firebaseStorageRef
             dest.title = "\(teamNum!) - \(teamName!)"
         }
     }

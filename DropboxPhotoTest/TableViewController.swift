@@ -24,7 +24,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
-    var firebaseStorageRef : StorageReference?
     var teamNum : Int?
     var teamName : String?
     
@@ -32,10 +31,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         super.viewDidLoad()
         //You can select once we are done setting up the photo uploader object
         self.tableView.allowsSelection = false
-        
-        // Get a reference to the storage service, using the default Firebase App
-        // Create a storage reference from our storage service
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(TableViewController.didLongPress(_:)))
         self.tableView.addGestureRecognizer(longPress)
@@ -389,7 +384,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         teamViewController.ourTeam = teamFB
         teamViewController.number = number
         teamViewController.title = "\(number) - \(name)"
-        teamViewController.firebaseStorageRef = self.firebaseStorageRef
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

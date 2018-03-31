@@ -36,7 +36,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     var filterByValue: String = "All"
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
-    var firebaseStorageRef : StorageReference?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +48,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         self.firebase!.child("Teams").observe(.value) { (snap) in
             self.teamsDictionary = snap.value as! NSDictionary
         }
-        firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
     }
     
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
@@ -171,7 +169,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             let teamName = teamDictionary.object(forKey: "name")
             dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
             dest.number = teamNum
-            dest.firebaseStorageRef = self.firebaseStorageRef
             dest.title = "\(teamNum!) - \(teamName!)"
         }
     }
