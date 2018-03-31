@@ -23,7 +23,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     let dataPointDropDown = DropDown()
     let dataPointValueDropDown = DropDown()
     // Array of all the data points in pit scout, not including ramp time/outcome, drive time/outcome, SEALs notes
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
     var pitDataPointValues: [String] = ["All"]
     var dataPointIndex: Int = 0
@@ -37,7 +37,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
     var firebaseStorageRef : StorageReference?
-    var photoManager : PhotoManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +50,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             self.teamsDictionary = snap.value as! NSDictionary
         }
         firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
-        if self.photoManager == nil {
-            self.photoManager = PhotoManager(teamsFirebase: (self.firebase!.child("Teams")))
-            photoManager!.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
-                self.photoManager!.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
-            })
-        }
     }
     
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
@@ -179,7 +172,6 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
             dest.number = teamNum
             dest.firebaseStorageRef = self.firebaseStorageRef
-            dest.photoManager = self.photoManager
             dest.title = "\(teamNum!) - \(teamName!)"
         }
     }

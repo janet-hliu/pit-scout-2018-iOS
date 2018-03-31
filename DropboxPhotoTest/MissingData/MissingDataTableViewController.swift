@@ -12,14 +12,13 @@ import Firebase
 
 class MissingDataTableViewController: UITableViewController {
     
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth", "pitHasCamera"]
     var firebase: DatabaseReference?
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
     var missingData: [(Int,String)] = [(Int,String)]()
-    // Holds team and missing dataPoints ex. [(118, "pitClimberType"), (100, "pitHasCamera")]
+    // Holds team and missing dataPoints ex. [(118, "pitClimberType \n pitProgrammingLanguage"), (100, "pitHasCamera")]
     var firebaseStorageRef : StorageReference!
-    var photoManager : PhotoManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +31,6 @@ class MissingDataTableViewController: UITableViewController {
             self.getNils()
         }
         firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
-        if self.photoManager == nil {
-            self.photoManager = PhotoManager(teamsFirebase: (self.firebase!.child("Teams")))
-            photoManager!.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
-                self.photoManager!.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
-            })
-        }
     }
     
     func getNils() {
@@ -59,7 +52,6 @@ class MissingDataTableViewController: UITableViewController {
             }
         }
         missingData.sort {$0.0 < $1.0}
-        print("\(missingData)")
         tableView.reloadData()
     }
     
@@ -90,7 +82,6 @@ class MissingDataTableViewController: UITableViewController {
             dest.ourTeam = self.firebase!.child("Teams").child("\(teamNum!)")
             dest.number = teamNum
             dest.firebaseStorageRef = self.firebaseStorageRef
-            dest.photoManager = self.photoManager
             dest.title = "\(teamNum!) - \(teamName!)"
         }
     }

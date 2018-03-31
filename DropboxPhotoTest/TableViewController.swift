@@ -21,7 +21,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     let operationQueue = OperationQueue()
     var teamNums = [Int]()
     var timer = Timer()
-    var photoManager : PhotoManager?
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
@@ -46,9 +45,11 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         
         self.firebase = Database.database().reference()
         
-        setupphotoManager()
+        PhotoManager.sharedPhotoManagerInstance.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
+            PhotoManager.sharedPhotoManagerInstance.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
+        })
         
-        NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.updateTitle(_:)), name: NSNotification.Name(rawValue: "titleUpdated"), object: nil)
+        self.tableView.allowsSelection = true
     }
     
     @objc func updateTitle(_ note : Notification) {
@@ -69,13 +70,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             print("This should not happen. Someone didn't enter anything into the text field or addATeam is funking things up.")
         }
     }
-    
-    func takeSnapshot() {
-        self.firebase!.child("Teams").observe(.value, with: { (teamSnapshot) in
-            self.setup(teamSnapshot)
-            })
-    }
-    
     
     func setup(_ snap: DataSnapshot) {
         self.teams = NSMutableDictionary() as! [String : [String : AnyObject]]
@@ -113,7 +107,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     func updateTeams() {
-        print("Updating teams and cache")
         self.cache.fetch(key: "scoutedTeamInfo").onSuccess({ [unowned self] (data) -> () in
             let cacheScoutedTeamInfo = NSKeyedUnarchiver.unarchiveObject(with: data) as! [[String: Int]]
             var cacheTeams: [Int] = []
@@ -149,16 +142,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
             self.tableView.reloadData()
         })
-    }
-    
-    func setupphotoManager() {
-        if self.photoManager == nil {
-            self.photoManager = PhotoManager(teamsFirebase: (self.firebase?.child("Teams"))!)
-            photoManager?.getNext(done: { (nextImage, nextKey, nextNumber, nextDate) in
-                self.photoManager?.startUploadingImageQueue(photo: nextImage, key: nextKey, teamNum: nextNumber, date: nextDate)
-            })
-        }
-        self.tableView.allowsSelection = true
     }
     
     // MARK:  UITextFieldDelegate Methods
@@ -346,7 +329,15 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+    /*
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let barViewControllers = segue.destinationViewController as! UITabBarController
+        let nav = barViewControllers.viewControllers![2] as! UINavigationController
+        let destinationViewController = nav.topviewcontroller as ProfileController
+        destinationViewController.firstName = self.firstName
+        destinationViewController.lastName = self.lastName
+    }*/
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var number = -1
         var name = ""
@@ -398,7 +389,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         teamViewController.ourTeam = teamFB
         teamViewController.number = number
         teamViewController.title = "\(number) - \(name)"
-        teamViewController.photoManager = self.photoManager
         teamViewController.firebaseStorageRef = self.firebaseStorageRef
     }
     
@@ -407,10 +397,9 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if self.photoManager != nil {
-            self.photoManager?.currentlyNotifyingTeamNumber = 0
-        }
-        takeSnapshot()
+        self.firebase!.child("Teams").observe(.value, with: { (teamSnapshot) in
+            self.setup(teamSnapshot)
+        })
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {

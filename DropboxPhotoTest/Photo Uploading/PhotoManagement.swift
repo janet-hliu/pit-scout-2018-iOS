@@ -12,7 +12,9 @@ import FirebaseStorage
 import Haneke
 
 class PhotoManager : NSObject {
-    // cache of urls used to set up images to view or delete
+    // Creates a shared instance of PhotoManager that can be used across all view controllers. Makes PhotoManager a singleton.
+    static let sharedPhotoManagerInstance = PhotoManager()
+    // Cache of urls used to set up images to view or delete
     let cache = Shared.dataCache
     var mayKeepWorking = true {
         didSet {
@@ -21,10 +23,8 @@ class PhotoManager : NSObject {
     }
     
     var timer : Timer = Timer()
-    var teamsFirebase : DatabaseReference
+    var teamsFirebase : DatabaseReference = Database.database().reference().child("Teams")
     var numberOfPhotosForTeam = [Int: Int]()
-    var currentlyNotifyingTeamNumber = 0
-    let photoSaver = CustomPhotoAlbum()
     let firebaseImageDownloadURLBeginning = "https://firebasestorage.googleapis.com/v0/b/scouting-2018-9023a.appspot.com/o/"
     let firebaseImageDownloadURLEnd = "?alt=media"
     // teamsList is a cache of keys used to find photos from the imageCache which will then be uploaded to firebase
@@ -34,11 +34,6 @@ class PhotoManager : NSObject {
     var teamKeys : [String]?
     var keyIndex : Int = 0
     var backgroundQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
-    
-    init(teamsFirebase : DatabaseReference) {
-        self.teamsFirebase = teamsFirebase
-        super.init()
-    }
     
     //MARK: Setup
     
@@ -126,8 +121,7 @@ class PhotoManager : NSObject {
      This function puts the URL link onto firebase, linking it to a randomnly generated string.
      */
     func putPhotoLinkToFirebase(_ link: String, teamNumber: Int) {
-        let teamFirebase = self.teamsFirebase.child("\(teamNumber)")
-        let URLs = teamFirebase.child("pitAllImageURLs")
+        let URLs = self.teamsFirebase.child("\(teamNumber)").child("pitAllImageURLs")
         self.writeArrayToFirebase(value: link, database: URLs)
     }
     
