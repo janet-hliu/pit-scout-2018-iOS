@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var hasCameraSwitch: UISwitch!
     @IBOutlet weak var robotWidth: UITextField!
     @IBOutlet weak var robotLength: UITextField!
+    @IBOutlet weak var autoRunLabel: UILabel!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
     @IBAction func AutoTimerSegue(_ sender: UIButton) {
     }
@@ -95,6 +96,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         })
         
         ourTeam.observeSingleEvent(of: .value) { (snapshot) in
+           
+            self.autoRunLabel.text = "Auto Run Percentage: \(String(describing: snapshot.childSnapshot(forPath: "calculatedData").childSnapshot(forPath: "autoRunPercentage").value!))"
+            
             for i in snapshot.childSnapshot(forPath: "pitDriveTime").children {
                 if let unwrapped = (i as! DataSnapshot).value as? Float {
                     self.driveTimeArray.append(unwrapped)
