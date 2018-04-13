@@ -271,8 +271,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             userInput = "0"
         }
         
+        self.ourTeam.observeSingleEvent(of: .value, with: {(snap)-> Void in
+            print(snap.childSnapshot(forPath: "number").value as! Int)
+        })
+        
         switch neededType {
-            
         case .Int:
             self.ourTeam.child(dataKey).setValue(Int(userInput)!)
         case .Float:
@@ -593,9 +596,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpTextField(elementName: selectedImageTextField, dataKey: "pitSelectedImage", dataKeyIndex: 0, neededType: NeededType.String)
         
-        self.setUpTextField(elementName: robotWidth, dataKey: "pitRobotWidth", dataKeyIndex: 7, neededType: NeededType.String)
+        self.setUpTextField(elementName: robotWidth, dataKey: "pitRobotWidth", dataKeyIndex: 7, neededType: NeededType.Float)
         
-        self.setUpTextField(elementName: robotLength, dataKey: "pitRobotLength", dataKeyIndex: 15, neededType: NeededType.String)
+        self.setUpTextField(elementName: robotLength, dataKey: "pitRobotLength", dataKeyIndex: 15, neededType: NeededType.Float)
         
         self.setUpSegmentedControl(elementName: wheelDiameterSegControl, dataKey: "pitWheelDiameter", dataKeyIndex: 13)
         
