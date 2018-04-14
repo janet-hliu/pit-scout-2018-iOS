@@ -27,10 +27,10 @@
             </objects>
             <point key="canvasLocation" x="-1142" y="-205"/>
         </scene>
-        <!--Nils-->
+        <!--Nil Values-->
         <scene sceneID="c0Z-Kn-LPy">
             <objects>
-                <viewController title="Nils" id="DoQ-rw-ILX" customClass="MissingDataViewController" customModule="DropboxPhotoTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="DoQ-rw-ILX" customClass="MissingDataViewController" customModule="DropboxPhotoTest" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fQh-cK-MfB"/>
                         <viewControllerLayoutGuide type="bottom" id="ujo-YD-Mfe"/>
