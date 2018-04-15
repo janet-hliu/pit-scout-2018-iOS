@@ -37,7 +37,7 @@
 		989A5E2420548B81002C3DAD /* (null) in Resources */ = {isa = PBXBuildFile; };
 		989A5E302055EDB7002C3DAD /* CellFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989A5E2E2055EDB7002C3DAD /* CellFilterTableViewCell.swift */; };
 		989A5E312055EDB7002C3DAD /* CellFilterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 989A5E2F2055EDB7002C3DAD /* CellFilterTableViewCell.xib */; };
-		98A37E052083F9C70098BA70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98A37E042083F9C70098BA70 /* GoogleService-Info.plist */; };
+		98A37E0720840F430098BA70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 98A37E0620840F420098BA70 /* GoogleService-Info.plist */; };
 		98A384E9206C1E23002C2FBE /* MissingDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A384E8206C1E23002C2FBE /* MissingDataTableViewController.swift */; };
 		98A384ED206C1EDA002C2FBE /* MissingDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A384EB206C1EDA002C2FBE /* MissingDataTableViewCell.swift */; };
 		98A384EE206C1EDA002C2FBE /* MissingDataTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98A384EC206C1EDA002C2FBE /* MissingDataTableViewCell.xib */; };
@@ -107,7 +107,10 @@
 		98991CAB20262E460095A64C /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		989A5E2E2055EDB7002C3DAD /* CellFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellFilterTableViewCell.swift; sourceTree = "<group>"; };
 		989A5E2F2055EDB7002C3DAD /* CellFilterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellFilterTableViewCell.xib; sourceTree = "<group>"; };
-		98A37E042083F9C70098BA70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		98A37E0620840F420098BA70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		98A37E0A208410590098BA70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		98A37E0B2084105B0098BA70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		98A37E0C208410620098BA70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		98A384E8206C1E23002C2FBE /* MissingDataTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingDataTableViewController.swift; sourceTree = "<group>"; };
 		98A384EB206C1EDA002C2FBE /* MissingDataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingDataTableViewCell.swift; sourceTree = "<group>"; };
 		98A384EC206C1EDA002C2FBE /* MissingDataTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MissingDataTableViewCell.xib; sourceTree = "<group>"; };
@@ -191,9 +194,9 @@
 				429589A8206B5D7E003CE646 /* Filter */,
 				4260EADD203A0A3500735530 /* Timer */,
 				19855CB41E130D83009E97B5 /* Reachability.swift */,
-				98A37E042083F9C70098BA70 /* GoogleService-Info.plist */,
 				4260EADE203A0A8500735530 /* Photo Uploading */,
 				192BEACD1C3463B900992A8A /* Info.plist */,
+				98A37E0620840F420098BA70 /* GoogleService-Info.plist */,
 				192BEAC81C3463B900992A8A /* Assets.xcassets */,
 				19498EDF1CAE174600CF5236 /* DropboxPhotoTest-Bridging-Header.h */,
 				5B51D299205DD74600E26A9E /* Photos for launch Screen */,
@@ -245,9 +248,12 @@
 		4260EADD203A0A3500735530 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				98A37E0B2084105B0098BA70 /* GoogleService-Info.plist */,
+				98A37E0C208410620098BA70 /* GoogleService-Info.plist */,
 				98991CAB20262E460095A64C /* TimerViewController.swift */,
 				42C078C52034288B00809BDE /* CellTimerTableViewCell.swift */,
 				42C078C62034288B00809BDE /* CellTimerTableViewCell.xib */,
+				98A37E0A208410590098BA70 /* GoogleService-Info.plist */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -410,7 +416,7 @@
 				42C078C82034288B00809BDE /* CellTimerTableViewCell.xib in Resources */,
 				5B8F09151E3D424B00F4348E /* GoogleService-Info (1).plist in Resources */,
 				989A5E312055EDB7002C3DAD /* CellFilterTableViewCell.xib in Resources */,
-				98A37E052083F9C70098BA70 /* GoogleService-Info.plist in Resources */,
+				98A37E0720840F430098BA70 /* GoogleService-Info.plist in Resources */,
 				98A384EE206C1EDA002C2FBE /* MissingDataTableViewCell.xib in Resources */,
 				989A5E2420548B81002C3DAD /* (null) in Resources */,
 			);
