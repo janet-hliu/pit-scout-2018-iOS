@@ -16,7 +16,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
-    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
+    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
+    // data is stored in cache
     // 0 is false, 1 is true
     let operationQueue = OperationQueue()
     var teamNums = [Int]()
@@ -397,7 +398,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
-        self.firebase?.observeSingleEvent(of: DataEventType.value, with: { (snap) -> Void in
+        /*self.firebase?.observeSingleEvent(of: DataEventType.value, with: { (snap) -> Void in
             do {
                 let theJSONData = try JSONSerialization.data(
                     withJSONObject: self.teams ,
@@ -411,5 +412,22 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
                 print(error.localizedDescription)
             }
         })
+        */
+        var csvString = "\("name"),\("pitDriveTrain"),\("pitSelectedImage"),\("pitAvailableWeight"),\("pitDriveTrain"),\("pitHasCamera"),\("pitProgrammingLanguage"),\("pitClimberType"),\("pitWheelDiameter")\n"
+        for (_, team) in self.teams {
+            for (_, value) in team {
+                csvString = csvString.appending("\(String(value as! String))")
+            }
+            csvString = csvString.appending("\n")
+        }
+        
+        let fileManager = FileManager.default
+        do {
+            let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let fileURL = path.appendingPathComponent("CSVRec.csv")
+            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print("error creating file")
+        }
         
     }}
