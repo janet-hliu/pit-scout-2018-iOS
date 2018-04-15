@@ -76,7 +76,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
         }*/
         
-        let teamsDatabase: NSDictionary = snap.value as! NSDictionary
+        let teamsDatabase: NSDictionary =a snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
