@@ -10,8 +10,9 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import Haneke
+import MessageUI
 
-class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
+class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate, MFMailComposeViewControllerDelegate {
     
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
@@ -76,7 +77,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             td = NSDictionary(objects: arrayTeamsDatabase, forKeys: Array(arrayTeamsDatabase.map { String(describing: $0["number"] as! Int) }) as [NSCopying])
         }*/
         
-        let teamsDatabase: NSDictionary =a snap.value as! NSDictionary
+        let teamsDatabase: NSDictionary = snap.value as! NSDictionary
         for (_, info) in teamsDatabase {
             // teamInfo is the information for the team at certain number
             let teamInfo = info as! [String: AnyObject]
@@ -413,21 +414,47 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             }
         })
         */
-        var csvString = "\("name"),\("pitDriveTrain"),\("pitSelectedImage"),\("pitAvailableWeight"),\("pitDriveTrain"),\("pitHasCamera"),\("pitProgrammingLanguage"),\("pitClimberType"),\("pitWheelDiameter")\n"
+        var csvString = "name,pitDriveTrain,pitAvailableWeight,pitHasCamera,pitProgrammingLanguage,pitClimberType,pitWheelDiameter\n"
+        let keys = ["name", "pitDriveTrain", "pitAvailableWeight", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
         for (_, team) in self.teams {
-            for (_, value) in team {
-                csvString = csvString.appending("\(String(value as! String))")
+            for key in keys {
+                let value = team[key]
+                if value != nil {
+                    csvString = csvString.appending("\(String(describing: value!))")
+                }else{
+                    csvString = csvString.appending("\(String("nil"))")
+                }
+                if key == keys.last {
+                    csvString = csvString.appending("\(String("\n"))")
+                } else {
+                    csvString = csvString.appending("\(String(","))")
+                }
             }
-            csvString = csvString.appending("\n")
         }
         
         let fileManager = FileManager.default
         do {
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-            let fileURL = path.appendingPathComponent("CSVRec.csv")
+            let fileURL = path.appendingPathComponent("TeamsData.csv")
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+            //print(csvString)
+            //let actVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+            //present(actVC, animated: true, completion: nil)
+            if MFMailComposeViewController.canSendMail() {
+                let emailController = MFMailComposeViewController()
+                emailController.mailComposeDelegate = self
+                emailController.setToRecipients([])
+                emailController.setSubject("pit scout data export")
+                emailController.setMessageBody("Hi,\n\nThe .csv data export is attached", isHTML: false)
+                
+                try emailController.addAttachmentData(NSData(contentsOf: fileURL) as Data, mimeType: "text/csv", fileName: "pitScoutTeamData.csv")
+                
+                present(emailController, animated: true, completion: nil)
+            }
         } catch {
             print("error creating file")
         }
-        
+        func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+            controller.dismiss(animated: true, completion: nil)
+        }
     }}
