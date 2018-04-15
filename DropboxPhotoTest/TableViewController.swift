@@ -437,24 +437,10 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
             let fileURL = path.appendingPathComponent("TeamsData.csv")
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-            //print(csvString)
-            //let actVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
-            //present(actVC, animated: true, completion: nil)
-            if MFMailComposeViewController.canSendMail() {
-                let emailController = MFMailComposeViewController()
-                emailController.mailComposeDelegate = self
-                emailController.setToRecipients([])
-                emailController.setSubject("pit scout data export")
-                emailController.setMessageBody("Hi,\n\nThe .csv data export is attached", isHTML: false)
-                
-                try emailController.addAttachmentData(NSData(contentsOf: fileURL) as Data, mimeType: "text/csv", fileName: "pitScoutTeamData.csv")
-                
-                present(emailController, animated: true, completion: nil)
-            }
+            print(csvString)
+            let actVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+            present(actVC, animated: true, completion: nil)
         } catch {
             print("error creating file")
-        }
-        func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-            controller.dismiss(animated: true, completion: nil)
         }
     }}
