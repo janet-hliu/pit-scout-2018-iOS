@@ -40,6 +40,7 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getNils() {
+        missingData = []
         for (_, teamData) in self.teamsDictionary {
             var missingDataForTeam = ""
             let dataDictionary = teamData as! NSDictionary
