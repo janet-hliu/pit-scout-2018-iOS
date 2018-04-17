@@ -399,29 +399,14 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
-        /*self.firebase?.observeSingleEvent(of: DataEventType.value, with: { (snap) -> Void in
-            do {
-                let theJSONData = try JSONSerialization.data(
-                    withJSONObject: self.teams ,
-                    options: JSONSerialization.WritingOptions())
-                
-                let theJSONText = NSString(data: theJSONData,
-                                           encoding: String.Encoding.ascii.rawValue)
-                let activityViewController = UIActivityViewController(activityItems: [theJSONText ?? ""], applicationActivities: nil)
-                self.present(activityViewController, animated: true, completion: {})
-            } catch {
-                print(error.localizedDescription)
-            }
-        })
-        */
-        var csvString = "name,pitDriveTrain,pitAvailableWeight,pitHasCamera,pitProgrammingLanguage,pitClimberType,pitWheelDiameter\n"
-        let keys = ["name", "pitDriveTrain", "pitAvailableWeight", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
-        for (_, team) in self.teams {
+        var csvString = "number,name,pitSelectedImage,pitAvailableWeight,pitDriveTrain,pitCanCheesecake,pitSEALsNotes,pitProgrammingLanguage,pitClimberType,pitRobotWidth,pitDriveTime,pitDriveTest,pitRampTime,pitDriveTimeOutcome,pitRampTimeOutcome,pitWheelDiameter,pitHasCamera,pitRobotLength,pitCanDoPIDOnDriveTrain,pitHasGyro,pitHasEncodersOnBothSides\n"
+        let keys = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitDriveTime","pitDriveTest","pitRampTime","pitDriveTimeOutcome","pitRampTimeOutcome","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
+        for (_, teamData) in self.teams {
             for key in keys {
-                let value = team[key]
+                let value = teamData[key]
                 if value != nil {
                     csvString = csvString.appending("\(String(describing: value!))")
-                }else{
+                } else {
                     csvString = csvString.appending("\(String("nil"))")
                 }
                 if key == keys.last {
@@ -435,7 +420,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
         let fileManager = FileManager.default
         do {
             let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-            let fileURL = path.appendingPathComponent("TeamsData.csv")
+            let fileURL = path.appendingPathComponent("pitTeamsData.csv")
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
             print(csvString)
             let actVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
