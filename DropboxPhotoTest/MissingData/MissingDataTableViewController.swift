@@ -65,7 +65,9 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
         dataPointDropDown.anchorView = anchorButton
         dataPointDropDown.bottomOffset = CGPoint(x: 0, y: anchorButton.bounds.height)
-        dataPointDropDown.dataSource = dataArray
+        var dropDownOptions = dataArray
+        dropDownOptions.insert("All", at: 0)
+        dataPointDropDown.dataSource = dropDownOptions
         dataPointDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointLabel.text = item
             self!.selectedPitDataPoint = item
