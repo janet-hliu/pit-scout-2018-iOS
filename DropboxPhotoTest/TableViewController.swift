@@ -400,7 +400,7 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
         var csvString = "number,name,pitSelectedImage,pitAvailableWeight,pitDriveTrain,pitCanCheesecake,pitSEALsNotes,pitProgrammingLanguage,pitClimberType,pitRobotWidth,pitDriveTime,pitDriveTest,pitRampTime,pitDriveTimeOutcome,pitRampTimeOutcome,pitWheelDiameter,pitHasCamera,pitRobotLength,pitCanDoPIDOnDriveTrain,pitHasGyro,pitHasEncodersOnBothSides\n"
-        let keys = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitDriveTime","pitDriveTest","pitRampTime","pitDriveTimeOutcome","pitRampTimeOutcome","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
+        let keys = [ "number", "name", "pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitDriveTime","pitDriveTest","pitRampTime","pitDriveTimeOutcome","pitRampTimeOutcome","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
         for (_, teamData) in self.teams {
             for key in keys {
                 let value = teamData[key]

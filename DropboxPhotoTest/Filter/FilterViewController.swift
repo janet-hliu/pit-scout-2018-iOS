@@ -19,6 +19,9 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var dataPointValueButton: UIButton!
     @IBOutlet weak var dataPointLabel: UILabel!
     @IBOutlet weak var dataPointValueLabel: UILabel!
+    @IBAction func reloadPinchGesture(_ sender: UIPinchGestureRecognizer) {
+        self.filterForData(dataPoint: self.filterDatapoint)
+    }
     
     let dataPointDropDown = DropDown()
     let dataPointValueDropDown = DropDown()

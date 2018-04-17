@@ -266,6 +266,7 @@
                             </tableViewCell>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="YOR-Y2-Top" firstAttribute="top" secondItem="CrL-mz-1AU" secondAttribute="bottom" constant="8" id="2H8-s5-qRN"/>
                             <constraint firstItem="JP7-SK-nKf" firstAttribute="leading" secondItem="5ED-WE-KI3" secondAttribute="trailing" constant="8" id="3Ev-WG-3Hr"/>
@@ -292,6 +293,9 @@
                             <constraint firstItem="5ED-WE-KI3" firstAttribute="height" secondItem="YOR-Y2-Top" secondAttribute="height" id="td7-eE-J6V"/>
                             <constraint firstItem="PfJ-uQ-dao" firstAttribute="top" secondItem="Vc5-mp-Sph" secondAttribute="bottom" constant="20" id="tf7-ix-uzn"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Fsa-ba-lgM" appends="YES" id="RZp-JR-N1f"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Filter" image="Image" id="RFa-JR-sqS"/>
                     <navigationItem key="navigationItem" title="Filter" id="wgd-i4-gPf"/>
@@ -304,6 +308,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFc-r9-o9I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="Fsa-ba-lgM">
+                    <connections>
+                        <action selector="reloadPinchGesture:" destination="nh2-oX-tjh" id="xOz-d3-69U"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="273" y="778"/>
         </scene>
@@ -1068,7 +1077,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="l9S-Pd-Q8j"/>
-        <segue reference="7GM-Rb-iOp"/>
+        <segue reference="ARU-NE-gge"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
