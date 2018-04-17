@@ -30,6 +30,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var driveTimerButton: UIButton!
     @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var hasCameraSwitch: UISwitch!
+    @IBOutlet weak var canDoPIDOnDriveTrainSwitch: UISwitch!
+    @IBOutlet weak var hasGyroSwitch: UISwitch!
+    @IBOutlet weak var hasEncodersOnBothSidesSwitch: UISwitch!
     @IBOutlet weak var robotWidth: UITextField!
     @IBOutlet weak var robotLength: UITextField!
     @IBOutlet weak var autoRunLabel: UILabel!
@@ -48,7 +51,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     var number : Int!
     //var firebase = Database.database().reference()
-    var firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-9023a.appspot.com/")
+    var firebaseStorageRef = Storage.storage().reference(forURL: "gs://scouting-2018-houston.appspot.com/")
     var ourTeam : DatabaseReference!
     var photos = [MWPhoto]()
     var canViewPhotos : Bool = true //This is for that little time in between when the photo is taken and when it has been passed over to the uploader controller.
@@ -56,7 +59,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var notActuallyLeavingViewController = false
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotWidth": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool], ["pitRobotLength": .Float]]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotWidth": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool], ["pitRobotLength": .Float], ["pitCanDoPIDOnDriveTrain": .Bool], ["pitHasGyro": .Bool], ["pitHasEncodersOnBothSides": .Bool]]
     
     var activeField : UITextField? {
         didSet {
@@ -427,7 +430,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                         // Comparing to see if the cached image key matches the firebase URL of one of the image URLs
                         for i in 0..<imageURLs.count {
                             let url = imageURLs[i]
-                            let urlArray = (url).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-9023a.appspot.com/o/", with: "")
+                            let urlArray = (url).replacingOccurrences(of: "https://firebasestorage.googleapis.com/v0/b/scouting-2018-houston.appspot.com/o/", with: "")
                             let componentArray: [String] = urlArray.components(separatedBy: ".png?")
                             let key = componentArray[0]
                             // This is the image key extracted from the image url, which will be modified to follow the format of the actual image key
@@ -611,6 +614,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
         
         self.setUpSwitch(elementName: hasCameraSwitch, dataKey: "pitHasCamera", dataKeyIndex: 14)
+        
+        self.setUpSwitch(elementName: canDoPIDOnDriveTrainSwitch, dataKey: "pitCanDoPIDOnDriveTrain", dataKeyIndex: 16)
+        
+        self.setUpSwitch(elementName: hasGyroSwitch, dataKey: "pitHatGyro", dataKeyIndex: 17)
+        
+        self.setUpSwitch(elementName: hasEncodersOnBothSidesSwitch, dataKey: "pitHasEncodersOnBothSides", dataKeyIndex: 18)
         
         self.setUpTextView(elementName: SEALsNotesTextView, dataKey: "pitSEALsNotes", dataKeyIndex: 4, placeHolder: "Miscellaneous Notes: climber notes, possible autos, etc")
         SEALsNotesTextView.delegate = self

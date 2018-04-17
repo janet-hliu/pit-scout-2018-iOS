@@ -10,13 +10,15 @@ import Foundation
 import Firebase
 import FirebaseStorage
 import Haneke
+import MessageUI
 
-class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
+class TableViewController: UITableViewController, UIPopoverPresentationControllerDelegate, MFMailComposeViewControllerDelegate {
     
     var firebase : DatabaseReference?
     var teams = [String: [String: AnyObject]]()
     
-    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0] // data is stored in cache
+    var scoutedTeamInfo : [[String: Int]] = []   // ["num": 254, "hasBeenScouted": 0]
+    // data is stored in cache
     // 0 is false, 1 is true
     let operationQueue = OperationQueue()
     var teamNums = [Int]()
@@ -397,19 +399,33 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
-        self.firebase?.observeSingleEvent(of: DataEventType.value, with: { (snap) -> Void in
-            do {
-                let theJSONData = try JSONSerialization.data(
-                    withJSONObject: self.teams ,
-                    options: JSONSerialization.WritingOptions())
-                
-                let theJSONText = NSString(data: theJSONData,
-                                           encoding: String.Encoding.ascii.rawValue)
-                let activityViewController = UIActivityViewController(activityItems: [theJSONText ?? ""], applicationActivities: nil)
-                self.present(activityViewController, animated: true, completion: {})
-            } catch {
-                print(error.localizedDescription)
+        var csvString = "number,name,pitSelectedImage,pitAvailableWeight,pitDriveTrain,pitCanCheesecake,pitSEALsNotes,pitProgrammingLanguage,pitClimberType,pitRobotWidth,pitDriveTime,pitDriveTest,pitRampTime,pitDriveTimeOutcome,pitRampTimeOutcome,pitWheelDiameter,pitHasCamera,pitRobotLength,pitCanDoPIDOnDriveTrain,pitHasGyro,pitHasEncodersOnBothSides\n"
+        let keys = [ "number", "name", "pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitDriveTime","pitDriveTest","pitRampTime","pitDriveTimeOutcome","pitRampTimeOutcome","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
+        for (_, teamData) in self.teams {
+            for key in keys {
+                let value = teamData[key]
+                if value != nil {
+                    csvString = csvString.appending("\(String(describing: value!))")
+                } else {
+                    csvString = csvString.appending("\(String("nil"))")
+                }
+                if key == keys.last {
+                    csvString = csvString.appending("\(String("\n"))")
+                } else {
+                    csvString = csvString.appending("\(String(","))")
+                }
             }
-        })
+        }
         
+        let fileManager = FileManager.default
+        do {
+            let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
+            let fileURL = path.appendingPathComponent("pitTeamsData.csv")
+            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
+            print(csvString)
+            let actVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: [])
+            present(actVC, animated: true, completion: nil)
+        } catch {
+            print("error creating file")
+        }
     }}

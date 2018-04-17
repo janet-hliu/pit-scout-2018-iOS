@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2d2-eS-liS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2d2-eS-liS">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -58,7 +58,7 @@
                                 <rect key="frame" x="16" y="108" width="288" height="323"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="ZlX-qX-gyh">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="ZlX-qX-gyh">
                                         <rect key="frame" x="0.0" y="28" width="288" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZlX-qX-gyh" id="fJK-S0-b9r">
@@ -266,6 +266,7 @@
                             </tableViewCell>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="YOR-Y2-Top" firstAttribute="top" secondItem="CrL-mz-1AU" secondAttribute="bottom" constant="8" id="2H8-s5-qRN"/>
                             <constraint firstItem="JP7-SK-nKf" firstAttribute="leading" secondItem="5ED-WE-KI3" secondAttribute="trailing" constant="8" id="3Ev-WG-3Hr"/>
@@ -292,6 +293,9 @@
                             <constraint firstItem="5ED-WE-KI3" firstAttribute="height" secondItem="YOR-Y2-Top" secondAttribute="height" id="td7-eE-J6V"/>
                             <constraint firstItem="PfJ-uQ-dao" firstAttribute="top" secondItem="Vc5-mp-Sph" secondAttribute="bottom" constant="20" id="tf7-ix-uzn"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Fsa-ba-lgM" appends="YES" id="RZp-JR-N1f"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Filter" image="Image" id="RFa-JR-sqS"/>
                     <navigationItem key="navigationItem" title="Filter" id="wgd-i4-gPf"/>
@@ -304,6 +308,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFc-r9-o9I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="Fsa-ba-lgM">
+                    <connections>
+                        <action selector="reloadPinchGesture:" destination="nh2-oX-tjh" id="xOz-d3-69U"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="273" y="778"/>
         </scene>
@@ -899,12 +908,15 @@
                         <outlet property="addImageButton" destination="IXY-QS-9WT" id="ONi-Fm-qRB"/>
                         <outlet property="autoRunLabel" destination="04l-Qo-71c" id="uIF-zC-yZH"/>
                         <outlet property="availableWeightTextField" destination="PD1-VW-55n" id="N4n-fa-Z2G"/>
+                        <outlet property="canDoPIDOnDriveTrainSwitch" destination="zNJ-tt-cqD" id="Rle-Li-Hyn"/>
                         <outlet property="climberTypeSegControl" destination="iba-fk-g5X" id="Tsb-DG-4fe"/>
                         <outlet property="deleteImageButton" destination="4UH-nJ-vrD" id="3tG-Nw-Ikq"/>
                         <outlet property="driveTestSegControl" destination="Cdh-6U-Lev" id="vz8-aF-KFd"/>
                         <outlet property="driveTimerButton" destination="Ns7-Oa-fLl" id="zmM-g7-56M"/>
                         <outlet property="driveTrainSegControl" destination="861-cM-XpH" id="yxB-1l-5TB"/>
                         <outlet property="hasCameraSwitch" destination="k80-Cc-Nj6" id="tO5-Sz-jqn"/>
+                        <outlet property="hasEncodersOnBothSidesSwitch" destination="jAb-oj-2Vh" id="Aof-vf-lfi"/>
+                        <outlet property="hasGyroSwitch" destination="cin-gi-RYQ" id="ZnK-78-o92"/>
                         <outlet property="programmingLanguageSegControl" destination="1Yg-nw-DjO" id="Znb-Al-erM"/>
                         <outlet property="rampTimerButton" destination="iEd-ux-vEe" id="J5N-xz-iYV"/>
                         <outlet property="robotLength" destination="4jx-ko-1to" id="zfT-4Q-VUN"/>
@@ -1065,7 +1077,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="l9S-Pd-Q8j"/>
-        <segue reference="7GM-Rb-iOp"/>
+        <segue reference="ARU-NE-gge"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.46531009674072266" green="0.85428363084793091" blue="0.28354483842849731" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

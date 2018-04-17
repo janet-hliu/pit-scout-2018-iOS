@@ -18,7 +18,7 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var dataPointLabel: UILabel!
     
     let dataPointDropDown = DropDown()
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth", "pitHasCamera"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth", "pitHasCamera", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
     var firebase: DatabaseReference?
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
@@ -40,6 +40,7 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func getNils() {
+        missingData = []
         for (_, teamData) in self.teamsDictionary {
             var missingDataForTeam = ""
             let dataDictionary = teamData as! NSDictionary
@@ -64,7 +65,9 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     func setUpDataPointDropDown(anchorButton: UIButton, dataArray: [String]) {
         dataPointDropDown.anchorView = anchorButton
         dataPointDropDown.bottomOffset = CGPoint(x: 0, y: anchorButton.bounds.height)
-        dataPointDropDown.dataSource = dataArray
+        var dropDownOptions = dataArray
+        dropDownOptions.insert("All", at: 0)
+        dataPointDropDown.dataSource = dropDownOptions
         dataPointDropDown.selectionAction = { [weak self] (index: Int, item: String) in
             self!.dataPointLabel.text = item
             self!.selectedPitDataPoint = item

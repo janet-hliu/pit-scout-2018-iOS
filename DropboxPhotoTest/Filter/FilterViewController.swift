@@ -19,11 +19,14 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var dataPointValueButton: UIButton!
     @IBOutlet weak var dataPointLabel: UILabel!
     @IBOutlet weak var dataPointValueLabel: UILabel!
+    @IBAction func reloadPinchGesture(_ sender: UIPinchGestureRecognizer) {
+        self.filterForData(dataPoint: self.filterDatapoint)
+    }
     
     let dataPointDropDown = DropDown()
     let dataPointValueDropDown = DropDown()
     // Array of all the data points in pit scout, not including ramp time/outcome, drive time/outcome, SEALs notes
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
     var pitDataPointValues: [String] = ["All"]
     var dataPointIndex: Int = 0
