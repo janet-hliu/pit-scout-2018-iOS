@@ -25,8 +25,8 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
     let dataPointDropDown = DropDown()
     let dataPointValueDropDown = DropDown()
-    // Array of all the data points in pit scout, not including ramp time/outcome, drive time/outcome, SEALs notes
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
+    // Array of all the data points in pit scout, not including SEALs notes
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitHasCamera", "pitProgrammingLanguage", "pitWheelDiameter", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
     // Array of all the values under a certain data point in pit scout. Will change when the data point selected changes
     var pitDataPointValues: [String] = ["All"]
     var dataPointIndex: Int = 0
