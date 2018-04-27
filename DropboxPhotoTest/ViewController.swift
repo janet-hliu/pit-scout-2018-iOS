@@ -25,10 +25,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var wheelDiameterSegControl: UISegmentedControl!
     @IBOutlet weak var programmingLanguageSegControl: UISegmentedControl!
     @IBOutlet weak var driveTrainSegControl: UISegmentedControl!
-    @IBOutlet weak var climberTypeSegControl: UISegmentedControl!
-    @IBOutlet weak var driveTestSegControl: UISegmentedControl!
-    @IBOutlet weak var driveTimerButton: UIButton!
-    @IBOutlet weak var rampTimerButton: UIButton!
     @IBOutlet weak var hasCameraSwitch: UISwitch!
     @IBOutlet weak var canDoPIDOnDriveTrainSwitch: UISwitch!
     @IBOutlet weak var hasGyroSwitch: UISwitch!
@@ -37,13 +33,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var robotLength: UITextField!
     @IBOutlet weak var autoRunLabel: UILabel!
     @IBOutlet weak var SEALsNotesTextView: UITextView!{ didSet { SEALsNotesTextView.delegate = self } }
-    @IBAction func AutoTimerSegue(_ sender: UIButton) {
-    }
   
-    var driveTimeArray: [Float] = []
-    var rampTimeArray: [Float] = []
-    var driveOutcomeArray: [Bool] = []
-    var rampOutcomeArray: [Bool] = []
    
     var green = UIColor(red: 119/255, green: 218/255, blue: 72/255, alpha: 1.0)
     var red: UIColor =  UIColor(red: 244/255, green: 142/255, blue: 124/255, alpha: 1)
@@ -59,7 +49,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var notActuallyLeavingViewController = false
     let teamsList = Shared.dataCache
     var deleteImagePhotoBrowser : Bool = false
-    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotWidth": .Float], ["pitDriveTime": .Float], ["pitDriveTest": .String], ["pitRampTime": .Float], ["pitDriveTimeOutcome": .Bool], ["pitRampTimeOutcome": .Bool], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool], ["pitRobotLength": .Float], ["pitCanDoPIDOnDriveTrain": .Bool], ["pitHasGyro": .Bool], ["pitHasEncodersOnBothSides": .Bool]]
+    let dataKeys: [[String: NeededType]] = [["pitSelectedImage": .String], ["pitAvailableWeight": .Int], ["pitDriveTrain": .String], ["pitCanCheesecake": .Bool], ["pitSEALsNotes": .String], ["pitProgrammingLanguage": .String], ["pitClimberType": .String], ["pitRobotWidth": .Float], ["pitWheelDiameter": .String], ["pitHasCamera": .Bool], ["pitRobotLength": .Float], ["pitCanDoPIDOnDriveTrain": .Bool], ["pitHasGyro": .Bool], ["pitHasEncodersOnBothSides": .Bool]]
     
     var activeField : UITextField? {
         didSet {
@@ -101,34 +91,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ourTeam.observeSingleEvent(of: .value) { (snapshot) in
            
             self.autoRunLabel.text = "Auto Run Percentage: \(String(describing: snapshot.childSnapshot(forPath: "calculatedData").childSnapshot(forPath: "autoRunPercentage").value!))"
-            
-            for i in snapshot.childSnapshot(forPath: "pitDriveTime").children {
-                if let unwrapped = (i as! DataSnapshot).value as? Float {
-                    self.driveTimeArray.append(unwrapped)
-                }
-            }
-            for i in snapshot.childSnapshot(forPath: "pitRampTime").children {
-                if let unwrapped = (i as! DataSnapshot).value as? Float {
-                    self.rampTimeArray.append(unwrapped)
-                }
-            }
-            for i in snapshot.childSnapshot(forPath: "pitDriveTimeOutcome").children {
-                if let unwrapped = (i as! DataSnapshot).value as? Bool {
-                    self.driveOutcomeArray.append(unwrapped)
-                }
-            }
-            for i in snapshot.childSnapshot(forPath: "pitRampTimeOutcome").children {
-                if let unwrapped = (i as! DataSnapshot).value as? Bool {
-                    self.rampOutcomeArray.append(unwrapped)
-                }
-            }
-            while self.rampOutcomeArray.count != self.rampTimeArray.count {
-                if self.rampOutcomeArray.count > self.rampTimeArray.count {
-                    self.rampOutcomeArray.remove(at: self.rampOutcomeArray.count-1)
-                } else {
-                    self.rampTimeArray.remove(at: self.rampTimeArray.count-1)
-                }
-            }
         }
     }
     
@@ -589,10 +551,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         // To set up image browser on deleteImageButton
         let normalTapGestureDeleteImage = UITapGestureRecognizer(target: self, action: #selector(ViewController.didNormalTapDeleteImage(_:)))
-        deleteImageButton.addGestureRecognizer(normalTapGestureDeleteImage)
-        deleteImageButton.layer.cornerRadius = 5
-        driveTimerButton.layer.cornerRadius = 5
-        rampTimerButton.layer.cornerRadius = 5
         
         // Setting up all the other UI elements
         self.setUpTextField(elementName: availableWeightTextField, dataKey: "pitAvailableWeight", dataKeyIndex: 1, neededType: NeededType.Int)
@@ -609,15 +567,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.setUpSegmentedControl(elementName: driveTrainSegControl, dataKey: "pitDriveTrain", dataKeyIndex: 2)
         
-        self.setUpSegmentedControl(elementName: driveTestSegControl, dataKey: "pitDriveTest", dataKeyIndex: 9)
-        
-        self.setUpSegmentedControl(elementName: climberTypeSegControl, dataKey: "pitClimberType", dataKeyIndex: 6)
-        
         self.setUpSwitch(elementName: hasCameraSwitch, dataKey: "pitHasCamera", dataKeyIndex: 14)
         
         self.setUpSwitch(elementName: canDoPIDOnDriveTrainSwitch, dataKey: "pitCanDoPIDOnDriveTrain", dataKeyIndex: 16)
         
-        self.setUpSwitch(elementName: hasGyroSwitch, dataKey: "pitHatGyro", dataKeyIndex: 17)
+        self.setUpSwitch(elementName: hasGyroSwitch, dataKey: "pitHasGyro", dataKeyIndex: 17)
         
         self.setUpSwitch(elementName: hasEncodersOnBothSidesSwitch, dataKey: "pitHasEncodersOnBothSides", dataKeyIndex: 18)
         
@@ -631,25 +585,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "driveTimeSegue" {
-            if let dest = segue.destination as? TimerViewController {
-                dest.ourTeam = self.ourTeam
-                dest.timeArray = self.driveTimeArray
-                dest.outcomeArray = self.driveOutcomeArray
-                dest.title = "Drive Timer"
-                dest.timeDataKey = "pitDriveTime"
-                dest.timeLabelText = "Drive Time"
-            }
-        } else if segue.identifier == "rampTimeSegue" {
-            if let dest = segue.destination as? TimerViewController {
-                dest.ourTeam = self.ourTeam
-                dest.timeArray = self.rampTimeArray
-                dest.outcomeArray = self.rampOutcomeArray
-                dest.title = "Ramp Timer"
-                dest.timeDataKey = "pitRampTime"
-                dest.timeLabelText = "Ramp Time"
-            }
-        }
     }
     
     @objc func dismissKeyboard() {

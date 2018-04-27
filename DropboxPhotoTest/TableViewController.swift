@@ -22,7 +22,6 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     // 0 is false, 1 is true
     let operationQueue = OperationQueue()
     var teamNums = [Int]()
-    var timer = Timer()
     var urlsDict : [Int : NSMutableArray] = [Int: NSMutableArray]()
     let cache = Shared.dataCache
     var refHandle = DatabaseHandle()
@@ -399,8 +398,8 @@ class TableViewController: UITableViewController, UIPopoverPresentationControlle
     }
     
     @IBAction func myShareButton(sender: UIBarButtonItem) {
-        var csvString = "number,name,pitSelectedImage,pitAvailableWeight,pitDriveTrain,pitCanCheesecake,pitSEALsNotes,pitProgrammingLanguage,pitClimberType,pitRobotWidth,pitDriveTime,pitDriveTest,pitRampTime,pitDriveTimeOutcome,pitRampTimeOutcome,pitWheelDiameter,pitHasCamera,pitRobotLength,pitCanDoPIDOnDriveTrain,pitHasGyro,pitHasEncodersOnBothSides\n"
-        let keys = [ "number", "name", "pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitDriveTime","pitDriveTest","pitRampTime","pitDriveTimeOutcome","pitRampTimeOutcome","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
+        var csvString = "number,name,pitSelectedImage,pitAvailableWeight,pitDriveTrain,pitCanCheesecake,pitSEALsNotes,pitProgrammingLanguage,pitClimberType,pitRobotWidth,pitWheelDiameter,pitHasCamera,pitRobotLength,pitCanDoPIDOnDriveTrain,pitHasGyro,pitHasEncodersOnBothSides\n"
+        let keys = [ "number", "name", "pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitCanCheesecake", "pitSEALsNotes", "pitProgrammingLanguage","pitClimberType","pitRobotWidth","pitWheelDiameter","pitHasCamera","pitRobotLength","pitCanDoPIDOnDriveTrain","pitHasGyro","pitHasEncodersOnBothSides"]
         for (_, teamData) in self.teams {
             for key in keys {
                 let value = teamData[key]

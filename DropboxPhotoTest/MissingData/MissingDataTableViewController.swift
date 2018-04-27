@@ -18,7 +18,7 @@ class MissingDataViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var dataPointLabel: UILabel!
     
     let dataPointDropDown = DropDown()
-    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitProgrammingLanguage", "pitClimberType", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth", "pitHasCamera", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
+    var pitDataPoints: [String] = ["pitSelectedImage", "pitAvailableWeight", "pitDriveTrain", "pitProgrammingLanguage", "pitWheelDiameter", "pitRobotLength", "pitRobotWidth", "pitHasCamera", "pitCanDoPIDOnDriveTrain", "pitHasGyro", "pitHasEncodersOnBothSides"]
     var firebase: DatabaseReference?
     var teamsDictionary: NSDictionary = [:]
     // Holds firebase data from "Teams"
